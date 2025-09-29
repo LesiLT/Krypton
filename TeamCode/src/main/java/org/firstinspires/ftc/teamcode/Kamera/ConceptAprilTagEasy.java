@@ -35,8 +35,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
@@ -108,6 +113,20 @@ public class ConceptAprilTagEasy extends LinearOpMode {
                 sleep(20);
             }
         }
+
+        for (AprilTagDetection detection : aprilTag.getDetections()) {
+            Orientation rot = Orientation.getOrientation(detection.rawPose.R, AxesReference.INTRINSIC,AxesOrder.XYZ, AngleUnit.DEGREES);
+// Original source data
+            double poseX = detection.rawPose.x;
+            double poseY = detection.rawPose.y;
+            double poseZ = detection.rawPose.z;
+            double poseAX = rot.firstAngle;
+            double poseAY = rot.secondAngle;
+            double poseAZ = rot.thirdAngle;
+
+        }
+
+
 
         // Save more CPU resources when camera is no longer needed.
         visionPortal.close();
