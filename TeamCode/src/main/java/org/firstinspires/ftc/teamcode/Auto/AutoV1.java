@@ -85,11 +85,11 @@ public class AutoV1 extends LinearOpMode {
         }
 
         Actions.runBlocking(drive.actionBuilder(beginPose)
-                //Šauna 3x
+                .stopAndAdd(new sovimas(sm, P1S,P2S, 0.5))
                 .turn(0.3333) //Atsisukti į apriltag
                 .lineToXLinearHeading(n, Math.toDegrees(90)) //važiutoi iki paėmimo ir atsisukti
                 //Sukti paėmimą ir paiimti
-                //šauti 3x
+                .stopAndAdd(new sovimas(sm, P1S,P2S, 0.5))
                 .strafeToLinearHeading(new Vector2d(0, 0), Math.toDegrees(0.33333)) //Grįžti atgal
                         .stopAndAdd(new sovimas(sm, P1S,P2S, 0.5))
                 .build())
