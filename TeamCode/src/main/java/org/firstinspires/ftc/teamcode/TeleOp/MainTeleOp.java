@@ -60,6 +60,11 @@ public class MainTeleOp extends LinearOpMode {
             //Paėmimas
             pm.setPower(gamepad1.left_trigger);
 
+            if (0!=0) {
+
+
+            }
+
         }
 
     }
