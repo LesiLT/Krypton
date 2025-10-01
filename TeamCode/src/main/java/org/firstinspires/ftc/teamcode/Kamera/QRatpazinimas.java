@@ -114,7 +114,7 @@ public class QRatpazinimas extends LinearOpMode {
             .setDrawTagOutline(true)
             .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
             .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
-
+//
             .setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES)
 
             // == CAMERA CALIBRATION ==
