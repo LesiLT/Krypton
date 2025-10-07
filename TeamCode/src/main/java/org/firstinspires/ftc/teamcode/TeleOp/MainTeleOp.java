@@ -7,14 +7,20 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-@TeleOp()
+
+@TeleOp
 public class MainTeleOp extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairė priekis/galas, desinė priekis/galas
     Double sp = 0.5; //Greitis
-   // CRServo P1S, P2S; // Padavimo servai
-   // DcMotor pm, sm; //Paėmimas, išmetimas
+
+    DcMotor pm, sm; //Paėmimas, išmetimas //0, 1 expansion hub
+
+
+    boolean prev = false;
+    boolean motorOn = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -24,14 +30,12 @@ public class MainTeleOp extends LinearOpMode {
         dP = new Motor(hardwareMap, "dP", Motor.GoBILDA.RPM_312); // 2 lizdas control hub
         dG = new Motor(hardwareMap, "dG", Motor.GoBILDA.RPM_312); // 3 lizdas control hub
 
-     /*   //Išmetimas/Paėmimas
+        //Išmetimas/Paėmimas
         pm = hardwareMap.get(DcMotor.class, "pm");
         sm = hardwareMap.get(DcMotor.class, "sm");
+        sm.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        //Padavimo servai
-        P1S = hardwareMap.get(CRServo.class, "P1S");
-        P2S = hardwareMap.get(CRServo.class, "P2S");
-*/
+
         waitForStart();
         while (!isStopRequested()) {
 
@@ -39,32 +43,33 @@ public class MainTeleOp extends LinearOpMode {
             MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG) ;
 
            drive.driveFieldCentric(
-                   gamepad1.left_stick_x * sp, // strafe/drift
-                   gamepad1.left_stick_y * -sp, // priekis
-                   gamepad1.right_stick_x * sp, // posūkis
+                  - gamepad1.left_stick_x / 2, // strafe/drift
+                    gamepad1.left_stick_y / 2, // priekis
+                   -gamepad1.right_stick_x / 2, // posūkis
                    0
            );
-/*
+
            //Šaudymas:
-            //išmetimas
-           if (gamepad1.triangle){
-               sm.setPower(1);
-           }
-           // Padavimas
-            if (gamepad1.right_bumper){
-                P1S.setPower(0.5);
-                P2S.setPower(0.5);
-            } else if (!gamepad1.right_bumper) {
-                P1S.setPower(0);
-                P2S.setPower(0);
-            }
+//30 laipsniu
             //Paėmimas
-            pm.setPower(gamepad1.left_trigger);
+            if (gamepad1.left_trigger > 0) {
+                pm.setPower(1);
+            }
+            pm.setPower(0);
 
-            if (0!=0) {
-
-
-            }*/
+            //išmetimas
+            boolean paspaustas = false;
+            paspaustas = gamepad1.triangle;
+            if(paspaustas && !prev)
+            {
+                motorOn = !motorOn;
+            }
+            prev = paspaustas;
+            if(motorOn){
+                gamepad1.rumble(500, 500, 600);
+                sm.setPower(1);
+            }
+            else sm.setPower(0);
 
         }
 
