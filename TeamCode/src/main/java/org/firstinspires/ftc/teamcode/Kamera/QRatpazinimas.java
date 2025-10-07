@@ -113,7 +113,7 @@ public class QRatpazinimas extends LinearOpMode {
             .setDrawCubeProjection(false)
             .setDrawTagOutline(true)
             .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-            .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
+            .setTagLibrary(AprilLibrary.getSmallLibrary())
 //
             .setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES)
 
