@@ -53,7 +53,7 @@ public class MainTeleOp extends LinearOpMode {
 //30 laipsniu
             //Paėmimas
             if (gamepad1.left_trigger > 0) {
-                pm.setPower(1);
+                pm.setPower(0.75);
             }
             pm.setPower(0);
 
