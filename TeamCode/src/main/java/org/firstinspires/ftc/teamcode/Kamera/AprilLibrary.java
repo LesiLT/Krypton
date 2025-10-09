@@ -13,7 +13,7 @@ public class AprilLibrary {
                         20,
                         "melynas",
                         16.5,
-                        new VectorF(6 ,1 ,10),
+                        new VectorF(0 ,0 ,0),
                         DistanceUnit.CM,
                         Quaternion.identityQuaternion()
                 )

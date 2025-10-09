@@ -31,9 +31,13 @@ package org.firstinspires.ftc.teamcode.Kamera;
 
 import android.util.Size;
 
+import com.arcrobotics.ftclib.drivebase.MecanumDrive;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -49,7 +53,8 @@ import java.util.List;
 //@Disabled
 @TeleOp(name = "Concept: AprilTag", group = "Concept")
 public class QRatpazinimas extends LinearOpMode {
-
+    DcMotor kP, kG, dP, dG; //kairė priekis/galas, desinė priekis/galas
+    Double sp = 0.5; //Greitis
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     /**
@@ -61,12 +66,17 @@ public class QRatpazinimas extends LinearOpMode {
      * The variable to store our instance of the vision portal.
      */
     private VisionPortal visionPortal;
+    double x;
 
     @Override
     public void runOpMode() {
 
         initAprilTag();
 
+        kP = hardwareMap.get(DcMotor.class, "kP"); // 0 lizdas control hub
+        kG = hardwareMap.get(DcMotor.class, "kG"); // 1 lizdas control hub
+        dP = hardwareMap.get(DcMotor.class, "dP"); // 2 lizdas control hub
+        dG = hardwareMap.get(DcMotor.class, "dG"); // 3 lizdas control hub
         // Wait for the DS start button to be touched.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch START to start OpMode");
@@ -75,6 +85,22 @@ public class QRatpazinimas extends LinearOpMode {
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
+                //Važiuoklės varikliai
+
+                if(x>0){
+                    kP.setPower(sp);
+                    kG.setPower(sp);
+                    dP.setPower(-sp);
+                    dG.setPower(-sp);
+                } else if (x<0) {
+                    kP.setPower(-sp);
+                    kG.setPower(-sp);
+                    dP.setPower(sp);
+                    dG.setPower(sp);
+                }
+
+
+
 
                 telemetryAprilTag();
 
@@ -183,6 +209,8 @@ public class QRatpazinimas extends LinearOpMode {
 
 
             if (detection.metadata != null) {
+
+                x=detection.ftcPose.x;
                 telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
                 telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
                 telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
@@ -202,4 +230,8 @@ public class QRatpazinimas extends LinearOpMode {
 
 
 
-}   // end class
+   // end class
+
+
+    }
+

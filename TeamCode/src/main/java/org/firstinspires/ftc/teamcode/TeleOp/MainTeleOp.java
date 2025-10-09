@@ -67,7 +67,7 @@ public class MainTeleOp extends LinearOpMode {
             prev = paspaustas;
             if(motorOn){
                 gamepad1.rumble(500, 500, 600);
-                sm.setPower(1);
+                sm.setPower(-1);
             }
             else sm.setPower(0);
 
