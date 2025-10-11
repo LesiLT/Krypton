@@ -6,11 +6,9 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
-import com.acmerobotics.roadrunner.ftc.Actions;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -31,7 +29,7 @@ import java.util.List;
 @Autonomous
 public class AutoV1 extends LinearOpMode {
 
-    //Rasto parinkimas:
+    //Rasto parinkimas
     int n = 10; //Rašto pasirinkimas
     int rX = 0;
     DcMotor kP,kG,dP,dG;
@@ -91,7 +89,7 @@ public class AutoV1 extends LinearOpMode {
                 //Sukti paėmimą ir paiimti
                 .stopAndAdd(new sovimas(sm, P1S,P2S, 0.5))
                 .strafeToLinearHeading(new Vector2d(0, 0), Math.toDegrees(0.33333)) //Grįžti atgal
-                        .stopAndAdd(new sovimas(sm, P1S,P2S, 0.5))
+                .stopAndAdd(new sovimas(sm, P1S,P2S, 0.5))
                 .build())
         ;
 

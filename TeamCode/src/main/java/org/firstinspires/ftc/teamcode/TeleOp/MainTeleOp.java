@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
-import com.arcrobotics.ftclib.hardware.HardwareDevice;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class MainTeleOp extends LinearOpMode {
@@ -52,7 +48,7 @@ public class MainTeleOp extends LinearOpMode {
            );
 
            //Šaudymas:
-//30 laipsniu
+
             //Paėmimas
             if (gamepad1.left_trigger > 0) {
                 pm.setPower(0.75);
