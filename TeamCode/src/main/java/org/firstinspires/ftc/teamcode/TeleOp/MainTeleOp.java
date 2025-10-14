@@ -41,9 +41,9 @@ public class MainTeleOp extends LinearOpMode {
             MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG) ;
 
            drive.driveFieldCentric(
-                  - gamepad1.left_stick_x / 2, // strafe/drift
-                    gamepad1.left_stick_y / 2, // priekis
-                   -gamepad1.right_stick_x / 2, // posūkis
+                  - gamepad1.left_stick_x * 0.75, // strafe/drift
+                    gamepad1.left_stick_y * 0.75, // priekis
+                   -gamepad1.right_stick_x * 0.75, // posūkis
                    0
            );
 
@@ -56,11 +56,12 @@ public class MainTeleOp extends LinearOpMode {
             pm.setPower(0);
 
             //išmetimas
-            /*telemetry.addData("Titas == blogas",gamepad1.right_trigger);
+            telemetry.addData("Titas == blogas",gamepad1.right_trigger);
             if(gamepad1.circle)telemetry.update();
-            sm1.setPower(-gamepad1.right_trigger);
-            sm2.setPower(gamepad1.right_trigger);*/
-
+            if (gamepad1.left_trigger > 0.2) {
+                sm1.setPower(-gamepad1.right_trigger);
+                sm2.setPower(gamepad1.right_trigger);
+            }
 
             boolean paspaustas = false;
             paspaustas = gamepad1.triangle;
@@ -74,10 +75,11 @@ public class MainTeleOp extends LinearOpMode {
                 sm1.setPower(-1);
                 sm2.setPower(1);
             }
-            else{ sm1.setPower(0);
-                sm2.setPower(0);}
+            else{
+                sm1.setPower(0);
+                sm2.setPower(0);
+            }
 
         }
-
     }
 }
