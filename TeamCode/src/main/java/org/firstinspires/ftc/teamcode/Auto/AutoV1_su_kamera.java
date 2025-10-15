@@ -27,13 +27,13 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
 @Autonomous
-public class AutoV1 extends LinearOpMode {
+public class AutoV1_su_kamera extends LinearOpMode {
 
     //Rasto parinkimas
     int n = 10; //Rašto pasirinkimas
     int rX = 0;
     DcMotor kP,kG,dP,dG;
-    DcMotor sm,pm;
+    DcMotor sm1,sm2,pm;
     CRServo P1S,P2S;
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -56,8 +56,10 @@ public class AutoV1 extends LinearOpMode {
         dG = hardwareMap.get(DcMotor.class, "dG"); // 3 lizdas control hub
 
         //Išmetimas/Paėmimas
+        sm1 = hardwareMap.get(DcMotor.class, "sm1");
+        sm2 = hardwareMap.get(DcMotor.class, "sm2");
         pm = hardwareMap.get(DcMotor.class, "pm");
-        sm = hardwareMap.get(DcMotor.class, "sm");
+
 
         //Padavimo servai
         P1S = hardwareMap.get(CRServo.class, "P1S");
@@ -83,13 +85,13 @@ public class AutoV1 extends LinearOpMode {
         }
 
         Actions.runBlocking(drive.actionBuilder(beginPose)
-                .stopAndAdd(new sovimas(sm, P1S,P2S, 0.5))
+                .stopAndAdd(new sovimas(sm1,sm2, P1S,P2S, 0.5))
                 .turn(0.3333) //Atsisukti į apriltag
                 .lineToXLinearHeading(n, Math.toDegrees(90)) //važiutoi iki paėmimo ir atsisukti
                 //Sukti paėmimą ir paiimti
-                .stopAndAdd(new sovimas(sm, P1S,P2S, 0.5))
+                .stopAndAdd(new sovimas(sm1,sm2, P1S,P2S, 0.5))
                 .strafeToLinearHeading(new Vector2d(0, 0), Math.toDegrees(0.33333)) //Grįžti atgal
-                .stopAndAdd(new sovimas(sm, P1S,P2S, 0.5))
+                .stopAndAdd(new sovimas(sm1,sm2, P1S,P2S, 0.5))
                 .build())
         ;
 
@@ -213,11 +215,12 @@ public class AutoV1 extends LinearOpMode {
         }
     }
     public class sovimas implements Action{
-        DcMotor sm;
+        DcMotor sm1,sm2;
         CRServo P1S, P2S;
         double sp;
-        public sovimas(DcMotor sm, CRServo P1S,CRServo P2S,double sp){
-            this.sm = sm;
+        public sovimas(DcMotor sm1,DcMotor sm2, CRServo P1S,CRServo P2S,double sp){
+            this.sm1 = sm1;
+            this.sm2 = sm2;
             this.P1S = P1S;
             this.P2S = P2S;
         }
@@ -226,7 +229,8 @@ public class AutoV1 extends LinearOpMode {
             resetRuntime();
             int n = 0;
             while(getRuntime() < 2){
-                sm.setPower(sp);
+                sm1.setPower(sp);
+                sm2.setPower(sp);
                 P1S.setPower(sp);
                 P2S.setPower(sp);
                 resetRuntime();
