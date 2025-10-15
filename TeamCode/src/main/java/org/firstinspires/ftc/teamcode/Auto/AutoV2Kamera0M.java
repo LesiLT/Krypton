@@ -18,7 +18,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @Autonomous (name = "Auto MėlynasDidysis")
-public class AutoV2 extends LinearOpMode {
+public class AutoV2Kamera0M extends LinearOpMode {
 
     DcMotor kP,kG,dP,dG;
     DcMotor sm1,sm2;

@@ -54,9 +54,14 @@ public class MainTeleOp extends LinearOpMode {
            //Šaudymas:
 
             //Paėmimas
+
+            if (gamepad1.left_trigger > 0) {
+                pm.setPower(0.75);
+
             while(gamepad1.square) {
                 P1S.setPower(-1);
                 P2S.setPower(1);
+
             }
             if(!gamepad1.square)P1S.setPower(0);
             P2S.setPower(0);
@@ -65,8 +70,8 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("Titas == blogas",gamepad1.right_trigger);
             if(gamepad1.circle)telemetry.update();
             if (gamepad1.left_trigger > 0.2) {
-                sm1.setPower(-gamepad1.right_trigger);
-                sm2.setPower(gamepad1.right_trigger);
+                sm1.setPower(-gamepad1.right_trigger / 0.5);
+                sm2.setPower(gamepad1.right_trigger / 0.5);
             }
 
             boolean paspaustas = false;
@@ -81,11 +86,15 @@ public class MainTeleOp extends LinearOpMode {
                 sm1.setPower(-1);
                 sm2.setPower(1);
             }
-            else{
+            else if (gamepad1.left_trigger < 0.2){
                 sm1.setPower(0);
                 sm2.setPower(0);
             }
 
+
+            //0.48 toliau
+            //0.37 arti
+
         }
     }
-}
+}}
