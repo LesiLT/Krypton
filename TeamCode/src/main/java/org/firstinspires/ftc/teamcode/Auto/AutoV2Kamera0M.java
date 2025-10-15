@@ -9,15 +9,15 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @Autonomous (name = "Auto Mėlynas")
-public class AutoV2 extends LinearOpMode {
+public class AutoV2Kamera0M extends LinearOpMode {
 
     DcMotor kP,kG,dP,dG;
     DcMotor sm1,sm2;
@@ -53,6 +53,10 @@ public class AutoV2 extends LinearOpMode {
 
     public class šauti implements Action {
         DcMotor sm1, sm2;
+
+        Servo P1, p2;
+
+
         double sp;
         public šauti(DcMotor sm1, DcMotor sm2, double sp) {
         this.sm1 = sm1;
