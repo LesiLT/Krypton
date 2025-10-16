@@ -27,9 +27,13 @@ public class AutoV2Kamera0M extends LinearOpMode {
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
 
+    int Arti_Toli_ToliToli = 0;
+    int KarD = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+
         kP = hardwareMap.get(DcMotor.class, "kP"); // 0 lizdas control hub
         kG = hardwareMap.get(DcMotor.class, "kG");// 1 lizdas control hub
         dP = hardwareMap.get(DcMotor.class, "dP"); // 2 lizdas control hub
@@ -38,12 +42,108 @@ public class AutoV2Kamera0M extends LinearOpMode {
         //Išmetimas/Paėmimas
         sm1 = hardwareMap.get(DcMotor.class, "sm1");
         sm2 = hardwareMap.get(DcMotor.class, "sm2");
+
+        while(!isStarted())
+        {
+            if (gamepad1.dpad_up)
+            {
+                telemetry.addData("Atstumas", "Arti");
+                Arti_Toli_ToliToli = 1;
+                telemetry.update();
+            }
+            else if(gamepad1.dpad_left)
+            {
+                telemetry.addData("Atstumas", "Toli");
+                Arti_Toli_ToliToli = 2;
+                telemetry.update();
+            }
+            else if(gamepad1.dpad_down)
+            {
+                telemetry.addData("Atstumas", "Labai Toli");
+                Arti_Toli_ToliToli = 3;
+                telemetry.update();
+            }
+
+            if(Arti_Toli_ToliToli == 1)
+            {
+                if(gamepad1.right_bumper)
+                {
+                    telemetry.addData("Atstumas", "Arti");
+                    telemetry.addData("Pusė", "Dešinė");
+                    KarD = 2;
+                    telemetry.update();
+                }
+                else if(gamepad1.left_bumper)
+                {
+                    telemetry.addData("Atstumas", "Arti");
+                    telemetry.addData("Pusė", "Kairė");
+                    KarD = 1;
+                    telemetry.update();
+                }
+            }
+            else if(Arti_Toli_ToliToli == 2)
+            {
+                if(gamepad1.right_bumper)
+                {
+                    telemetry.addData("Atstumas", "Toli");
+                    telemetry.addData("Pusė", "Dešinė");
+                    KarD = 2;
+                    telemetry.update();
+                }
+                else if(gamepad1.left_bumper)
+                {
+                    telemetry.addData("Atstumas", "Toli");
+                    telemetry.addData("Pusė", "Kairė");
+                    KarD = 1;
+                    telemetry.update();
+                }
+            }
+
+        }
+
         MecanumDrive drive= new MecanumDrive(hardwareMap,new Pose2d(0,0,0));
         waitForStart();
-        Actions.runBlocking(drive.actionBuilder(new Pose2d(0,0,0))
-                .stopAndAdd(new šauti(sm1, sm2, 0.5))
-                .build()
-        );
+        if(Arti_Toli_ToliToli == 1 && KarD == 1)
+        {
+            Actions.runBlocking(drive.actionBuilder(new Pose2d(0,0,0))
+                    .stopAndAdd(new šauti(sm1, sm2, 0.5))
+                    .strafeTo(new Vector2d(0, -10))
+                    .build()
+            );
+        }
+        else if(Arti_Toli_ToliToli == 1 && KarD == 2)
+        {
+            Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
+                    .stopAndAdd(new šauti(sm1, sm2, 0.5))
+                    .strafeTo(new Vector2d(0, 10))
+                    .build()
+            );
+        }
+        else if(Arti_Toli_ToliToli == 2 && KarD == 1)
+        {
+            Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
+                    .stopAndAdd(new šauti(sm1, sm2, 0.5))
+                    .strafeTo(new Vector2d(0, -10))
+                    .build()
+            );
+        }
+        else if(Arti_Toli_ToliToli == 2 && KarD == 2)
+        {
+            Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
+                    .stopAndAdd(new šauti(sm1, sm2, 0.5))
+                    .strafeTo(new Vector2d(0, 10))
+                    .build()
+            );
+        }
+        else
+        {
+            Actions.runBlocking(drive.actionBuilder(new Pose2d(0,0,0))
+                    .stopAndAdd(new šauti(sm1, sm2, 0.5))
+                    .lineToX(10)
+                    .build()
+            );
+        }
+
 
 
 
