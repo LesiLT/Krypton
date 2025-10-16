@@ -14,8 +14,8 @@ public class MainTeleOp extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairė priekis/galas, desinė priekis/galas
     Double sp = 0.5; //Greitis
     CRServo P1S,P2S;
-    DcMotor pm, sm1,sm2; //Paėmimas, išmetimas //0, 1, 2expansion hub
-
+    DcMotor  sm1,sm2; //Paėmimas, išmetimas //0, 1, 2expansion hub
+    Servo pm;
 
     boolean prev = false;
     boolean motorOn = false;
@@ -29,13 +29,13 @@ public class MainTeleOp extends LinearOpMode {
         dG = new Motor(hardwareMap, "dG", Motor.GoBILDA.RPM_312); // 3 lizdas control hub
 
         //Išmetimas/Paėmimas
-        pm = hardwareMap.get(DcMotor.class, "pm");
+
         sm1 = hardwareMap.get(DcMotor.class, "sm1");
         sm2 = hardwareMap.get(DcMotor.class, "sm2");
         P1S = hardwareMap.get(CRServo.class, "P1S");
         P2S = hardwareMap.get(CRServo.class, "P2S");
-        sm1.setDirection(DcMotorSimple.Direction.REVERSE);
-        sm2.setDirection(DcMotorSimple.Direction.REVERSE);
+        pm = hardwareMap.get(Servo.class, "pm");
+
 
 
         waitForStart();
@@ -52,26 +52,33 @@ public class MainTeleOp extends LinearOpMode {
            );
 
            //Šaudymas:
+            //Padavimas
+            if (gamepad1.dpad_down) {
+                pm.setPosition(0);
+            }
+            if (gamepad1.dpad_up){
+                telemetry.addData("Servo poz", pm.getPosition());
+                telemetry.update();
+                pm.setPosition(0.20);
 
+            }
             //Paėmimas
 
-            if (gamepad1.left_trigger > 0) {
-                pm.setPower(0.75);
 
             while(gamepad1.square) {
                 P1S.setPower(-1);
                 P2S.setPower(1);
 
             }
-            if(!gamepad1.square)P1S.setPower(0);
-            P2S.setPower(0);
+            if(!gamepad1.square){P1S.setPower(0);
+            P2S.setPower(0);}
 
             //išmetimas
             telemetry.addData("Titas == blogas",gamepad1.right_trigger);
             if(gamepad1.circle)telemetry.update();
             if (gamepad1.left_trigger > 0.2) {
-                sm1.setPower(-gamepad1.right_trigger / 0.5);
-                sm2.setPower(gamepad1.right_trigger / 0.5);
+                sm1.setPower(-gamepad1.right_trigger);
+                sm2.setPower(gamepad1.right_trigger);
             }
 
             boolean paspaustas = false;
@@ -83,10 +90,10 @@ public class MainTeleOp extends LinearOpMode {
             prev = paspaustas;
             if(motorOn){
                 gamepad1.rumble(500, 500, 600);
-                sm1.setPower(-1);
-                sm2.setPower(1);
+                sm1.setPower(0.76);
+                sm2.setPower(-0.76);
             }
-            else if (gamepad1.left_trigger < 0.2){
+            else {
                 sm1.setPower(0);
                 sm2.setPower(0);
             }
@@ -97,4 +104,4 @@ public class MainTeleOp extends LinearOpMode {
 
         }
     }
-}}
+}
