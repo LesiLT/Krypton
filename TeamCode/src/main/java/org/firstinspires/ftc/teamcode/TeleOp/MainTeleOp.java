@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import static java.lang.Math.abs;
+
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -61,19 +63,19 @@ public class MainTeleOp extends LinearOpMode {
 
            //Šaudymas:
             //Padavimas
-            if (gamepad1.dpad_down) {
-                pm.setPosition(0);
-            }
+
             if (gamepad1.dpad_up){
                 telemetry.addData("Servo poz", pm.getPosition());
                 telemetry.update();
                 pm.setPosition(0.45);
 
             }
+            else if (pm.getPosition() == 0.45 )
+            pm.setPosition(0);
             //Paėmimas
 
 
-            while(gamepad1.square) {
+            if (gamepad1.square) {
                 P1S.setPower(-1);
                 P2S.setPower(1);
 
@@ -83,8 +85,11 @@ public class MainTeleOp extends LinearOpMode {
 
             //išmetimas
             telemetry.addData("Titas == blogas",gamepad1.right_trigger);
+            //double realtime_rpm1 = 6000*sm1.getPower();
+            double realtime_rpm2 = 6000*abs(sm1.getPower());
+            telemetry.addData("RPM sm2", realtime_rpm2);
             if(gamepad1.circle)telemetry.update();
-            if (gamepad1.left_trigger > 0.2) {
+            if (gamepad1.right_trigger > 0.2) {
                 sm1.setPower(gamepad1.right_trigger);
                 sm2.setPower(-gamepad1.right_trigger);
             }
@@ -97,7 +102,7 @@ public class MainTeleOp extends LinearOpMode {
             }
             prev = paspaustas;
             if(motorOn){
-                if(sm2.getPower() == -0.75)
+                if(sm2.getPower() >= -0.75)
                 gamepad1.rumble(500, 500, 600);
                 sm1.setPower(0.76);
                 sm2.setPower(-0.76);

@@ -148,13 +148,14 @@ public class AutoV2Kamera0M extends LinearOpMode {
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             resetRuntime();
             int n = 0;
-            sm1.setPower(sp);
-            sm2.setPower(-sp);
-            while (getRuntime() < 2) {
+
+            while (getRuntime() < 2000) {
+                sm1.setPower(sp);
+                sm2.setPower(-sp);
                 pm.setPosition(0);
                 P1S.setPower(-1);
                 P2S.setPower(1);
-                if (getRuntime() > 1)
+                if (getRuntime() > 1000)
                     pm.setPosition(0.45);
                 resetRuntime();
                 n++;
