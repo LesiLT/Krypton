@@ -9,10 +9,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.ftccommon.internal.manualcontrol.commands.MotorCommands;
+
 @TeleOp
 public class MainTeleOp extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairė priekis/galas, desinė priekis/galas
     Double sp = 0.5; //Greitis
+    int KP=0,KG=0,DP=0,DG=0;
     CRServo P1S,P2S;
     DcMotor  sm1,sm2; //Paėmimas, išmetimas //0, 1, 2expansion hub
     Servo pm;
@@ -27,6 +30,11 @@ public class MainTeleOp extends LinearOpMode {
         kG = new Motor(hardwareMap, "kG", Motor.GoBILDA.RPM_312); // 1 lizdas control hub
         dP = new Motor(hardwareMap, "dP", Motor.GoBILDA.RPM_312); // 2 lizdas control hub
         dG = new Motor(hardwareMap, "dG", Motor.GoBILDA.RPM_312); // 3 lizdas control hub
+        /*kP = hardwareMap.get(DcMotor.class, "kP"); // 0 lizdas control hub
+        kG = hardwareMap.get(DcMotor.class, "kG");// 1 lizdas control hub
+        dP = hardwareMap.get(DcMotor.class, "dP"); // 2 lizdas control hub
+        dG = hardwareMap.get(DcMotor.class, "dG"); // 3 lizdas control hub*/
+
 
         //Išmetimas/Paėmimas
 
@@ -44,12 +52,12 @@ public class MainTeleOp extends LinearOpMode {
             // Važiuoklė
             MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG) ;
 
-           drive.driveFieldCentric(
+          if(motorOn == false){ drive.driveFieldCentric(
                   - gamepad1.left_stick_x * 0.75, // strafe/drift
                     gamepad1.left_stick_y * 0.75, // priekis
                    -gamepad1.right_stick_x * 0.75, // posūkis
                    0
-           );
+           );}
 
            //Šaudymas:
             //Padavimas
@@ -59,7 +67,7 @@ public class MainTeleOp extends LinearOpMode {
             if (gamepad1.dpad_up){
                 telemetry.addData("Servo poz", pm.getPosition());
                 telemetry.update();
-                pm.setPosition(0.20);
+                pm.setPosition(0.45);
 
             }
             //Paėmimas
@@ -92,6 +100,10 @@ public class MainTeleOp extends LinearOpMode {
                 gamepad1.rumble(500, 500, 600);
                 sm1.setPower(0.76);
                 sm2.setPower(-0.76);
+                drive.driveFieldCentric(
+                        KG,KP,DP,DG );
+
+
             }
             else {
                 sm1.setPower(0);
