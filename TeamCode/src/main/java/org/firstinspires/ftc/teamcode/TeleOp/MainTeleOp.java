@@ -54,7 +54,7 @@ public class MainTeleOp extends LinearOpMode {
             // Važiuoklė
             MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG) ;
 
-          if(motorOn == false){ drive.driveFieldCentric(
+          if(!motorOn){ drive.driveFieldCentric(
                   - gamepad1.left_stick_x * 0.75, // strafe/drift
                     gamepad1.left_stick_y * 0.75, // priekis
                    -gamepad1.right_stick_x * 0.75, // posūkis
@@ -89,10 +89,8 @@ public class MainTeleOp extends LinearOpMode {
             double realtime_rpm2 = 6000*abs(sm1.getPower());
             telemetry.addData("RPM sm2", realtime_rpm2);
             if(gamepad1.circle)telemetry.update();
-            if (gamepad1.right_trigger > 0.2) {
-                sm1.setPower(gamepad1.right_trigger);
-                sm2.setPower(-gamepad1.right_trigger);
-            }
+
+
 
             boolean paspaustas = false;
             paspaustas = gamepad1.triangle;
