@@ -96,31 +96,31 @@ public class AutoV2Kamera0M extends LinearOpMode {
         waitForStart();
         if (Arti_Toli_ToliToli == 1 && KarD == 1) {
             Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                    .stopAndAdd(new šauti(sm1, sm2, 0.5))
+                    .stopAndAdd(new šauti(sm1, sm2,P1S,P2S,pm, 0.5))
                     .strafeTo(new Vector2d(0, -10))
                     .build()
             );
         } else if (Arti_Toli_ToliToli == 1 && KarD == 2) {
             Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                    .stopAndAdd(new šauti(sm1, sm2, 0.5))
+                    .stopAndAdd(new šauti(sm1, sm2,P1S,P2S,pm, 0.5))
                     .strafeTo(new Vector2d(0, 10))
                     .build()
             );
         } else if (Arti_Toli_ToliToli == 2 && KarD == 1) {
             Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                    .stopAndAdd(new šauti(sm1, sm2, 0.5))
+                    .stopAndAdd(new šauti(sm1, sm2,P1S,P2S,pm, 0.5))
                     .strafeTo(new Vector2d(0, -10))
                     .build()
             );
         } else if (Arti_Toli_ToliToli == 2 && KarD == 2) {
             Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                    .stopAndAdd(new šauti(sm1, sm2, 0.5))
+                    .stopAndAdd(new šauti(sm1, sm2,P1S,P2S,pm, 0.5))
                     .strafeTo(new Vector2d(0, 10))
                     .build()
             );
         } else {
             Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                    .stopAndAdd(new šauti(sm1, sm2, 0.5))
+                    .stopAndAdd(new šauti(sm1, sm2,P1S,P2S,pm, 0.5))
                     .lineToX(10)
                     .build()
             );
@@ -131,11 +131,16 @@ public class AutoV2Kamera0M extends LinearOpMode {
 
     public class šauti implements Action {
         DcMotor sm1, sm2;
+        CRServo P1S,P2S;
+        Servo pm;
         double sp;
 
-        public šauti(DcMotor sm1, DcMotor sm2, double sp) {
+        public šauti(DcMotor sm1, DcMotor sm2,CRServo P1S,CRServo P2S,Servo pm, double sp) {
             this.sm1 = sm1;
             this.sm2 = sm2;
+            this.P1S = P1S;
+            this.P2S = P2S;
+            this.pm = pm;
 
         }
 
@@ -154,6 +159,7 @@ public class AutoV2Kamera0M extends LinearOpMode {
                 resetRuntime();
                 n++;
                 if (n == 3) break;
+                resetRuntime();
             } // kas parase sita cikla, tas rizikuoja komandos sansus laimeti, sveikinu NOJAU
             return false;
 
