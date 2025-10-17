@@ -96,31 +96,56 @@ public class AutoV2Kamera0M extends LinearOpMode {
         waitForStart();
         if (Arti_Toli_ToliToli == 1 && KarD == 1) {
             Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                    .stopAndAdd(new šauti(sm1, sm2,P1S,P2S,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
                     .strafeTo(new Vector2d(0, -10))
                     .build()
             );
         } else if (Arti_Toli_ToliToli == 1 && KarD == 2) {
             Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                    .stopAndAdd(new šauti(sm1, sm2,P1S,P2S,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
                     .strafeTo(new Vector2d(0, 10))
                     .build()
             );
         } else if (Arti_Toli_ToliToli == 2 && KarD == 1) {
             Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                    .stopAndAdd(new šauti(sm1, sm2,P1S,P2S,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
                     .strafeTo(new Vector2d(0, -10))
                     .build()
             );
         } else if (Arti_Toli_ToliToli == 2 && KarD == 2) {
             Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                    .stopAndAdd(new šauti(sm1, sm2,P1S,P2S,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
                     .strafeTo(new Vector2d(0, 10))
                     .build()
             );
         } else {
             Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                    .stopAndAdd(new šauti(sm1, sm2,P1S,P2S,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
+                    .stopAndAdd(new keliauti(P1S,P2S,pm))
+                    .stopAndAdd(new šauti(sm1, sm2,pm, 0.5))
                     .lineToX(10)
                     .build()
             );
@@ -129,39 +154,52 @@ public class AutoV2Kamera0M extends LinearOpMode {
 
     }
 
+    public class keliauti implements Action {
+        CRServo P1S, P2S;
+        Servo pm;
+        public keliauti(CRServo P1S, CRServo P2S, Servo pm) {
+            this.P1S = P1S;
+            this.P2S = P2S;
+            this.pm = pm;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            pm.setPosition(0);
+            while (getRuntime() < 1000) {
+                P1S.setPower(-1);
+                P2S.setPower(1);
+            }
+            resetRuntime();
+            return false;
+        }
+
+
+
+    }
     public class šauti implements Action {
         DcMotor sm1, sm2;
-        CRServo P1S,P2S;
         Servo pm;
         double sp;
 
-        public šauti(DcMotor sm1, DcMotor sm2,CRServo P1S,CRServo P2S,Servo pm, double sp) {
+        public šauti(DcMotor sm1, DcMotor sm2,Servo pm, double sp) {
             this.sm1 = sm1;
             this.sm2 = sm2;
-            this.P1S = P1S;
-            this.P2S = P2S;
             this.pm = pm;
 
         }
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            resetRuntime();
-            int n = 0;
-
-            while (getRuntime() < 2000) {
+                getRuntime();
                 sm1.setPower(sp);
                 sm2.setPower(-sp);
-                pm.setPosition(0);
-                P1S.setPower(-1);
-                P2S.setPower(1);
-                if (getRuntime() > 1000)
-                    pm.setPosition(0.45);
+                while (getRuntime() < 1500) {}
+                pm.setPosition(0.45);
                 resetRuntime();
-                n++;
-                if (n == 3) break;
-                resetRuntime();
-            } // kas parase sita cikla, tas rizikuoja komandos sansus laimeti, sveikinu NOJAU
+
+
+
             return false;
 
         }
