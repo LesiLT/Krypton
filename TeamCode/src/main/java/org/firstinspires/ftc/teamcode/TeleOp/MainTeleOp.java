@@ -85,8 +85,8 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("Titas == blogas",gamepad1.right_trigger);
             if(gamepad1.circle)telemetry.update();
             if (gamepad1.left_trigger > 0.2) {
-                sm1.setPower(-gamepad1.right_trigger);
-                sm2.setPower(gamepad1.right_trigger);
+                sm1.setPower(gamepad1.right_trigger);
+                sm2.setPower(-gamepad1.right_trigger);
             }
 
             boolean paspaustas = false;
