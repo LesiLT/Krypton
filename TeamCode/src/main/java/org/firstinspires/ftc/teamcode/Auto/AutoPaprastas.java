@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+
 
 @Autonomous (name = "Auto")
 public class AutoPaprastas extends OpMode {
@@ -15,6 +17,7 @@ public class AutoPaprastas extends OpMode {
 
     CRServo P1S,P2S;
     Servo pm;
+    int x = 0;
 
     @Override
     public void init() {
@@ -33,47 +36,27 @@ public class AutoPaprastas extends OpMode {
 
         telemetry.addData("kartai ", kartai);
 
+            resetRuntime();
         pm.setPosition(0);
     }
 
     @Override
     public void loop() {
-    telemetry.addData("T: ", getRuntime());
+        if (getRuntime() > 1 && x == 0) {
+            resetRuntime();
+            x++;
+        }
 
-        resetRuntime();
-telemetry.addData("Kartai", kartai);
-        if (kartai < 3 ) {
-            telemetry.addData("Šauna", 0);
-            P1S.setPower(-1);
-            P2S.setPower(1);
-            sm1.setPower(0.76);
-            sm2.setPower(-0.76);
-            pm.setPosition(0.45);
-            telemetry.addData("servo", pm.getPosition());
-                if (pm.getPosition() == 0.45 && getRuntime() < 1200){
-                    pm.setPosition(0);
-                    kartai++;
-                }
-            }
+        while (getRuntime() < 3) {
+            kP.setPower(-0.2);
+            kG.setPower(-0.2);
+            dP.setPower(0.2);
+            dG.setPower(0.2);
+        }
 
-
-
-        P1S.setPower(0);
-        P2S.setPower(0);
-        sm1.setPower(0);
-        sm2.setPower(0);
-
-        resetRuntime();
-//        while (kartai >= 3 && getRuntime() < 400){
-//            kP.setPower(0.7);
-//            kG.setPower(-0.7);
-//            dP.setPower(-0.7);
-//            dG.setPower(0.7);
-//        }
-        kP.setPower(0);
-        kG.setPower(0);
+        kP.setPower(-0);
+        kG.setPower(-0);
         dP.setPower(0);
         dG.setPower(0);
 
-    }
-}
+}}

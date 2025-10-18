@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-@Autonomous (name = "Auto MėlynasDidysis")
-public class AutoV2Kamera0M extends LinearOpMode {
+@Autonomous (name = "Auto RaudonasDidysis")
+public class AutoV2Kamera55 extends LinearOpMode {
 
     DcMotor kP, kG, dP, dG;
     DcMotor sm1, sm2;
@@ -242,10 +242,10 @@ public class AutoV2Kamera0M extends LinearOpMode {
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             getRuntime();
             while (getRuntime() <0.5) {
-                kP.setPower(0.5);
-                kG.setPower(-0.5);
-                dP.setPower(0.5);
-                dG.setPower(-0.5);
+                kP.setPower(-0.5);
+                kG.setPower(0.5);
+                dP.setPower(-0.5);
+                dG.setPower(0.5);
 
             }
             resetRuntime();
