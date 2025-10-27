@@ -16,8 +16,8 @@ import org.firstinspires.ftc.ftccommon.internal.manualcontrol.commands.MotorComm
 @TeleOp
 public class MainTeleOp extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairė priekis/galas, desinė priekis/galas
-    Double sp = 0.5; //Greitis
-    int KP=0,KG=0,DP=0,DG=0;
+
+        int KP=0,KG=0,DP=0,DG=0;
     CRServo P1S,P2S;
     DcMotor  sm1,sm2; //Paėmimas, išmetimas //0, 1, 2expansion hub
     Servo pm;
@@ -51,13 +51,15 @@ public class MainTeleOp extends LinearOpMode {
         waitForStart();
         while (!isStopRequested()) {
 
+
+
             // Važiuoklė
             MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG) ;
 
           if(!motorOn){ drive.driveFieldCentric(
-                  - gamepad1.left_stick_x * 0.75, // strafe/drift
-                    gamepad1.left_stick_y * 0.75, // priekis
-                   -gamepad1.right_stick_x * 0.75, // posūkis
+                  - gamepad1.left_stick_x * 0.85, // strafe/drift
+                    gamepad1.left_stick_y * 0.85, // priekis
+                   -gamepad1.right_stick_x * 0.85, // posūkis
                    0
            );}
 
@@ -91,7 +93,7 @@ public class MainTeleOp extends LinearOpMode {
             if(gamepad1.circle)telemetry.update();
 
 
-
+            Double sp = 0.75; //Greitis
             boolean paspaustas = false;
             paspaustas = gamepad1.triangle;
             if(paspaustas && !prev)
@@ -100,10 +102,10 @@ public class MainTeleOp extends LinearOpMode {
             }
             prev = paspaustas;
             if(motorOn){
-                if(sm2.getPower() >= -0.75)
-                gamepad1.rumble(500, 500, 600);
-                sm1.setPower(0.76);
-                sm2.setPower(-0.76);
+                if(sm2.getPower() >= -sp ){
+                gamepad1.rumble(500, 500, 600);}
+                sm1.setPower(sp);
+                sm2.setPower(-sp);
                 drive.driveFieldCentric(
                         KG,KP,DP,DG );
 
