@@ -119,7 +119,7 @@ public class TaiklumoKorekcija extends LinearOpMode {
     /**
      * Initialize the AprilTag processor.
      */
-    private void initAprilTag() {
+    public void initAprilTag() {
 
 
 

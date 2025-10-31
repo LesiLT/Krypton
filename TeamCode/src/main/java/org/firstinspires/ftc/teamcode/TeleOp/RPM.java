@@ -52,8 +52,8 @@ public class RPM extends LinearOpMode {
                     pad.setPower(0.4);
                 }
 
-                   if (gamepad1.left_stick_x >0 || gamepad1.left_stick_x <0){
-                       pad.setPower(gamepad1.left_stick_x);
+                   if (gamepad1.left_stick_y >0 || gamepad1.left_stick_y <0){
+                       pad.setPower(gamepad1.left_stick_y);
                    }
                     else pad.setPower(0);
 
