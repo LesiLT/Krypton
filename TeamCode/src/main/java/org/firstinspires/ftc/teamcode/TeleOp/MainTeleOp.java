@@ -21,7 +21,7 @@ public class MainTeleOp extends LinearOpMode {
         int KP=0,KG=0,DP=0,DG=0;
     CRServo P1S,P2S;
     DcMotor  sm1,sm2; //Paėmimas, išmetimas //0, 1, 2expansion hub
-    DcMotor pad;
+    DcMotor pad,pem;
     private static final int CPR = 28;             // encoder counts per rev (GoBILDA 6000RPM)
     private static final int MAX_RPM = 6000;
     private static final int MAX_TICKS_PER_SEC = (MAX_RPM / 60) * CPR;  // ~2800
@@ -46,11 +46,11 @@ public class MainTeleOp extends LinearOpMode {
 
         //Išmetimas/Paėmimas
 
-        sm1 = hardwareMap.get(DcMotor.class, "sm1");
-        sm2 = hardwareMap.get(DcMotor.class, "sm2");
-        P1S = hardwareMap.get(CRServo.class, "P1S");
-        P2S = hardwareMap.get(CRServo.class, "P2S");
-        pad = hardwareMap.get(DcMotor.class, "pad");
+        sm1 = hardwareMap.get(DcMotor.class, "sm1");  // 0 lizdas expansion hub
+        sm2 = hardwareMap.get(DcMotor.class, "sm2");  // 1 lizdas expansion hub
+        pad = hardwareMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
+        pem = hardwareMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
+
 
 
 
@@ -73,7 +73,9 @@ public class MainTeleOp extends LinearOpMode {
             if (gamepad1.dpad_up){
                 pad.setPower(0.5);
             }
-
+            if (gamepad1.dpad_down){
+                pem.setPower(0.5);
+            }
 
 
 
