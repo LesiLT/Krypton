@@ -100,7 +100,7 @@ public class MainTeleOp extends LinearOpMode {
 
 
             boolean paspaustas = false;
-            paspaustas = gamepad1.square;
+            paspaustas = gamepad1.left_bumper;
             if(paspaustas && !prev)
             {
                 motorOn = !motorOn;
