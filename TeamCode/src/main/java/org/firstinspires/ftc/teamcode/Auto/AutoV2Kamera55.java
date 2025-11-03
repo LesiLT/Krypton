@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-@Autonomous (name = "Auto RaudonasDidysis")
+@Autonomous (name = "Auto Raudonas Didysis")
 public class AutoV2Kamera55 extends LinearOpMode {
 
     DcMotor kP, kG, dP, dG;

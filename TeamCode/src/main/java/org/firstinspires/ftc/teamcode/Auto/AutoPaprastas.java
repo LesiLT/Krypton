@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-@Autonomous (name = "Auto")
+@Autonomous (name = "Auto tiesiai")
 public class AutoPaprastas extends OpMode {
 
     int kartai = 0;
