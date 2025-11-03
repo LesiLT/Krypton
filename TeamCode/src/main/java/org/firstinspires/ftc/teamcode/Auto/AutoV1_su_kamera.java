@@ -216,6 +216,50 @@ public class AutoV1_su_kamera extends LinearOpMode {
             return false;
         }
     }
+    public class atsisukimas_apriltag_centras implements Action{
+        public void telemetryAprilTag(double x) {
+
+            List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+            telemetry.addData("# AprilTags Detected", currentDetections.size());
+
+            // Step through the list of detections and display info for each one.
+            for (AprilTagDetection detection : currentDetections) {
+
+
+                if (detection.metadata != null) {
+
+                    x=detection.ftcPose.x;
+                    telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
+                    telemetry.addLine(String.format("Y %6.1f (cm)",  detection.ftcPose.y));
+                    telemetry.addLine(String.format("P %6.1f (deg)", detection.ftcPose.pitch));
+                    telemetry.addLine(String.format("R %6.1f (cm)", detection.ftcPose.range));
+                } else {
+                    telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
+                    telemetry.addLine(String.format("Center   (pixels)", detection.center.x));
+                }
+
+            }   // end for() loop
+        }   // end method telemetryAprilTag()
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            double x = 0;
+            double sp = 1;
+            telemetryAprilTag(x);
+            if(x<0)
+            {
+                kP.setPower(sp);
+                dP.setPower(-sp);
+            }
+            else if(x>0)
+            {
+                kP.setPower(-sp);
+                dP.setPower(sp);
+            }
+
+            return false;
+        }
+    }
     public class sovimas implements Action{
         DcMotor sm1,sm2;
         CRServo P1S, P2S;

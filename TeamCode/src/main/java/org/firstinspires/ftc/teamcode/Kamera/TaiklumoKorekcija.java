@@ -49,7 +49,7 @@ import java.util.List;
 @TeleOp(name = "auto aim")
 public class TaiklumoKorekcija extends LinearOpMode {
     DcMotor kP, dP; //kairė priekis/galas, desinė priekis/galas
-    Double sp = 0.5; //Greitis
+    Double sp = 0.25; //Greitis
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 

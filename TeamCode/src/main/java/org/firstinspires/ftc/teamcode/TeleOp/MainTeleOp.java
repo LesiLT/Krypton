@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
 
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -17,11 +18,16 @@ import org.firstinspires.ftc.ftccommon.internal.manualcontrol.commands.MotorComm
 public class MainTeleOp extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairė priekis/galas, desinė priekis/galas
 
-        int KP=0,KG=0,DP=0,DG=0;
+    int KP=0,KG=0,DP=0,DG=0;
     CRServo P1S,P2S;
     DcMotor  sm1,sm2; //Paėmimas, išmetimas //0, 1, 2expansion hub
-    Servo pm;
+    DcMotor pad, pem;
+    private static final int CPR = 28;             // encoder counts per rev (GoBILDA 6000RPM)
+    private static final int MAX_RPM = 6000;
+    private static final int MAX_TICKS_PER_SEC = (MAX_RPM / 60) * CPR;  // ~2800
 
+    // Start at ~70% power
+    private double targetVelocity = MAX_TICKS_PER_SEC * 0.7;   ///derinsimes
     boolean prev = false;
     boolean motorOn = false;
 
@@ -40,11 +46,12 @@ public class MainTeleOp extends LinearOpMode {
 
         //Išmetimas/Paėmimas
 
-        sm1 = hardwareMap.get(DcMotor.class, "sm1");
-        sm2 = hardwareMap.get(DcMotor.class, "sm2");
-        P1S = hardwareMap.get(CRServo.class, "P1S");
-        P2S = hardwareMap.get(CRServo.class, "P2S");
-        pm = hardwareMap.get(Servo.class, "pm");
+
+        sm1 = hardwareMap.get(DcMotor.class, "svD");  // 0 lizdas expansion hub
+        sm2 = hardwareMap.get(DcMotor.class, "svK");  // 1 lizdas expansion hub
+        pad = hardwareMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
+        pem = hardwareMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
+
 
 
 
@@ -56,34 +63,32 @@ public class MainTeleOp extends LinearOpMode {
             // Važiuoklė
             MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG) ;
 
-          if(!motorOn){ drive.driveFieldCentric(
-                  - gamepad1.left_stick_x * 0.85, // strafe/drift
-                    gamepad1.left_stick_y * 0.85, // priekis
-                   -gamepad1.right_stick_x * 0.85, // posūkis
-                   0
-           );}
+            if(!motorOn){ drive.driveFieldCentric(
+                     gamepad1.left_stick_x * 0.85, // strafe/drift
+                    -gamepad1.left_stick_y * 0.85, // priekis
+                    gamepad1.right_stick_x * 0.85, // posūkis
+                    0
+                );
+            }
 
-           //Šaudymas:
+            //Paemimas
+
+            if (gamepad1.right_bumper) {
+                pem.setPower(-0.5);
+            }
+            else if (!gamepad1.right_bumper) {
+                pem.setPower(0);
+            }
+
             //Padavimas
-
             if (gamepad1.dpad_up){
-                telemetry.addData("Servo poz", pm.getPosition());
-                telemetry.update();
-                pm.setPosition(0.45);
-
+                pad.setPower(0.5);
             }
-            else if (pm.getPosition() == 0.45 )
-            pm.setPosition(0);
-            //Paėmimas
 
-
-            if (gamepad1.square) {
-                P1S.setPower(-1);
-                P2S.setPower(1);
-
+            if (gamepad1.dpad_down){
+                pad.setPower(0);
             }
-            if(!gamepad1.square){P1S.setPower(0);
-            P2S.setPower(0);}
+
 
             //išmetimas
             telemetry.addData("Titas == blogas",gamepad1.right_trigger);
@@ -93,19 +98,19 @@ public class MainTeleOp extends LinearOpMode {
             if(gamepad1.circle)telemetry.update();
 
 
-            Double sp = 0.75; //Greitis
+
             boolean paspaustas = false;
-            paspaustas = gamepad1.triangle;
+            paspaustas = gamepad1.square;
             if(paspaustas && !prev)
             {
                 motorOn = !motorOn;
             }
             prev = paspaustas;
             if(motorOn){
-                if(sm2.getPower() >= -sp ){
-                gamepad1.rumble(500, 500, 600);}
-                sm1.setPower(sp);
-                sm2.setPower(-sp);
+                if(sm2.getPower() >= targetVelocity){
+                    gamepad1.rumble(500, 500, 600);}
+                sm1.setPower(-targetVelocity);
+                sm2.setPower(targetVelocity);
                 drive.driveFieldCentric(
                         KG,KP,DP,DG );
 
@@ -123,3 +128,4 @@ public class MainTeleOp extends LinearOpMode {
         }
     }
 }
+
