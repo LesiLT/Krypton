@@ -48,8 +48,8 @@ import java.util.List;
 //@Disabled
 @TeleOp(name = "auto aim")
 public class TaiklumoKorekcija extends LinearOpMode {
-    DcMotor kP, dP; //kairė priekis/galas, desinė priekis/galas
-    Double sp = 0.25; //Greitis
+    DcMotor kP,kG, dP,dG; //kairė priekis/galas, desinė priekis/galas
+    Double sp = 0.6; //Greitis
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -70,9 +70,9 @@ public class TaiklumoKorekcija extends LinearOpMode {
         initAprilTag();
 
         kP = hardwareMap.get(DcMotor.class, "kP"); // 0 lizdas control hub
-//        kG = hardwareMap.get(DcMotor.class, "kG"); // 1 lizdas control hub
+        kG = hardwareMap.get(DcMotor.class, "kG"); // 1 lizdas control hub
         dP = hardwareMap.get(DcMotor.class, "dP"); // 2 lizdas control hub
-//        dG = hardwareMap.get(DcMotor.class, "dG"); // 3 lizdas control hub
+        dG = hardwareMap.get(DcMotor.class, "dG"); // 3 lizdas control hub
         // Wait for the DS start button to be touched.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch START to start OpMode");
@@ -85,14 +85,14 @@ public class TaiklumoKorekcija extends LinearOpMode {
 
                 if(x>0){
                     kP.setPower(sp);
-//                    kG.setPower(sp);
-                    dP.setPower(-sp);
-//                    dG.setPower(-sp);
+                    kG.setPower(sp);
+                    dP.setPower(sp);
+                    dG.setPower(sp);
                 } else if (x<0) {
                     kP.setPower(-sp);
-//                    kG.setPower(-sp);
-                    dP.setPower(sp);
-//                    dG.setPower(sp);
+                    kG.setPower(-sp);
+                    dP.setPower(-sp);
+                    dG.setPower(-sp);
                 }
 
 
@@ -192,7 +192,7 @@ public class TaiklumoKorekcija extends LinearOpMode {
     /**
      * Add telemetry about AprilTag detections.
      */
-    private void telemetryAprilTag() {
+    public void telemetryAprilTag() {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         telemetry.addData("# AprilTags Detected", currentDetections.size());

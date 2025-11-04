@@ -19,7 +19,9 @@ import org.firstinspires.ftc.teamcode.Kamera.AprilLibrary;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-@TeleOp (name = "Main be korekcijos")
+import java.lang.reflect.MalformedParameterizedTypeException;
+
+@TeleOp (name = "MainTeleOp")
 public class MainTeleOp extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairė priekis/galas, desinė priekis/galas
 
@@ -49,6 +51,12 @@ public class MainTeleOp extends LinearOpMode {
         kG = new Motor(hardwareMap, "kG", Motor.GoBILDA.RPM_312); // 1 lizdas control hub
         dP = new Motor(hardwareMap, "dP", Motor.GoBILDA.RPM_312); // 2 lizdas control hub
         dG = new Motor(hardwareMap, "dG", Motor.GoBILDA.RPM_312); // 3 lizdas control hub
+
+        kP.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        kG.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        dP.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        dG.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
         /*kP = hardwareMap.get(DcMotor.class, "kP"); // 0 lizdas control hub
         kG = hardwareMap.get(DcMotor.class, "kG");// 1 lizdas control hub
         dP = hardwareMap.get(DcMotor.class, "dP"); // 2 lizdas control hub
@@ -56,7 +64,6 @@ public class MainTeleOp extends LinearOpMode {
 
 
         //Išmetimas/Paėmimas
-
 
         sm1 = hardwareMap.get(DcMotor.class, "svD");  // 0 lizdas expansion hub
         sm2 = hardwareMap.get(DcMotor.class, "svK");  // 1 lizdas expansion hub
@@ -72,11 +79,10 @@ public class MainTeleOp extends LinearOpMode {
             MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG);
 
             if (!motorOn) {
-                drive.driveFieldCentric(
+                drive.driveRobotCentric(
                         gamepad1.left_stick_x * 0.85, // strafe/drift
-                        -gamepad1.left_stick_y * 0.85, // priekis
-                        gamepad1.right_stick_x * 0.85, // posūkis
-                        0
+                            -gamepad1.left_stick_y * 0.85, // priekis
+                            gamepad1.right_stick_x * 0.85 // posūkis
                 );
             }
 
@@ -92,10 +98,11 @@ public class MainTeleOp extends LinearOpMode {
             if (gamepad1.dpad_up) {
                 pad.setPower(0.4);
             }
-
-            if (gamepad1.dpad_down) {
-                pad.setPower(0);
-            }
+             else if  (gamepad1.triangle){
+                pad.setPower(-0.5);
+            }   else if (!gamepad1.triangle || gamepad1.dpad_down) {
+                 pad.setPower(0);
+             }
 
 
             //išmetimas
@@ -118,8 +125,11 @@ public class MainTeleOp extends LinearOpMode {
                 }
                 sm1.setPower(-targetVelocity);
                 sm2.setPower(targetVelocity);
-                drive.driveFieldCentric(
-                        KG, KP, DP, DG);
+                drive.driveRobotCentric(
+                        0,
+                        0,
+                        0
+                );
 
 
             }

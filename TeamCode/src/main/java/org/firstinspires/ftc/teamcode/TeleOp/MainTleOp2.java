@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -26,12 +27,12 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 
-@TeleOp (name = "Main su korekcija")
+@TeleOp (name = "MainTest")
 public class MainTleOp2 extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairÄ— priekis/galas, desinÄ— priekis/galas
 
     int KP=0,KG=0,DP=0,DG=0;
-    DcMotor  sm1,sm2; //PaÄ—mimas, iÅmetimas //0, 1, 2expansion hub
+    DcMotorEx sm1,sm2; //PaÄ—mimas, iÅmetimas //0, 1, 2expansion hub
     DcMotor pad, pem;
     //AprilTag skirti dalykai
     private static final int CPR = 28;             // encoder counts per rev (GoBILDA 6000RPM)
@@ -39,8 +40,8 @@ public class MainTleOp2 extends LinearOpMode {
     private static final int MAX_TICKS_PER_SEC = (MAX_RPM / 60) * CPR;  // ~2800
 
     // Start at ~70% power
-    private double targetVelocity = MAX_TICKS_PER_SEC * 0.7;   ///derinsimes
-    double x; //aprilTag x detection
+    private double targetVelocity = MAX_TICKS_PER_SEC * 1;   ///derinsimes
+    double x,y; //aprilTag x detection
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
@@ -63,10 +64,13 @@ public class MainTleOp2 extends LinearOpMode {
 
         //IÅmetimas/PaÄ—mimas
 
-        sm1 = hardwareMap.get(DcMotor.class, "svD");  // 0 lizdas expansion hub
-        sm2 = hardwareMap.get(DcMotor.class, "svK");  // 1 lizdas expansion hub
+        sm1 = hardwareMap.get(DcMotorEx.class, "svD");  // 0 lizdas expansion hub
+        sm2 = hardwareMap.get(DcMotorEx.class, "svK");  // 1 lizdas expansion hub
         pad = hardwareMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
         pem = hardwareMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
+
+        sm1.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
+        sm2.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
 
         initAprilTag();
 
@@ -78,12 +82,10 @@ public class MainTleOp2 extends LinearOpMode {
             // VaÅ¾iuoklÄ—
             MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG) ;
 
-            if(!motorOn){ drive.driveFieldCentric(
+            if(!motorOn){ drive.driveRobotCentric(
                     gamepad1.left_stick_x * 0.85, // strafe/drift
                     -gamepad1.left_stick_y * 0.85, // priekis
-                    gamepad1.right_stick_x * 0.85,
-                    0
-                    // posÅ«kis
+                    gamepad1.right_stick_x * 0.85
 
             );
             }
@@ -100,14 +102,15 @@ public class MainTleOp2 extends LinearOpMode {
                 pad.setPower(0);
             }
 
-            telemetry.addData("Titas == blogas",gamepad1.right_trigger);
+            telemetry.addData("Titas == blogas",x);
+            telemetry.addData("Greitis ",targetVelocity);
             //double realtime_rpm1 = 6000*sm1.getPower();
             double realtime_rpm2 = 6000*abs(sm1.getPower());
-            telemetry.addData("RPM sm2", realtime_rpm2);
+            telemetry.addData("Y = ", y);
             if(gamepad1.circle)telemetry.update();
 
 
-            double sp = 0.75; //Greitis
+
             boolean paspaustas = false;
             paspaustas = gamepad1.triangle;
             if(paspaustas && !prev)
@@ -116,10 +119,10 @@ public class MainTleOp2 extends LinearOpMode {
             }
             prev = paspaustas;
             if(motorOn){
-                if(sm2.getPower() >= targetVelocity ){
+                if(sm1.getPower() >= -targetVelocity ){
                     gamepad1.rumble(500, 500, 600);}
-                sm1.setPower(-targetVelocity);
-                sm2.setPower(targetVelocity);
+                sm1.setVelocity(-targetVelocity);
+                sm2.setVelocity(targetVelocity);
                 drive.driveFieldCentric(
                         KG,KP,DP,DG );
 
@@ -134,19 +137,25 @@ public class MainTleOp2 extends LinearOpMode {
             //0.48 toliau
             //0.37 arti
 
-            if(gamepad1.square)
+            while (gamepad1.square)
             {
+                double sp = 0.25; //Greitis
                 telemetryAprilTag();
                 telemetry.update();
                 if(x>0)
                 {
+
                     kP.set(sp);
-                    dP.set(-sp);
+                    dP.set(sp);
+                    dG.set(sp);
+                    kG.set(sp);
                 }
                 else if(x<0)
                 {
                     kP.set(-sp);
-                    dP.set(sp);
+                    dP.set(-sp);
+                    dG.set(-sp);
+                    kG.set(-sp);
                 }
             }
 
@@ -233,6 +242,7 @@ public class MainTleOp2 extends LinearOpMode {
             if (detection.metadata != null) {
 
                 x=detection.ftcPose.x;
+                y=detection.ftcPose.y;
                 telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
                 telemetry.addLine(String.format("Y %6.1f (cm)",  detection.ftcPose.y));
                 telemetry.addLine(String.format("P %6.1f (deg)", detection.ftcPose.pitch));

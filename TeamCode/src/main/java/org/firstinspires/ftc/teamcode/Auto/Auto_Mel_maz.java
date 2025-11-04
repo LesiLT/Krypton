@@ -12,9 +12,9 @@ import org.firstinspires.ftc.teamcode.Kamera.TaiklumoKorekcija;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Autonomous (name = "Auto melinas mazas")
-class Auto_Mel_maz extends LinearOpMode {
+public class Auto_Mel_maz extends LinearOpMode {
 DcMotor kP, kG, dP, dG;
-DcMotor sm1,sm2,pad;
+DcMotor sm1,sm2,pad,pem;
 @Override
 public void runOpMode() throws InterruptedException {
     kP = hardwareMap.get(DcMotor.class, "kP"); // 0 lizdas control hub
@@ -22,9 +22,10 @@ public void runOpMode() throws InterruptedException {
     dP = hardwareMap.get(DcMotor.class, "dP"); // 2 lizdas control hub
     dG = hardwareMap.get(DcMotor.class, "dG"); // 3 lizdas control hub
 
-    sm1 = hardwareMap.get(DcMotor.class, "sm1");
-    sm2 = hardwareMap.get(DcMotor.class, "sm2");
+    sm1 = hardwareMap.get(DcMotor.class, "svK");
+    sm2 = hardwareMap.get(DcMotor.class, "svD");
     pad = hardwareMap.get(DcMotor.class, "pad");
+    pem = hardwareMap.get(DcMotor.class, "pem");
 
 
 
