@@ -51,7 +51,7 @@ public class MainTleOp2 extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //VaÅ¾iuoklÄ—s varikliai
+        //Važiuoklės varikliai
         kP = new Motor(hardwareMap, "kP", Motor.GoBILDA.RPM_312); // 0 lizdas control hub
         kG = new Motor(hardwareMap, "kG", Motor.GoBILDA.RPM_312); // 1 lizdas control hub
         dP = new Motor(hardwareMap, "dP", Motor.GoBILDA.RPM_312); // 2 lizdas control hub
@@ -62,7 +62,7 @@ public class MainTleOp2 extends LinearOpMode {
         dG = hardwareMap.get(DcMotor.class, "dG"); // 3 lizdas control hub*/
 
 
-        //IÅmetimas/PaÄ—mimas
+        //Išmetimas/Paėmimas
 
         sm1 = hardwareMap.get(DcMotorEx.class, "svD");  // 0 lizdas expansion hub
         sm2 = hardwareMap.get(DcMotorEx.class, "svK");  // 1 lizdas expansion hub
@@ -102,7 +102,7 @@ public class MainTleOp2 extends LinearOpMode {
                 pad.setPower(0);
             }
 
-            telemetry.addData("Titas == blogas",x);
+            telemetry.addData("Titas = blogas", x);
             telemetry.addData("Greitis ",targetVelocity);
             //double realtime_rpm1 = 6000*sm1.getPower();
             double realtime_rpm2 = 6000*abs(sm1.getPower());
@@ -136,27 +136,38 @@ public class MainTleOp2 extends LinearOpMode {
 
             //0.48 toliau
             //0.37 arti
-
+            //Taiklumo korekcija
             while (gamepad1.square)
             {
-                double sp = 0.25; //Greitis
+                double sp = 0.15; //Greitis
                 telemetryAprilTag();
                 telemetry.update();
-                if(x>0)
-                {
 
-                    kP.set(sp);
-                    dP.set(sp);
-                    dG.set(sp);
-                    kG.set(sp);
-                }
-                else if(x<0)
-                {
-                    kP.set(-sp);
-                    dP.set(-sp);
-                    dG.set(-sp);
-                    kG.set(-sp);
-                }
+
+                      while (x > 4) {
+                        kP.set(sp);
+                        dP.set(sp);
+                        dG.set(sp);
+                        kG.set(sp);
+                        if (x < 4 && x > -4) {
+                            break;
+                        }
+                    }
+                      while (x < -4) {
+                        kP.set(-sp);
+                        dP.set(-sp);
+                        dG.set(-sp);
+                        kG.set(-sp);
+                        if (x > -4 && x < 4) {
+                            break;
+                        }
+                      }
+                    while (x > -4 && x < 4) {
+                        kP.set(0);
+                        dP.set(0);
+                        dG.set(0);
+                        kG.set(0);
+                    }
             }
 
         }
@@ -238,11 +249,10 @@ public class MainTleOp2 extends LinearOpMode {
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
 
-
             if (detection.metadata != null) {
 
-                x=detection.ftcPose.x;
-                y=detection.ftcPose.y;
+                x = detection.ftcPose.x;
+                y = detection.ftcPose.y;
                 telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
                 telemetry.addLine(String.format("Y %6.1f (cm)",  detection.ftcPose.y));
                 telemetry.addLine(String.format("P %6.1f (deg)", detection.ftcPose.pitch));
