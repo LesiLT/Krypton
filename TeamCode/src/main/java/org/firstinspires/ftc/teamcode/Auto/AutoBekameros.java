@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
 
+import android.hardware.biometrics.PromptVerticalListContentView;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -13,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
@@ -45,18 +48,35 @@ public class AutoBekameros extends LinearOpMode {
         sm2 = hardwareMap.get(DcMotorEx.class, "svK");  // 1 lizdas expansion hub
         pad = hardwareMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
         pem = hardwareMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
+        sm2.setDirection(DcMotorSimple.Direction.REVERSE);
         //Kr1pton?5
 
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         waitForStart();
-
+            kP.setPower(-0.25);
+            dG.setPower(0.25);
+            dP.setPower(0.25);
+            kG.setPower(-0.25);
+            sleep(1500);
+        kP.setPower(0);
+        dG.setPower(-0);
+        dP.setPower(-0);
+        kG.setPower(0);
             Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                            .lineToX(-10)
-                            .stopAndAdd(new šauti(sm1, sm2, pad, pem, 0.6))
-
-
+                        //    .lineToX(-10)
+                            .stopAndAdd(new šauti(sm1, sm2, pad, pem, 0.9))
             .build());
+        kP.setPower(-0.25);
+        dG.setPower(0.25);
+        dP.setPower(-0.25);
+        kG.setPower(0.25);
+        sleep(1000);
+        kP.setPower(0);
+        dG.setPower(-0);
+        dP.setPower(-0);
+        kG.setPower(0);
+
 
         }
 
@@ -80,12 +100,12 @@ public class AutoBekameros extends LinearOpMode {
 
                 sm1.setPower(sp);
                 sm2.setPower(-sp);
-            sleep(3000);
+            sleep(800);
                 sm1.setPower(sp);
                 sm2.setPower(-sp);
-                pad.setPower(0.6);
-                pem.setPower(0.6);
-            sleep(6000);
+                pad.setPower(0.5);
+                pem.setPower(-0.5);
+            sleep(2000);
 
             return false;
 

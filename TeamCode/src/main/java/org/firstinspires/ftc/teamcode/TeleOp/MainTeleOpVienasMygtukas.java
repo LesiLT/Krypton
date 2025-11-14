@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.sqrt;
 
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -12,18 +11,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.ftccommon.internal.manualcontrol.commands.MotorCommands;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Kamera.AprilLibrary;
-import org.firstinspires.ftc.teamcode.R;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-import java.lang.reflect.MalformedParameterizedTypeException;
-
 @TeleOp (name = "MainTeleOp")
-public class MainTeleOp extends LinearOpMode {
+public class MainTeleOpVienasMygtukas extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairė priekis/galas, desinė priekis/galas
 
     int KP=0,KG=0,DP=0,DG=0;
@@ -133,6 +125,13 @@ public class MainTeleOp extends LinearOpMode {
                 }
                 sm1.setPower(-targetVelocity);
                 sm2.setPower(targetVelocity);
+                sleep(200);
+                sm1.setPower(-targetVelocity);
+                sm2.setPower(targetVelocity);
+                pad.setPower(0.5);
+                pem.setPower(-0.5);
+
+
                 drive.driveRobotCentric(
                         0,
                         0,

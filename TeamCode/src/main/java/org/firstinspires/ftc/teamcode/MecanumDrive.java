@@ -63,14 +63,14 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
         // drive model parameters
-        public double inPerTick = 1;
+        public double inPerTick = 0.5;
         public double lateralInPerTick = inPerTick;
-        public double trackWidthTicks = 0;
+        public double trackWidthTicks = 5;
 
         // feedforward parameters (in tick units)
-        public double kS = 0;
-        public double kV = 0;
-        public double kA = 0;
+        public double kS = 0.00001;
+        public double kV = 0.00001;
+        public double kA = 0.000000000001;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -129,12 +129,14 @@ public final class MecanumDrive {
         private boolean initialized;
         private Pose2d pose;
 
+
         public DriveLocalizer(Pose2d pose) {
             leftFront = new OverflowEncoder(new RawEncoder(MecanumDrive.this.leftFront));
             leftBack = new OverflowEncoder(new RawEncoder(MecanumDrive.this.leftBack));
             rightBack = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightBack));
             rightFront = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightFront));
-
+            rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+            rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
             imu = lazyImu.get();
 
             // TODO: reverse encoders if needed
@@ -228,7 +230,8 @@ public final class MecanumDrive {
         leftFront = hardwareMap.get(DcMotorEx.class, "kP");
         leftBack = hardwareMap.get(DcMotorEx.class, "kG");
         rightBack = hardwareMap.get(DcMotorEx.class, "dG");
-        rightFront = hardwareMap.get(DcMotorEx.class, "dP");
+        rightFront = hardwareMap.get(DcMotorEx.class, "dP" +
+                "");
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

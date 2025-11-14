@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@Autonomous (name = "Auto tiesiai")
+@Autonomous (name = "Auto 1")
 public class Auto_Tiesiai extends LinearOpMode {
 DcMotor kP, kG, dP, dG;
 DcMotor sm1,sm2,pad;
@@ -19,8 +19,8 @@ public void runOpMode() throws InterruptedException {
     dP = hardwareMap.get(DcMotor.class, "dP"); // 2 lizdas control hub
     dG = hardwareMap.get(DcMotor.class, "dG"); // 3 lizdas control hub
 
-    sm1 = hardwareMap.get(DcMotor.class, "sm1");
-    sm2 = hardwareMap.get(DcMotor.class, "sm2");
+    sm1 = hardwareMap.get(DcMotor.class, "svD");
+    sm2 = hardwareMap.get(DcMotor.class, "svK");
     pad = hardwareMap.get(DcMotor.class, "pad");
 
 

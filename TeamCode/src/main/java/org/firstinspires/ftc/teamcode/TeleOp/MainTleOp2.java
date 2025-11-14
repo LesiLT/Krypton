@@ -144,7 +144,7 @@ public class MainTleOp2 extends LinearOpMode {
                 telemetry.update();
 
 
-                      while (x > 4) {
+                      if (x > 4) {
                         kP.set(sp);
                         dP.set(sp);
                         dG.set(sp);
@@ -153,7 +153,7 @@ public class MainTleOp2 extends LinearOpMode {
                             break;
                         }
                     }
-                      while (x < -4) {
+                      if (x < -4) {
                         kP.set(-sp);
                         dP.set(-sp);
                         dG.set(-sp);
@@ -162,7 +162,7 @@ public class MainTleOp2 extends LinearOpMode {
                             break;
                         }
                       }
-                    while (x > -4 && x < 4) {
+                    if (x > -4 && x < 4) {
                         kP.set(0);
                         dP.set(0);
                         dG.set(0);
