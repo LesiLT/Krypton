@@ -71,12 +71,11 @@ public class MainTeleOp extends LinearOpMode {
         sm2 = hardwareMap.get(DcMotor.class, "svK");  // 1 lizdas expansion hub
         pad = hardwareMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
         pem = hardwareMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
-        sm1.setDirection(DcMotorSimple.Direction.REVERSE);
 
         /// Pak4limas
         pak0 = hardwareMap.get(Servo.class, "pak0");
         pak1 = hardwareMap.get(Servo.class, "pak1");
-        pak0.setDirection(Servo.Direction.REVERSE);
+
         pak1.setDirection(Servo.Direction.REVERSE);
 
         waitForStart();
@@ -131,7 +130,7 @@ public class MainTeleOp extends LinearOpMode {
                 if (sm2.getPower() >= targetVelocity) {
                     gamepad1.rumble(500, 500, 600);
                 }
-                sm1.setPower(-targetVelocity);
+                sm1.setPower(targetVelocity);
                 sm2.setPower(targetVelocity);
                 drive.driveRobotCentric(
                         0,
@@ -144,11 +143,11 @@ public class MainTeleOp extends LinearOpMode {
                 sm1.setPower(0);
                 sm2.setPower(0);
             }
-            if (gamepad1.dpad_down && gamepad1.cross) {
+            if (gamepad1.dpad_down) {
                 //pak0.setPosition(0.9); nuline pozicija
-                pak0.setPosition(0.3);
+                pak0.setPosition(0.4);
                 sleep(500);
-                pak1.setPosition(0.2);
+                pak1.setPosition(0.4);
 
             }
 

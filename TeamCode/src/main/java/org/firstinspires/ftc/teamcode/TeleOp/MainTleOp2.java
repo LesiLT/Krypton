@@ -41,7 +41,8 @@ public class MainTleOp2 extends LinearOpMode {
 
     // Start at ~70% power
     private double targetVelocity = MAX_TICKS_PER_SEC * 1;   ///derinsimes
-    double x,y; //aprilTag x detection
+    double x,y; //aprilTag x , y detection
+    int id=0;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
@@ -56,6 +57,11 @@ public class MainTleOp2 extends LinearOpMode {
         kG = new Motor(hardwareMap, "kG", Motor.GoBILDA.RPM_312); // 1 lizdas control hub
         dP = new Motor(hardwareMap, "dP", Motor.GoBILDA.RPM_312); // 2 lizdas control hub
         dG = new Motor(hardwareMap, "dG", Motor.GoBILDA.RPM_312); // 3 lizdas control hub
+        kP.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        kG.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        dP.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        dG.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
         /*kP = hardwareMap.get(DcMotor.class, "kP"); // 0 lizdas control hub
         kG = hardwareMap.get(DcMotor.class, "kG");// 1 lizdas control hub
         dP = hardwareMap.get(DcMotor.class, "dP"); // 2 lizdas control hub
@@ -102,35 +108,37 @@ public class MainTleOp2 extends LinearOpMode {
                 pad.setPower(0);
             }
 
-            telemetry.addData("Titas = blogas", x);
+            /*telemetry.addData("Titas = blogas", x);
             telemetry.addData("Greitis ",targetVelocity);
             //double realtime_rpm1 = 6000*sm1.getPower();
             double realtime_rpm2 = 6000*abs(sm1.getPower());
             telemetry.addData("Y = ", y);
-            if(gamepad1.circle)telemetry.update();
+            if(gamepad1.circle)telemetry.update();*/
 
 
 
-            boolean paspaustas = false;
-            paspaustas = gamepad1.triangle;
-            if(paspaustas && !prev)
-            {
-                motorOn = !motorOn;
-            }
-            prev = paspaustas;
-            if(motorOn){
-                if(sm1.getPower() >= -targetVelocity ){
-                    gamepad1.rumble(500, 500, 600);}
-                sm1.setVelocity(-targetVelocity);
-                sm2.setVelocity(targetVelocity);
-                drive.driveFieldCentric(
-                        KG,KP,DP,DG );
-
-
-            }
-            else {
+            if (gamepad1.left_bumper) {
+                if (sm2.getPower() >= targetVelocity) {
+                    gamepad1.rumble(500, 500, 600);
+                }
+                sm1.setPower(targetVelocity);
+                sm2.setPower(targetVelocity);
+                sleep(400);
+                sm1.setPower(targetVelocity);
+                sm2.setPower(targetVelocity);
+                pad.setPower(0.4);
+                pem.setPower(-0.5);
+                sleep(900);
                 sm1.setPower(0);
                 sm2.setPower(0);
+                pad.setPower(0);
+                pem.setPower(0);
+                drive.driveRobotCentric(
+                        0,
+                        0,
+                        0
+                );
+
             }
 
 
@@ -139,36 +147,70 @@ public class MainTleOp2 extends LinearOpMode {
             //Taiklumo korekcija
             while (gamepad1.square)
             {
-                double sp = 0.15; //Greitis
+                double sp = 0.2; //Greitis
                 telemetryAprilTag();
                 telemetry.update();
 
-
-                      if (x > 4) {
+                if(id == 0){
+                    kP.set(0.4);
+                    dP.set(0.4);
+                    dG.set(0.4);
+                    kG.set(0.4);
+                    if(id != 0){
+                        break;
+                    }
+                }
+                      if (x > 20 && x <25) {
                         kP.set(sp);
                         dP.set(sp);
                         dG.set(sp);
                         kG.set(sp);
-                        if (x < 4 && x > -4) {
+                        if (x < 20 && x > -15 || x > -20 && x < -15) {
                             break;
                         }
                     }
-                      if (x < -4) {
+                      if (x < -20 && x >-15) {
                         kP.set(-sp);
                         dP.set(-sp);
                         dG.set(-sp);
                         kG.set(-sp);
-                        if (x > -4 && x < 4) {
+                        if (x < 20 && x > -15 || x > -20 && x < -15) {
                             break;
                         }
                       }
-                    if (x > -4 && x < 4) {
+                    if (x < 20 && x > -15 && id>0 || x > -20 && x < -15 && id>0) {
                         kP.set(0);
                         dP.set(0);
                         dG.set(0);
                         kG.set(0);
+
+                            if (sm2.getPower() >= targetVelocity) {
+                                gamepad1.rumble(500, 500, 600);
+                            }
+                            sm1.setPower(targetVelocity);
+                            sm2.setPower(targetVelocity);
+                            sleep(400);
+                            sm1.setPower(targetVelocity);
+                            sm2.setPower(targetVelocity);
+                            pad.setPower(0.4);
+                            pem.setPower(-0.5);
+                            sleep(900);
+                            sm1.setPower(0);
+                            sm2.setPower(0);
+                            pad.setPower(0);
+                            pem.setPower(0);
+                            drive.driveRobotCentric(
+                                    0,
+                                    0,
+                                    0
+                            );
+
+
                     }
+                    id=0;
             }
+
+
 
         }
     }
@@ -253,10 +295,11 @@ public class MainTleOp2 extends LinearOpMode {
 
                 x = detection.ftcPose.x;
                 y = detection.ftcPose.y;
+                id = detection.id;
                 telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
                 telemetry.addLine(String.format("Y %6.1f (cm)",  detection.ftcPose.y));
-                telemetry.addLine(String.format("P %6.1f (deg)", detection.ftcPose.pitch));
-                telemetry.addLine(String.format("R %6.1f (cm)", detection.ftcPose.range));
+                telemetry.addLine(String.format("X %6.1f (deg)", detection.ftcPose.pitch));
+                telemetry.addLine(String.format("Z %6.1f (cm)", detection.ftcPose.range));
             } else {
                 telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
                 telemetry.addLine(String.format("Center   (pixels)", detection.center.x));

@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-@TeleOp (name = "MainTeleOp")
+@TeleOp (name = "MainTeleOpVMTest")
 public class MainTeleOpVienasMygtukas extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairė priekis/galas, desinė priekis/galas
 
@@ -63,7 +63,6 @@ public class MainTeleOpVienasMygtukas extends LinearOpMode {
         sm2 = hardwareMap.get(DcMotor.class, "svK");  // 1 lizdas expansion hub
         pad = hardwareMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
         pem = hardwareMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
-        sm1.setDirection(DcMotorSimple.Direction.REVERSE);
 
         /// Pak4limas
         pak0 = hardwareMap.get(Servo.class, "pak0");
@@ -112,26 +111,24 @@ public class MainTeleOpVienasMygtukas extends LinearOpMode {
             telemetry.addData("RPM sm2", realtime_rpm2);
             if (gamepad1.circle) telemetry.update();
 
+            ///Vienas mygtukas sovimui
 
-            boolean paspaustas = false;
-            paspaustas = gamepad1.left_bumper;
-            if (paspaustas && !prev) {
-                motorOn = !motorOn;
-            }
-            prev = paspaustas;
-            if (motorOn) {
+            if (gamepad1.left_bumper) {
                 if (sm2.getPower() >= targetVelocity) {
                     gamepad1.rumble(500, 500, 600);
                 }
-                sm1.setPower(-targetVelocity);
+                sm1.setPower(targetVelocity);
                 sm2.setPower(targetVelocity);
-                sleep(200);
-                sm1.setPower(-targetVelocity);
+                sleep(400);
+                sm1.setPower(targetVelocity);
                 sm2.setPower(targetVelocity);
-                pad.setPower(0.5);
+                pad.setPower(0.4);
                 pem.setPower(-0.5);
-
-
+                sleep(900);
+                sm1.setPower(0);
+                sm2.setPower(0);
+                pad.setPower(0);
+                pem.setPower(0);
                 drive.driveRobotCentric(
                         0,
                         0,
@@ -139,10 +136,9 @@ public class MainTeleOpVienasMygtukas extends LinearOpMode {
                 );
 
             }
-            else{
-                sm1.setPower(0);
-                sm2.setPower(0);
-            }
+
+
+
             if (gamepad1.dpad_down && gamepad1.cross) {
                 //pak0.setPosition(0.9); nuline pozicija
                 pak0.setPosition(0.3);
