@@ -137,7 +137,7 @@ public final class TuningOpModes {
                     ThreeDeadWheelLocalizer dl = (ThreeDeadWheelLocalizer) md.localizer;
                     encoderGroups.add(new LynxQuadratureEncoderGroup(
                             hardwareMap.getAll(LynxModule.class),
-                            Arrays.asList(dl.par0, dl.par1, dl.perp)
+                            Arrays.asList(dl.krded, dl.dsded, dl.vdded)
                     ));
                     parEncs.add(new EncoderRef(0, 0));
                     parEncs.add(new EncoderRef(0, 1));
@@ -220,7 +220,7 @@ public final class TuningOpModes {
                     ThreeDeadWheelLocalizer dl = (ThreeDeadWheelLocalizer) td.localizer;
                     encoderGroups.add(new LynxQuadratureEncoderGroup(
                             hardwareMap.getAll(LynxModule.class),
-                            Arrays.asList(dl.par0, dl.par1, dl.perp)
+                            Arrays.asList(dl.krded, dl.dsded, dl.vdded)
                     ));
                     parEncs.add(new EncoderRef(0, 0));
                     parEncs.add(new EncoderRef(0, 1));

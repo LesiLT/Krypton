@@ -143,7 +143,7 @@ public class MainTeleOp extends LinearOpMode {
                 sm1.setPower(0);
                 sm2.setPower(0);
             }
-            if (gamepad1.dpad_down) {
+            if (gamepad1.dpad_left) {
                 //pak0.setPosition(0.9); nuline pozicija
                 pak0.setPosition(0.4);
                 sleep(500);

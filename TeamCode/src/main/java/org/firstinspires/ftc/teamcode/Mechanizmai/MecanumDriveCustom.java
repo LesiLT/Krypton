@@ -17,8 +17,8 @@ public class MecanumDriveCustom {
          backLeftMotor = hardwareMap.dcMotor.get("back_left_motor");
          backRightMotor = hardwareMap.dcMotor.get("back_right_motor");
 
-         backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-         frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+         //backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+         //frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
 
          frontLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
          frontRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

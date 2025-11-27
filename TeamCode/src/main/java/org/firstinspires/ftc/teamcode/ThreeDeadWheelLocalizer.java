@@ -30,9 +30,9 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
 
     public static Params PARAMS = new Params();
 
-    public final Encoder par0, par1, perp;
+    public final Encoder krded, dsded, vdded;
 
-    public final double inPerTick;
+    public final double inPerTick;//=0.001893333333333333333333;
 
     private int lastPar0Pos, lastPar1Pos, lastPerpPos;
     private boolean initialized;
@@ -42,17 +42,15 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
         // TODO: make sure your config has **motors** with these names (or change them)
         //   the encoders should be plugged into the slot matching the named motor
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
-        par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "pem")));
-        par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "kG")));
-        perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "dP")));
+        krded = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "pem")));
+        dsded = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "kG")));
+        vdded = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "dP")));
         DcMotorSimple.Direction reverse = null;
-        par1.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        par0.setDirection(DcMotorSimple.Direction.REVERSE );
 
         // TODO: reverse encoder directions if needed
         //   par0.setDirection(DcMotorSimple.Direction.REVERSE);
-
+        dsded.setDirection(DcMotorSimple.Direction.REVERSE);
+        vdded.setDirection(DcMotorSimple.Direction.REVERSE);
         this.inPerTick = inPerTick;
 
         FlightRecorder.write("THREE_DEAD_WHEEL_PARAMS", PARAMS);
@@ -72,9 +70,9 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
 
     @Override
     public PoseVelocity2d update() {
-        PositionVelocityPair par0PosVel = par0.getPositionAndVelocity();
-        PositionVelocityPair par1PosVel = par1.getPositionAndVelocity();
-        PositionVelocityPair perpPosVel = perp.getPositionAndVelocity();
+        PositionVelocityPair par0PosVel = krded.getPositionAndVelocity();
+        PositionVelocityPair par1PosVel = dsded.getPositionAndVelocity();
+        PositionVelocityPair perpPosVel = vdded.getPositionAndVelocity();
 
         FlightRecorder.write("THREE_DEAD_WHEEL_INPUTS", new ThreeDeadWheelInputsMessage(par0PosVel, par1PosVel, perpPosVel));
 
