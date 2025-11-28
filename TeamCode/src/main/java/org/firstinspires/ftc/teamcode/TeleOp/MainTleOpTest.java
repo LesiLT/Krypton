@@ -8,14 +8,10 @@ import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 
 
-import org.firstinspires.ftc.ftccommon.internal.manualcontrol.commands.MotorCommands;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -28,7 +24,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
 @TeleOp (name = "MainTest")
-public class MainTleOp2 extends LinearOpMode {
+public class MainTleOpTest extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairÄ— priekis/galas, desinÄ— priekis/galas
 
     int KP=0,KG=0,DP=0,DG=0;
@@ -84,7 +80,6 @@ public class MainTleOp2 extends LinearOpMode {
         while (!isStopRequested()) {
 
 
-
             // VaÅ¾iuoklÄ—
             MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG) ;
 
@@ -116,8 +111,7 @@ public class MainTleOp2 extends LinearOpMode {
             if(gamepad1.circle)telemetry.update();*/
 
 
-
-            if (gamepad1.left_bumper) {
+            if (gamepad1.square) {
                 if (sm2.getPower() >= targetVelocity) {
                     gamepad1.rumble(500, 500, 600);
                 }
@@ -142,43 +136,35 @@ public class MainTleOp2 extends LinearOpMode {
             }
 
 
-            //0.48 toliau
-            //0.37 arti
             //Taiklumo korekcija
-            while (gamepad1.square)
+            while (gamepad1.left_bumper)
             {
                 double sp = 0.2; //Greitis
                 telemetryAprilTag();
                 telemetry.update();
-
-                if(id == 0){
-                    kP.set(0.4);
-                    dP.set(0.4);
-                    dG.set(0.4);
-                    kG.set(0.4);
-                    if(id != 0){
-                        break;
-                    }
-                }
-                      if (x > 20 && x <25) {
+                    ///Ieskoti tarp 20/25
+                      if (x > 20 && x < 25) {
                         kP.set(sp);
                         dP.set(sp);
                         dG.set(sp);
                         kG.set(sp);
-                        if (x < 20 && x > -15 || x > -20 && x < -15) {
+                        ///Šauti tarp
+                        if (x < 20 || x > -20) {
                             break;
                         }
                     }
-                      if (x < -20 && x >-15) {
+                      /// Ieškoti tarp -20
+                      if (x < -20) {
                         kP.set(-sp);
                         dP.set(-sp);
                         dG.set(-sp);
                         kG.set(-sp);
-                        if (x < 20 && x > -15 || x > -20 && x < -15) {
+                        if (x < 20 || x > -20) {
                             break;
                         }
                       }
-                    if (x < 20 && x > -15 && id>0 || x > -20 && x < -15 && id>0) {
+                      /// Šauti
+                    if (x < 20 && x > -20) {
                         kP.set(0);
                         dP.set(0);
                         dG.set(0);

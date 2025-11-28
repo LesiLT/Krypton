@@ -22,7 +22,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.lang.reflect.MalformedParameterizedTypeException;
 
-@TeleOp (name = "MainTeleOp")
+@TeleOp (name = "MainTeleOpBeKameros")
 public class MainTeleOp extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairė priekis/galas, desinė priekis/galas
 
