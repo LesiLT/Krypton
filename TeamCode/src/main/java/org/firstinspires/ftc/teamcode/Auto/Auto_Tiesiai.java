@@ -5,13 +5,16 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
-@Autonomous (name = "Auto 1")
+@Autonomous (name = "Auto tiesiai10")
 public class Auto_Tiesiai extends LinearOpMode {
 DcMotor kP, kG, dP, dG;
-DcMotor sm1,sm2,pad;
+    Servo pak0,pak1;
+    DcMotor  sm1,sm2;
+    DcMotor pad, pem;
 @Override
 public void runOpMode() throws InterruptedException {
     kP = hardwareMap.get(DcMotor.class, "kP"); // 0 lizdas control hub
@@ -22,13 +25,17 @@ public void runOpMode() throws InterruptedException {
     sm1 = hardwareMap.get(DcMotor.class, "svD");
     sm2 = hardwareMap.get(DcMotor.class, "svK");
     pad = hardwareMap.get(DcMotor.class, "pad");
+    pem = hardwareMap.get(DcMotor.class,"pem");
+    pak0 = hardwareMap.get(Servo.class, "pak0");
+    pak1 = hardwareMap.get(Servo.class, "pak1");
+    pak1.setDirection(Servo.Direction.REVERSE);
 
 
 
     MecanumDrive drive = new  MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
     waitForStart();
     Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-            .lineToX(10)
+            .lineToX(-100)
             .build()
     );
 }

@@ -23,9 +23,9 @@ import org.firstinspires.ftc.teamcode.messages.ThreeDeadWheelInputsMessage;
 @Config
 public final class ThreeDeadWheelLocalizer implements Localizer {
     public static class Params {
-        public double par0YTicks = 0.0; // y position of the first parallel encoder (in tick units)
-        public double par1YTicks = 1.0; // y position of the second parallel encoder (in tick units)
-        public double perpXTicks = 0.0; // x position of the perpendicular encoder (in tick units)
+        public double par0YTicks = 1977.9983729649477; // y position of the first parallel encoder (in tick units)
+        public double par1YTicks = 1891.2418630260504; // y position of the second parallel encoder (in tick units)
+        public double perpXTicks = 0.135907033754905; // x position of the perpendicular encoder (in tick units)
     }
 
     public static Params PARAMS = new Params();
@@ -51,6 +51,7 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
         //   par0.setDirection(DcMotorSimple.Direction.REVERSE);
         krded.setDirection(DcMotorSimple.Direction.REVERSE);
         vdded.setDirection(DcMotorSimple.Direction.REVERSE);
+
         this.inPerTick = inPerTick;
 
         FlightRecorder.write("THREE_DEAD_WHEEL_PARAMS", PARAMS);
