@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.TeleOp.SuKamera;
 
 import android.util.Size;
 
@@ -8,12 +8,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Kamera.AprilLibrary;
+import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -22,9 +24,13 @@ import java.util.List;
 
 @TeleOp (name = "MainTeleOpSuKamera")
 public class MainTleOpSukamera extends LinearOpMode {
+
+    Šaudyklė kam = new Šaudyklė();
+
     Motor kP, kG, dP, dG; //kairÄ— priekis/galas, desinÄ— priekis/galas
 
     int KP=0,KG=0,DP=0,DG=0;
+    Servo pak1, pak0;
     DcMotorEx sm1,sm2; //PaÄ—mimas, iÅmetimas //0, 1, 2expansion hub
     DcMotor pad, pem;
     //AprilTag skirti dalykai
@@ -45,6 +51,8 @@ public class MainTleOpSukamera extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        kam.init(hardwareMap);
+
         //Važiuoklės varikliai
         kP = new Motor(hardwareMap, "kP", Motor.GoBILDA.RPM_312); // 0 lizdas control hub
         kG = new Motor(hardwareMap, "kG", Motor.GoBILDA.RPM_312); // 1 lizdas control hub
@@ -55,10 +63,9 @@ public class MainTleOpSukamera extends LinearOpMode {
         dP.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         dG.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        /*kP = hardwareMap.get(DcMotor.class, "kP"); // 0 lizdas control hub
-        kG = hardwareMap.get(DcMotor.class, "kG");// 1 lizdas control hub
-        dP = hardwareMap.get(DcMotor.class, "dP"); // 2 lizdas control hub
-        dG = hardwareMap.get(DcMotor.class, "dG"); // 3 lizdas control hub*/
+        /// Pakėlimas
+        pak1 = hardwareMap.get(Servo.class, "pak1");
+        pak0 = hardwareMap.get(Servo.class, "pak0");
 
 
         //Išmetimas/Paėmimas
@@ -80,7 +87,7 @@ public class MainTleOpSukamera extends LinearOpMode {
 
             // VaÅ¾iuoklÄ—
             MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG) ;
-
+            /// right bumper,dpad up,square,left bumper,dpad left,circle,
             if(!motorOn){ drive.driveRobotCentric(
                     gamepad1.left_stick_x * 0.85, // strafe/drift
                     -gamepad1.left_stick_y * 0.85, // priekis
@@ -90,33 +97,29 @@ public class MainTleOpSukamera extends LinearOpMode {
             }
             if (gamepad1.right_bumper) {
                 pem.setPower(-0.5); ///Paemimas
-            } else if (!gamepad1.right_bumper) {
+            }else if (gamepad1.triangle) {
+                pem.setPower(0.5); ///Paemimas
+            }else if (!gamepad1.right_bumper && !gamepad1.triangle) {
                 pem.setPower(0);
             }
-            if (gamepad1.dpad_up) {
+
+
+            if (gamepad1.cross) {
+                pad.setPower(-0.5);  ///Padavimas
+            }
+            else if (gamepad1.dpad_up) {
                 pad.setPower(0.5);  ///Padavimas
-            } else if (!gamepad1.dpad_up) {
+            } else if (!gamepad1.dpad_up && !gamepad1.cross) {
                 pad.setPower(0);
             }
 
 
 
-            if (gamepad1.left_bumper) {
+            if (gamepad1.square) {
                 if (sm2.getPower() >= targetVelocity) {
                     gamepad1.rumble(500, 500, 600);
                 }
-                sm1.setPower(targetVelocity);
-                sm2.setPower(targetVelocity);
-                sleep(400);
-                sm1.setPower(targetVelocity);
-                sm2.setPower(targetVelocity);
-                pad.setPower(0.4);
-                pem.setPower(-0.5);
-                sleep(900);
-                sm1.setPower(0);
-                sm2.setPower(0);
-                pad.setPower(0);
-                pem.setPower(0);
+               kam.ugnis();
                 drive.driveRobotCentric(
                         0,
                         0,
@@ -128,74 +131,43 @@ public class MainTleOpSukamera extends LinearOpMode {
 
 
             //Taiklumo korekcija
-            while (gamepad1.square)
+            while (gamepad1.left_bumper)
             {
                 double sp = 0.2; //Greitis
                 telemetryAprilTag();
                 telemetry.update();
-
-                if(id == 0){
-                    kP.set(0.4);
-                    dP.set(0.4);
-                    dG.set(0.4);
-                    kG.set(0.4);
-                    if(id != 0){
+                if (id == 20 || id == 24) {
+                    if (x >= -18 && x <= 18) {
+                        kam.ugnis();
+                        drive.driveRobotCentric(
+                                0,
+                                0,
+                                0
+                        );
+                    } else if (x < - 5 || x > 5) {
                         break;
+
                     }
                 }
-                      if (x > 20 && x < 25) {
-                        kP.set(sp);
-                        dP.set(sp);
-                        dG.set(sp);
-                        kG.set(sp);
-                        if (x < 20 && x > -15 || x > -20 && x < -15) {
-                            break;
-                        }
-                    }
-                      if (x < -20 && x >-15) {
-                        kP.set(-sp);
-                        dP.set(-sp);
-                        dG.set(-sp);
-                        kG.set(-sp);
-                        if (x < 20 && x > -15 || x > -20 && x < -15) {
-                            break;
-                        }
-                      }
-                    if (x < 20 && x > -15 && id>0 || x > -20 && x < -15 && id>0) {
-                        kP.set(0);
-                        dP.set(0);
-                        dG.set(0);
-                        kG.set(0);
-
-                            if (sm2.getPower() >= targetVelocity) {
-                                gamepad1.rumble(500, 500, 600);
-                            }
-                            sm1.setPower(targetVelocity);
-                            sm2.setPower(targetVelocity);
-                            sleep(400);
-                            sm1.setPower(targetVelocity);
-                            sm2.setPower(targetVelocity);
-                            pad.setPower(0.4);
-                            pem.setPower(-0.5);
-                            sleep(900);
-                            sm1.setPower(0);
-                            sm2.setPower(0);
-                            pad.setPower(0);
-                            pem.setPower(0);
-                            drive.driveRobotCentric(
-                                    0,
-                                    0,
-                                    0
-                            );
 
 
-                    }
-                    id=0;
+            }
+            id=0;
+
+
+            if (gamepad1.dpad_left && gamepad1.circle) {
+                //pak0.setPosition(0.9); nuline pozicija
+                pak0.setPosition(0.4);
+
+                pak1.setPosition(0.4);
+
             }
 
 
 
+
         }
+
     }
 
     private void initAprilTag() {
