@@ -39,9 +39,9 @@ public class MainTleOpSukamera extends LinearOpMode {
     private static final int MAX_TICKS_PER_SEC = (MAX_RPM / 60) * CPR;  // ~2800
 
     // Start at ~70% power
-    private double targetVelocity = MAX_TICKS_PER_SEC * 1;   ///derinsimes
-    double x,y; //aprilTag x , y detection
-    int id=0;
+    private double targetVelocity = MAX_TICKS_PER_SEC * 0.8;   ///derinsimes
+    double x, y; //aprilTag x , y detection
+    int id = 0;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
@@ -98,18 +98,22 @@ public class MainTleOpSukamera extends LinearOpMode {
             if (gamepad1.right_bumper) {
                 pem.setPower(-0.5); ///Paemimas
             }else if (gamepad1.triangle) {
-                pem.setPower(0.5); ///Paemimas
+                pem.setPower(0.5); ///Paemimas atgal
             }else if (!gamepad1.right_bumper && !gamepad1.triangle) {
                 pem.setPower(0);
             }
-
-
-            if (gamepad1.cross) {
-                pad.setPower(-0.5);  ///Padavimas
+            /// Atgal visas
+            if (gamepad1.cross){
+                kam.atgal1();
             }
-            else if (gamepad1.dpad_up) {
+            else if (!gamepad1.cross){
+                kam.atgal0();
+            }
+
+
+            if (gamepad1.dpad_up) {
                 pad.setPower(0.5);  ///Padavimas
-            } else if (!gamepad1.dpad_up && !gamepad1.cross) {
+            } else if (!gamepad1.dpad_up) {
                 pad.setPower(0);
             }
 
