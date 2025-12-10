@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Auto.AutoTest;
 
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+
 
 @Autonomous
 public class Auto10 extends LinearOpMode {
@@ -30,10 +32,15 @@ public class Auto10 extends LinearOpMode {
             ); /// 71.5 = 10
         }
         if (gamepad1.dpad_down){
-            Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                    .turn(1)
+            ParallelAction(drive.actionBuilder(new Pose2d(0, 0, 0))
+                    turn(mirk(360))
                     .build()
             );
         }
+        new ParallelAction();
     }}
+    private double mirk(double degrees)
+    {
+        return Math.toRadians(degrees);
+    }
 }
