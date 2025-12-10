@@ -8,12 +8,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.Mechanizmai.Posūkis_laisniais;
 
 
 @Autonomous
 public class Auto10 extends LinearOpMode {
+    Posūkis_laisniais sukis = new Posūkis_laisniais();
     @Override
     public void runOpMode() throws InterruptedException {
+        sukis.init(hardwareMap);
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         waitForStart();
@@ -32,15 +35,8 @@ public class Auto10 extends LinearOpMode {
             ); /// 71.5 = 10
         }
         if (gamepad1.dpad_down){
-            ParallelAction(drive.actionBuilder(new Pose2d(0, 0, 0))
-                    turn(mirk(360))
-                    .build()
-            );
+            sukis.posukis(90);
         }
         new ParallelAction();
     }}
-    private double mirk(double degrees)
-    {
-        return Math.toRadians(degrees);
-    }
 }
