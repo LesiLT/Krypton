@@ -11,19 +11,15 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Mechanizmai.HardwareInit;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @Disabled
 @TeleOp (name = "MainTeleOpBeKameros")
 public class MainTeleOp extends LinearOpMode {
-    Motor kP, kG, dP, dG; //kairė priekis/galas, desinė priekis/galas
-
     int KP=0,KG=0,DP=0,DG=0;
     CRServo P1S,P2S;
-    Servo pak0,pak1; ///Pakelimo servas Eh = 0, Eh 1
-    DcMotor  sm1,sm2; ///Paėmimas, išmetimas //0, 1, 2expansion hub
-    DcMotor pad, pem;
     private static final int CPR = 28;             // encoder counts per rev (GoBILDA 6000RPM)
     private static final int MAX_RPM = 6000;
     private static final int MAX_TICKS_PER_SEC = (MAX_RPM / 60) * CPR;  // ~2800
@@ -39,44 +35,21 @@ public class MainTeleOp extends LinearOpMode {
     private VisionPortal visionPortal;
     double sp = 0.5;
 
+    public HardwareInit hw;
+
     @Override
     public void runOpMode() throws InterruptedException {
-        //Važiuoklės varikliai
-        kP = new Motor(hardwareMap, "kP", Motor.GoBILDA.RPM_312); // 0 lizdas control hub
-        kG = new Motor(hardwareMap, "kG", Motor.GoBILDA.RPM_312); // 1 lizdas control hub
-        dP = new Motor(hardwareMap, "dP", Motor.GoBILDA.RPM_312); // 2 lizdas control hub
-        dG = new Motor(hardwareMap, "dG", Motor.GoBILDA.RPM_312); // 3 lizdas control hub
 
-        kP.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        kG.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        dP.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        dG.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-
-        /*kP = hardwareMap.get(DcMotor.class, "kP"); // 0 lizdas control hub
-        kG = hardwareMap.get(DcMotor.class, "kG");// 1 lizdas control hub
-        dP = hardwareMap.get(DcMotor.class, "dP"); // 2 lizdas control hub
-        dG = hardwareMap.get(DcMotor.class, "dG"); // 3 lizdas control hub*/
-
-
-        //Išmetimas/Paėmimas
-
-        sm1 = hardwareMap.get(DcMotor.class, "svD");  // 0 lizdas expansion hub
-        sm2 = hardwareMap.get(DcMotor.class, "svK");  // 1 lizdas expansion hub
-        pad = hardwareMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
-        pem = hardwareMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
-
-        /// Pak4limas
-        pak0 = hardwareMap.get(Servo.class, "pak0");
-        pak1 = hardwareMap.get(Servo.class, "pak1");
-
-        pak1.setDirection(Servo.Direction.REVERSE);
+        //Hardware inicializacija
+        hw = new HardwareInit();
+        hw.initializeHardware(hardwareMap);
 
         waitForStart();
         while (!isStopRequested()) {
 
 
             // Važiuoklė
-            MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG);
+            MecanumDrive drive = new MecanumDrive(hw.kP, hw.dP, hw.kG, hw.dG);
 
             if (!motorOn) {
                 drive.driveRobotCentric(
@@ -89,26 +62,26 @@ public class MainTeleOp extends LinearOpMode {
             //Paemimas
 
             if (gamepad1.right_bumper) {
-                pem.setPower(-0.5);
+                hw.pem.setPower(-0.5);
             } else if (!gamepad1.right_bumper) {
-                pem.setPower(0);
+                hw.pem.setPower(0);
             }
 
             //Padavimas
             if (gamepad1.dpad_up) {
-                pad.setPower(0.4);
+                hw.pad.setPower(0.4);
             }
              else if  (gamepad1.triangle){
-                pad.setPower(-0.5);
+                hw.pad.setPower(-0.5);
             }   else if (!gamepad1.triangle || gamepad1.dpad_down) {
-                 pad.setPower(0);
+                 hw.pad.setPower(0);
              }
 
 
             //išmetimas
             telemetry.addData("Titas == blogas", gamepad1.right_trigger);
             //double realtime_rpm1 = 6000*sm1.getPower();
-            double realtime_rpm2 = 6000 * abs(sm1.getPower());
+            double realtime_rpm2 = 6000 * abs(hw.sm1.getPower());
             telemetry.addData("RPM sm2", realtime_rpm2);
             if (gamepad1.circle) telemetry.update();
 
@@ -120,11 +93,11 @@ public class MainTeleOp extends LinearOpMode {
             }
             prev = paspaustas;
             if (motorOn) {
-                if (sm2.getPower() >= targetVelocity) {
+                if (hw.sm2.getPower() >= targetVelocity) {
                     gamepad1.rumble(500, 500, 600);
                 }
-                sm1.setPower(targetVelocity);
-                sm2.setPower(targetVelocity);
+                hw.sm1.setPower(targetVelocity);
+                hw.sm2.setPower(targetVelocity);
                 drive.driveRobotCentric(
                         0,
                         0,
@@ -133,14 +106,14 @@ public class MainTeleOp extends LinearOpMode {
 
             }
             else{
-                sm1.setPower(0);
-                sm2.setPower(0);
+                hw.sm1.setPower(0);
+                hw.sm2.setPower(0);
             }
             if (gamepad1.dpad_left) {
                 //pak0.setPosition(0.9); nuline pozicija
-                pak0.setPosition(0.4);
+                hw.pak0.setPosition(0.4);
                 sleep(500);
-                pak1.setPosition(0.4);
+                hw.pak1.setPosition(0.4);
 
             }
 
