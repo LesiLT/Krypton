@@ -5,6 +5,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+
+//Dabar kuriant nauja Java Klase gali i si kreiptis su sitomis kodo linijomis:
+//public HardwareInit hw;
+//hw = new HardwareInit();
+//hw.initializeHardware(hardwareMap);
+//taip pat is naujo nereikia aprasyti Motoru, servu ar Dcmotoru, kreiptis su hw.(variable_name), pvz: hw.kP, hw.sm1, hw.pak0
 public class HardwareInit {
     
     public Motor kP, kG, dP, dG; //kairė priekis/galas, desinė priekis/galas
