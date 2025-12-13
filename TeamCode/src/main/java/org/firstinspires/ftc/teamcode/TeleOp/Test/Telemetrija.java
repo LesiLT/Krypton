@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
-public class Telemetry extends OpMode {
+public class Telemetrija extends OpMode {
     Servo pak0, pak1;
     @Override
     public void init() {
