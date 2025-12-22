@@ -8,8 +8,5 @@ public class Posūkis_laisniais {
 
     public void init(HardwareMap hardwareMap) {
     }
-    public double posukis(double degrees)
-    {
-        return Math.toRadians(degrees);
-    }
+
 }

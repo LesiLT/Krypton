@@ -25,31 +25,6 @@ public class Šaudyklė {
         pem = hwMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
     }
 
-    public void ugnis() {
-        sm1.setPower(targetVelocity);
-        sm2.setPower(targetVelocity);
-        sleep(400);
-        sm1.setPower(targetVelocity);
-        sm2.setPower(targetVelocity);
-        pad.setPower(0.4);
-        pem.setPower(-0.5);
-        sleep(900);
-        sm1.setPower(0);
-        sm2.setPower(0);
-        pad.setPower(0);
-        pem.setPower(0);
-    }
-    public void atgal1(){
-        pem.setPower(0.7);
-        pad.setPower(-0.7);
-        sm1.setPower(-0.6);
-        sm2.setPower(-0.6);
-    }
-    public void atgal0(){
-        pem.setPower(0);
-        pad.setPower(-0);
-        sm1.setPower(-0);
-        sm2.setPower(-0);
-    }
+
 
 }

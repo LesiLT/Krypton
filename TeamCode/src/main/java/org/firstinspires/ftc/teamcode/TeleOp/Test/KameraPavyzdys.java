@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.teamcode.TeleOp.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Kamera.Kamera.Kamera;
+import org.firstinspires.ftc.teamcode.Mechanizmai.Kamera;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 

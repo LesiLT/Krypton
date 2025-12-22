@@ -3,15 +3,12 @@ package org.firstinspires.ftc.teamcode.TeleOp.BeKameros;
 import static java.lang.Math.abs;
 
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.Mechanizmai.HardwareInit;
+import org.firstinspires.ftc.teamcode.Mechanizmai.HardwareInit_Metodai;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
@@ -35,14 +32,14 @@ public class MainTeleOp extends LinearOpMode {
     private VisionPortal visionPortal;
     double sp = 0.5;
 
-    public HardwareInit hw;
+    public HardwareInit_Metodai hw;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         //Hardware inicializacija
-        hw = new HardwareInit();
-        hw.initializeHardware(hardwareMap);
+        hw = new HardwareInit_Metodai(hardwareMap, telemetry);
+        hw.initializeHardware();
 
         waitForStart();
         while (!isStopRequested()) {
