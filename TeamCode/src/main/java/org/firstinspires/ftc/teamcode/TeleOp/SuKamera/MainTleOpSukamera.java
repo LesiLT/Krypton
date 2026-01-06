@@ -20,6 +20,11 @@ public class MainTleOpSukamera extends LinearOpMode {
     boolean prev = false;
     boolean motorOn = false;
 
+    boolean lastRight = false;
+    boolean lastLeft = false;
+
+    double level = 0;
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -105,6 +110,21 @@ public class MainTleOpSukamera extends LinearOpMode {
             }
             hw.id=0;
 
+
+            if(gamepad1.dpad_right && !lastRight)
+            {
+                level = level + 0.05;
+            }
+
+            if(gamepad1.dpad_left && !lastLeft)
+            {
+                level = level - 0.05;
+            }
+
+            hw.kamp.setPosition(level);
+
+            lastRight = gamepad1.dpad_right;
+            lastLeft = gamepad1.dpad_left;
 
             if (gamepad1.dpad_left && gamepad1.circle) {
                 //hw.pak0.setPosition(0.9); nuline pozicija

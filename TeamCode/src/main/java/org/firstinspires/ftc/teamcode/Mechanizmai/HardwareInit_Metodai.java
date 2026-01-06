@@ -41,6 +41,8 @@ public class HardwareInit_Metodai {
     public DcMotor pad, pem;
     public Servo pak0, pak1; //Pakelimo servas Eh = 0, Eh 1
 
+    public Servo kamp;
+
     public int id=0;
     public static final int CPR = 28;             // encoder counts per rev (GoBILDA 6000RPM)
     public static final int MAX_RPM = 6000;
@@ -91,9 +93,11 @@ public class HardwareInit_Metodai {
         /// Pak4limas
         pak0 = hardwareMap.get(Servo.class, "pak0");
         pak1 = hardwareMap.get(Servo.class, "pak1");
+        kamp = hardwareMap.get(Servo.class, "kamp");
 
         pak0.setDirection(Servo.Direction.REVERSE);
         pak1.setDirection(Servo.Direction.REVERSE);
+        pad.setDirection(DcMotor.Direction.REVERSE);
     }
     //Surinkimo metodai------------------------------------------------------------------------
     public void paemimas(){
@@ -137,7 +141,7 @@ public class HardwareInit_Metodai {
 
     //Kiti metodai-------------------------------------------------------------------------------
 
-    public double posukis(double degrees)
+    public double posukis(int degrees)
     {
         return Math.toRadians(degrees);
     }
