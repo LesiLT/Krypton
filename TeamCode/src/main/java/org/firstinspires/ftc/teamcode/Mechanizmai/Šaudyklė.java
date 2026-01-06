@@ -14,6 +14,7 @@ public class Šaudyklė {
     private static final int CPR = 28;             // encoder counts per rev (GoBILDA 6000RPM)
     private static final int MAX_RPM = 6000;
     private static final int MAX_TICKS_PER_SEC = (MAX_RPM / 60) * CPR;  // ~2800
+    double smGalia = 0.85;
 
     // Start at ~70% power
     private double targetVelocity = MAX_TICKS_PER_SEC * 1;   ///derinsimes
@@ -26,12 +27,12 @@ public class Šaudyklė {
     }
 
     public void ugnis() {
-        sm1.setPower(targetVelocity);
-        sm2.setPower(targetVelocity);
+        sm1.setPower(smGalia);
+        sm2.setPower(smGalia);
         sleep(400);
         sm1.setPower(targetVelocity);
         sm2.setPower(targetVelocity);
-        pad.setPower(0.4);
+        pad.setPower(-0.7);
         pem.setPower(-0.5);
         sleep(900);
         sm1.setPower(0);
@@ -41,7 +42,7 @@ public class Šaudyklė {
     }
     public void atgal1(){
         pem.setPower(0.7);
-        pad.setPower(-0.7);
+        pad.setPower(0.7);
         sm1.setPower(-0.6);
         sm2.setPower(-0.6);
     }

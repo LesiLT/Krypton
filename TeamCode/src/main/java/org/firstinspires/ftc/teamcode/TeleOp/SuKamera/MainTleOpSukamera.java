@@ -15,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Kamera.AprilLibrary;
+import org.firstinspires.ftc.teamcode.Kamera.Kamera.Kamera;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -24,13 +25,13 @@ import java.util.List;
 
 @TeleOp (name = "MainTeleOpSuKamera")
 public class MainTleOpSukamera extends LinearOpMode {
-
+    Kamera kamera = new Kamera();
     Šaudyklė kam = new Šaudyklė();
 
     Motor kP, kG, dP, dG; //kairÄ— priekis/galas, desinÄ— priekis/galas
 
     int KP=0,KG=0,DP=0,DG=0;
-    Servo pak1, pak0;
+    Servo pak1, pak0, kamp;
     DcMotorEx sm1,sm2; //PaÄ—mimas, iÅmetimas //0, 1, 2expansion hub
     DcMotor pad, pem;
     //AprilTag skirti dalykai
@@ -69,6 +70,7 @@ public class MainTleOpSukamera extends LinearOpMode {
 
 
         //Išmetimas/Paėmimas
+        kamp = hardwareMap.get(Servo.class, "kamp");
 
         sm1 = hardwareMap.get(DcMotorEx.class, "svD");  // 0 lizdas expansion hub
         sm2 = hardwareMap.get(DcMotorEx.class, "svK");  // 1 lizdas expansion hub
@@ -97,10 +99,11 @@ public class MainTleOpSukamera extends LinearOpMode {
             }
             if (gamepad1.right_bumper) {
                 pem.setPower(-0.5); ///Paemimas
-            }else if (gamepad1.triangle) {
-                pem.setPower(0.5); ///Paemimas atgal
-            }else if (!gamepad1.right_bumper && !gamepad1.triangle) {
+            }
+             else if (!gamepad1.right_bumper) {
                 pem.setPower(0);
+            }if (gamepad1.triangle) {
+                pem.setPower(0.5); ///Paemimas atgal
             }
             /// Atgal visas
             if (gamepad1.cross){
@@ -110,14 +113,20 @@ public class MainTleOpSukamera extends LinearOpMode {
                 kam.atgal0();
             }
 
-
+///Padavimas
             if (gamepad1.dpad_up) {
-                pad.setPower(0.5);  ///Padavimas
+                pad.setPower(0.5);
             } else if (!gamepad1.dpad_up) {
                 pad.setPower(0);
             }
 
+            /// Išmetim0 kampas
 
+            while (gamepad1.left_trigger > 0.25 && gamepad1.right_trigger > 0){
+                kamp.setPosition(gamepad1.right_trigger);
+                telemetry.addData("Kampas: ", kamp.getPosition());
+                telemetry.update();
+            }
 
             if (gamepad1.square) {
                 if (sm2.getPower() >= targetVelocity) {
@@ -129,20 +138,36 @@ public class MainTleOpSukamera extends LinearOpMode {
                         0,
                         0
                 );
+                telemetry.addData("Kampas: ", kamp.getPosition());
+                telemetry.update();
 
             }
 
 
 
             //Taiklumo korekcija
+            /// Z=83cm, kampas 0.65 1 kamuoliukas 11.9 voltai
+            /// Kamera nemato:
+            ///kampas 0.156, 12.68 voltai antras kamuoliukas, abudu per pusę roboto arčiau
+            /// kampas 0.2, 0.25, 0.3 - 0
+            /// kampas  0.5, 0.55 - antras, 12.63 voltai
+            /// kampas 0.6 - 0 per arti
+            /// Beveik prie pat:
+            /// Kampas 0.1-0.0, du kamuoliai 12.52 voltai
+            /// kampas 0.2 atsimušą į sieną įkrenta du, 12.50 voltai
+            /// Z = 81.2 cm:
+            /// Kampas, 0.3 - 1, 12.44 voltai
+
             while (gamepad1.left_bumper)
             {
                 double sp = 0.2; //Greitis
                 telemetryAprilTag();
                 telemetry.update();
+
                 if (id == 20 || id == 24) {
                     if (x >= -18 && x <= 18) {
                         kam.ugnis();
+
                         drive.driveRobotCentric(
                                 0,
                                 0,
@@ -259,6 +284,8 @@ public class MainTleOpSukamera extends LinearOpMode {
                 telemetry.addLine(String.format("Y %6.1f (cm)",  detection.ftcPose.y));
                 telemetry.addLine(String.format("X %6.1f (deg)", detection.ftcPose.pitch));
                 telemetry.addLine(String.format("Z %6.1f (cm)", detection.ftcPose.range));
+                telemetry.addData("Kampas: ", kamp.getPosition());
+                telemetry.update();
             } else {
                 telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
                 telemetry.addLine(String.format("Center   (pixels)", detection.center.x));
