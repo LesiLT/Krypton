@@ -29,7 +29,7 @@ public class MainTleOpSukamera extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         hw = new HardwareInit_Metodai(hardwareMap, telemetry);
-        
+
 
         hw.sm1.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
         hw.sm2.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
@@ -38,6 +38,8 @@ public class MainTleOpSukamera extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hw.kP, hw.dP, hw.kG, hw.dG);
         waitForStart();
         while (!isStopRequested()) {
+
+
 
             /// right bumper,dpad up,square,left bumper,dpad left,circle,
             if(!motorOn){ drive.driveRobotCentric(
@@ -48,10 +50,10 @@ public class MainTleOpSukamera extends LinearOpMode {
             );
             }
             if (gamepad1.right_bumper) {
-                hw.pem.setPower(-0.5); ///Paemimas
-            }else if (gamepad1.triangle) {
-                hw.pem.setPower(0.5); ///Paemimas atgal
-            }else if (!gamepad1.right_bumper && !gamepad1.triangle) {
+                hw.atgal2();///Paemimas
+            }
+            else if(gamepad1.triangle) hw.pem.setPower(0.5);
+            else if (!gamepad1.right_bumper && !gamepad1.triangle) {
                 hw.pem.setPower(0);
             }
             /// Atgal visas
@@ -111,7 +113,7 @@ public class MainTleOpSukamera extends LinearOpMode {
             hw.id=0;
 
 
-            if(gamepad1.dpad_right && !lastRight)
+            /*if(gamepad1.dpad_right && !lastRight)
             {
                 level = level + 0.05;
             }
@@ -124,7 +126,7 @@ public class MainTleOpSukamera extends LinearOpMode {
             hw.kamp.setPosition(level);
 
             lastRight = gamepad1.dpad_right;
-            lastLeft = gamepad1.dpad_left;
+            lastLeft = gamepad1.dpad_left;*/
 
             if (gamepad1.dpad_left && gamepad1.circle) {
                 //hw.pak0.setPosition(0.9); nuline pozicija

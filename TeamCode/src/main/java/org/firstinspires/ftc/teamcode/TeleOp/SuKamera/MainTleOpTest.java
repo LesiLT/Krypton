@@ -23,7 +23,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
-@Disabled
+
 @TeleOp (name = "MainTest")
 public class MainTleOpTest extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairÄ— priekis/galas, desinÄ— priekis/galas
@@ -46,6 +46,7 @@ public class MainTleOpTest extends LinearOpMode {
     //--------------------
     boolean prev = false;
     boolean motorOn = false;
+
 
     @Override
     public void runOpMode() throws InterruptedException {

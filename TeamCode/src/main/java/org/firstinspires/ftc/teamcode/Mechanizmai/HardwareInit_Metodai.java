@@ -102,6 +102,7 @@ public class HardwareInit_Metodai {
     //Surinkimo metodai------------------------------------------------------------------------
     public void paemimas(){
         pem.setPower(-0.5);
+        pad.setPower(0.01);
     }
     public void atgal(){
         pem.setPower(0.5);
@@ -127,10 +128,18 @@ public class HardwareInit_Metodai {
         pem.setPower(0);
     }
     public void atgal1(){
-        pem.setPower(0.7);
+        //pem.setPower(0.7);
         pad.setPower(-0.7);
         sm1.setPower(-0.6);
         sm2.setPower(-0.6);
+    }
+
+    public void atgal2()
+    {
+        pem.setPower(-0.7);
+        // pad.setPower(-0.7);
+        // sm1.setPower(-0.6);
+        // sm2.setPower(-0.6);
     }
     public void atgal0(){
         pem.setPower(0);
