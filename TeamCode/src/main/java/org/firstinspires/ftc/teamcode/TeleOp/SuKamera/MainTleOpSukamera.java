@@ -166,6 +166,7 @@ public class MainTleOpSukamera extends LinearOpMode {
 
                 if (id == 20 || id == 24) {
                     if (x >= -18 && x <= 18) {
+                        kamp.setPosition(0.25);
                         kam.ugnis();
 
                         drive.driveRobotCentric(
@@ -177,6 +178,16 @@ public class MainTleOpSukamera extends LinearOpMode {
                         break;
 
                     }
+                }
+                else{
+                    kamp.setPosition(0.15);
+                    kam.ugnis();
+
+                    drive.driveRobotCentric(
+                            0,
+                            0,
+                            0
+                    );
                 }
 
 
