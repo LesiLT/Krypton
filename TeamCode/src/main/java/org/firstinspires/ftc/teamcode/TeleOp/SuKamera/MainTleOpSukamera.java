@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Mechanizmai.HardwareInit_Metodai;
 
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Mechanizmai.HardwareInit_Metodai;
 public class MainTleOpSukamera extends LinearOpMode {
 
     private HardwareInit_Metodai hw;
-
+    DcMotor pem;
     int KP=0,KG=0,DP=0,DG=0;
 
     //--------------------
@@ -27,6 +28,7 @@ public class MainTleOpSukamera extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        pem = hardwareMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
 
         hw = new HardwareInit_Metodai(hardwareMap, telemetry);
 
@@ -48,13 +50,13 @@ public class MainTleOpSukamera extends LinearOpMode {
                     gamepad1.right_stick_x * 0.85
 
             );
-            }
+            }///Paemimas
             if (gamepad1.right_bumper) {
-                hw.atgal2();///Paemimas
+                hw.atgal2();
             }
-            else if(gamepad1.triangle) hw.pem.setPower(0.5);
+            else if(gamepad1.triangle) pem.setPower(0.5);
             else if (!gamepad1.right_bumper && !gamepad1.triangle) {
-                hw.pem.setPower(0);
+                pem.setPower(0);
             }
             /// Atgal visas
             if (gamepad1.cross){
