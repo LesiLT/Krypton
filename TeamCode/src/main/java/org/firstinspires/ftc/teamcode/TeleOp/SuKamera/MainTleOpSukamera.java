@@ -39,6 +39,7 @@ public class MainTleOpSukamera extends LinearOpMode {
         // VaÅ¾iuoklÄ—
         MecanumDrive drive = new MecanumDrive(hw.kP, hw.dP, hw.kG, hw.dG);
         waitForStart();
+        hw.kamp.setPosition(0);
         while (!isStopRequested()) {
 
 
@@ -52,17 +53,15 @@ public class MainTleOpSukamera extends LinearOpMode {
             );
             }///Paemimas
             if (gamepad1.right_bumper) {
-                hw.atgal2();
+                pem.setPower(-0.6);
             }
-            else if(gamepad1.triangle) pem.setPower(0.5);
-            else if (!gamepad1.right_bumper && !gamepad1.triangle) {
-                pem.setPower(0);
-            }
+//            else if(!gamepad1.right_bumper) pem.setPower(0);
+
             /// Atgal visas
             if (gamepad1.cross){
                 hw.atgal1();
             }
-            else if (!gamepad1.cross){
+            else if (!gamepad1.cross && !gamepad1.right_bumper){
                 hw.atgal0();
             }
 
@@ -74,22 +73,6 @@ public class MainTleOpSukamera extends LinearOpMode {
             }
 
 
-
-            if (gamepad1.square) {
-                if (hw.sm2.getVelocity() >= hw.targetVelocity) {
-                    gamepad1.rumble(500, 500, 600);
-                }
-               hw.ugnis();
-                drive.driveRobotCentric(
-                        0,
-                        0,
-                        0
-                );
-
-            }
-
-
-
             //Taiklumo korekcija
             while (gamepad1.left_bumper)
             {
@@ -98,6 +81,7 @@ public class MainTleOpSukamera extends LinearOpMode {
                 telemetry.update();
                 if (hw.id == 20 || hw.id == 24) {
                     if (hw.x >= -18 && hw.x <= 18) {
+                        hw.kamp.setPosition(0.3);
                         hw.ugnis();
                         drive.driveRobotCentric(
                                 0,
@@ -108,6 +92,9 @@ public class MainTleOpSukamera extends LinearOpMode {
                         break;
 
                     }
+                } else {
+                    hw.kamp.setPosition(0.2);
+                    hw.ugnis();
                 }
 
 
