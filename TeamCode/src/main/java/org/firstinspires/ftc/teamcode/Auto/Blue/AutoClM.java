@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Auto.Blue;
 
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -48,18 +49,31 @@ public class AutoClM extends LinearOpMode {
 
         pak0.setDirection(Servo.Direction.REVERSE);
         pak1.setDirection(Servo.Direction.REVERSE);
-        Posūkis_laisniais posukis = new Posūkis_laisniais();
-        Surinkimas surinkimas = new Surinkimas();
-        Šaudyklė saudyklė = new Šaudyklė();
+        Posūkis_laisniais posukis = new Posūkis_laisniais(hardwareMap);
+        Surinkimas surinkimas = new Surinkimas(hardwareMap);
+        Šaudyklė saudyklė = new Šaudyklė(hardwareMap);
 
-    Pose2d initialPose = new Pose2d(0, 0, 0);
-    MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
+    MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,0));
     waitForStart();
-    /*Actions.runBlocking(
-            new ParallelAction( drive.actionBuilder(initialPose)
-            .lineToX(10),
-                    posukis.posukis(90),
-                    saudyklė.ugnis())
-    );*/
+    Actions.runBlocking(
+            drive.actionBuilder(new Pose2d(0, 0, 0))
+                    .lineToX(10)
+                    .build());
+    Actions.runBlocking(
+            drive.actionBuilder(new Pose2d(0, 0, 0))
+            .turn(Math.toRadians(-135))
+                    .build());
+    Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
+                    .stopAndAdd(saudyklė.ugnis())
+                    .build()
+            );
+        Actions.runBlocking(
+                drive.actionBuilder(new Pose2d(0, 0, 0))
+                        .turn(Math.toRadians(135))
+                        .build());
+        Actions.runBlocking(
+                drive.actionBuilder(new Pose2d(0, 0, 0))
+                        .lineToX(10)
+                        .build());
     }
 }

@@ -13,10 +13,10 @@ import org.firstinspires.ftc.teamcode.Mechanizmai.Posūkis_laisniais;
 
 @Autonomous
 public class Auto10 extends LinearOpMode {
-    Posūkis_laisniais sukis = new Posūkis_laisniais();
+    Posūkis_laisniais sukis = new Posūkis_laisniais(hardwareMap);
     @Override
     public void runOpMode() throws InterruptedException {
-        sukis.init(hardwareMap);
+
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         waitForStart();

@@ -138,7 +138,7 @@ public class Auto2MO extends LinearOpMode {
             sleep(800);
             sm1.setPower(sp);
             sm2.setPower(-sp);
-            pad.setPower(0.5);
+            pad.setPower(-0.5);
             pem.setPower(-0.5);
             sleep(1500);
 

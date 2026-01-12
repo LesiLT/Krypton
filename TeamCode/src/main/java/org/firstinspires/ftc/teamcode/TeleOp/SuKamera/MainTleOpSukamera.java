@@ -26,7 +26,7 @@ import java.util.List;
 @TeleOp (name = "MainTeleOpSuKamera")
 public class MainTleOpSukamera extends LinearOpMode {
     Kamera kamera = new Kamera();
-    Šaudyklė kam = new Šaudyklė();
+    Šaudyklė kam = new Šaudyklė(hardwareMap);
 
     Motor kP, kG, dP, dG; //kairÄ— priekis/galas, desinÄ— priekis/galas
 
@@ -52,7 +52,6 @@ public class MainTleOpSukamera extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        kam.init(hardwareMap);
 
         //Važiuoklės varikliai
         kP = new Motor(hardwareMap, "kP", Motor.GoBILDA.RPM_312); // 0 lizdas control hub
