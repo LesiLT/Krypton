@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Mechanizmai.Posūkis_laisniais;
 
 @Autonomous
 public class Auto10 extends LinearOpMode {
-    Posūkis_laisniais sukis = new Posūkis_laisniais(hardwareMap);
+    //Posūkis_laisniais sukis = new Posūkis_laisniais(hardwareMap);
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -35,7 +35,7 @@ public class Auto10 extends LinearOpMode {
             ); /// 71.5 = 10
         }
         if (gamepad1.dpad_down){
-            sukis.posukis(90);
+
         }
         new ParallelAction();
     }}

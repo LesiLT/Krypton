@@ -14,10 +14,6 @@ public class Surinkimas {
         pem = hardwareMap.get(DcMotor.class, "pem");
 
     }
-    /*public Action paemimas(){
-        pem.setPower(-0.5);
-        return null;
-    }*/
     public class paemimas implements Action {
         private boolean initialized = false;
         @Override
@@ -33,10 +29,32 @@ public class Surinkimas {
     public  Action paemimas() {
         return new Surinkimas.paemimas();
     }
-    public void atgal(){
-        pem.setPower(0.5);
+    public class atgal implements Action {
+        private boolean initialized = false;
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                pem.setPower(0.5);
+                initialized = true;
+            }
+            return false;
+        }
     }
-    public void stop(){
-        pem.setPower(0);
+    public  Action atgal() {
+        return new Surinkimas.atgal();
+    }
+    public class stop implements Action {
+        private boolean initialized = false;
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                pem.setPower(0);
+                initialized = true;
+            }
+            return false;
+        }
+    }
+    public  Action stop() {
+        return new Surinkimas.stop();
     }
 }

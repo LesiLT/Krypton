@@ -30,23 +30,6 @@ public class Šaudyklė {
         pad = hwMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
         pem = hwMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
     }
-
-//    public InstantFunction ugnis() {
-//        sm1.setPower(smGalia);
-//        sm2.setPower(smGalia);
-//        sleep(400);
-//        sm1.setPower(targetVelocity);
-//        sm2.setPower(targetVelocity);
-//        pad.setPower(-0.7);
-//        pem.setPower(-0.5);
-//        sleep(900);
-//        sm1.setPower(0);
-//        sm2.setPower(0);
-//        pad.setPower(0);
-//        pem.setPower(0);
-//
-//        return null;
-//    }
     public class ugnis implements Action {
         private boolean initialized = false;
         @Override
@@ -72,17 +55,39 @@ public class Šaudyklė {
     public  Action ugnis() {
         return new Šaudyklė.ugnis();
     }
-    public void atgal1(){
-        pem.setPower(0.7);
-        pad.setPower(0.7);
-        sm1.setPower(-0.6);
-        sm2.setPower(-0.6);
+    public class atgal1 implements Action {
+        private boolean initialized = false;
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                pem.setPower(0.7);
+                pad.setPower(0.7);
+                sm1.setPower(-0.6);
+                sm2.setPower(-0.6);
+                initialized = true;
+            }
+            return false;
+        }
     }
-    public void atgal0(){
-        pem.setPower(0);
-        pad.setPower(-0);
-        sm1.setPower(-0);
-        sm2.setPower(-0);
+    public  Action atgal1() {
+        return new Šaudyklė.atgal1();
+    }
+    public class atgal0 implements Action {
+        private boolean initialized = false;
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                pem.setPower(0);
+                pad.setPower(-0);
+                sm1.setPower(-0);
+                sm2.setPower(-0);
+                initialized = true;
+            }
+            return false;
+        }
+    }
+    public  Action atgal0() {
+        return new Šaudyklė.atgal0();
     }
 
 }
