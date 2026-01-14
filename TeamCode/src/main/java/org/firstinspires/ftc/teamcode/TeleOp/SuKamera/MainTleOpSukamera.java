@@ -81,7 +81,7 @@ public class MainTleOpSukamera extends LinearOpMode {
                 telemetry.update();
                 if (hw.id == 20 || hw.id == 24) {
                     if (hw.x >= -18 && hw.x <= 18) {
-                        hw.kamp.setPosition(0.3);
+                        hw.kamp.setPosition(0.4);
                         hw.ugnis();
                         drive.driveRobotCentric(
                                 0,

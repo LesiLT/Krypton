@@ -13,17 +13,20 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+/// O = odometrija
 @Autonomous (name = "Auto+2Blue0")
 public class Auto2MO extends LinearOpMode {
 
     DcMotor kP, kG, dP, dG;
     DcMotorEx sm1,sm2; //PaÄ—mimas, iÅmetimas //0, 1, 2expansion hub
     DcMotor pad, pem;
+    Servo kamp;
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
     private AprilTagProcessor aprilTag;
@@ -33,6 +36,9 @@ public class Auto2MO extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        kamp = hardwareMap.get(Servo.class, "kamp");
+
 
         kP = hardwareMap.get(DcMotor.class, "kP"); // 0 lizdas control hub
         kG = hardwareMap.get(DcMotor.class, "kG");// 1 lizdas control hub
@@ -54,30 +60,37 @@ public class Auto2MO extends LinearOpMode {
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         waitForStart();
+        kamp.setPosition(0.25);
 
 
+        /// Atsitraukti, pasisukti
         Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                .lineToX(-27)
-                .stopAndAdd(new šauti(sm1, sm2, pad, pem, 0.9))
-                        .lineToX(-33)
-                        .stopAndAdd(new suktis(kP, kG, dG, dP, 1))
+                .lineToX(-10)
+                        .turn(-Math.PI/18)
+                .stopAndAdd(new šauti(sm1, sm2, pad, pem, 0.96))
+                .lineToX(-33)
+                .turn(Math.PI/4.5)
+                .stopAndAdd(new stopV(sm1, sm2, pad, pem, 0))
                 .build());
+        /// Strafe
         Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                        .strafeTo(new Vector2d(0, 5))
+                        .strafeTo(new Vector2d(0, 3.6))
                         .build()
         );
-
-                pem.setPower(-0.6);
+        /// paėmimas
+                pem.setPower(-0.9);
+                pad.setPower(0.0);
         Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                        .lineToX(25)
                         .lineToX(20)
-                        .stopAndAdd(new suktis(kP, kG, dG, dP, -1))
-
+                        .turn(-Math.PI/6)
                 .build()
         );
+        /// grįžti, išauti
+        kamp.setPosition(0.4);
         Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                .strafeTo(new Vector2d(0, -10))
-                .stopAndAdd(new šauti(sm1, sm2, pad, pem, 0.9))
+                .strafeTo(new Vector2d(0, -11))
+                .stopAndAdd(new šauti(sm1, sm2, pad, pem, 0.96))
+                        .strafeTo(new Vector2d(0, -3))
                 .build());
 
 
@@ -138,12 +151,40 @@ public class Auto2MO extends LinearOpMode {
             sleep(800);
             sm1.setPower(sp);
             sm2.setPower(-sp);
-            pad.setPower(0.5);
-            pem.setPower(-0.5);
+            pad.setPower(-0.5);
+            pem.setPower( -0.8);
             sleep(1500);
 
             return false;
         }
     }
+
+    public class stopV implements Action {
+        DcMotorEx sm1,sm2; //PaÄ—mimas, iÅmetimas //0, 1, 2expansion hub
+        DcMotor pad, pem;
+        double sp;
+
+        public stopV(DcMotorEx sm1, DcMotorEx sm2, DcMotor pad, DcMotor pem, double sp) {
+            this.sm1 = sm1;
+            this.sm2 = sm2;
+            this.pad = pad;
+            this.pem = pem;
+            this.sp = sp;
+
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+            sm1.setPower(0);
+            sm2.setPower(-0);
+            pad.setPower(-0);
+            pem.setPower(-0);
+
+
+            return false;
+        }
+    }
+
 
 }

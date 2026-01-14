@@ -50,6 +50,7 @@ public class HardwareInit_Metodai {
 
     // Start at ~70% power
     public double targetVelocity = MAX_TICKS_PER_SEC * 1;   ///derinsimes
+
     public double x,y; //aprilTag x , y detection
 
     public static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
