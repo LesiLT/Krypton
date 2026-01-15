@@ -11,10 +11,11 @@ import com.acmerobotics.roadrunner.InstantFunction;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Šaudyklė {
-    DcMotorEx sm1,sm2; //, iÅmetimas //0, 1, 2expansion hub
-    DcMotor pad, pem; //Paėmimas padavimas
+    public DcMotorEx sm1,sm2; //, iÅmetimas //0, 1, 2expansion hub
+    public DcMotor pad, pem; //Paėmimas padavimas
 
     private static final int CPR = 28;             // encoder counts per rev (GoBILDA 6000RPM)
     private static final int MAX_RPM = 6000;

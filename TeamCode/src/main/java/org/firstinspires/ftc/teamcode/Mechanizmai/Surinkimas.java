@@ -20,7 +20,6 @@ public class Surinkimas {
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
                 pem.setPower(0.6);
-                //timer.reset();
                 initialized = true;
             }
             return false;

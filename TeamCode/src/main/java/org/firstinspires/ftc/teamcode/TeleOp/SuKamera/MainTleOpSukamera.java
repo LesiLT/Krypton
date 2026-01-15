@@ -1,51 +1,19 @@
 package org.firstinspires.ftc.teamcode.TeleOp.SuKamera;
 
-import android.util.Size;
-
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Kamera.AprilLibrary;
-import org.firstinspires.ftc.teamcode.Kamera.Kamera.Kamera;
+import org.firstinspires.ftc.teamcode.Mechanizmai.Kamera;
+import org.firstinspires.ftc.teamcode.Mechanizmai.Surinkimas;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
-import java.util.List;
 
 @TeleOp (name = "MainTeleOpSuKamera")
 public class MainTleOpSukamera extends LinearOpMode {
-    Kamera kamera = new Kamera();
-    Šaudyklė kam = new Šaudyklė(hardwareMap);
-
     Motor kP, kG, dP, dG; //kairÄ— priekis/galas, desinÄ— priekis/galas
-
     int KP=0,KG=0,DP=0,DG=0;
     Servo pak1, pak0, kamp;
-    DcMotorEx sm1,sm2; //PaÄ—mimas, iÅmetimas //0, 1, 2expansion hub
-    DcMotor pad, pem;
-    //AprilTag skirti dalykai
-    private static final int CPR = 28;             // encoder counts per rev (GoBILDA 6000RPM)
-    private static final int MAX_RPM = 6000;
-    private static final int MAX_TICKS_PER_SEC = (MAX_RPM / 60) * CPR;  // ~2800
-
-    // Start at ~70% power
-    private double targetVelocity = MAX_TICKS_PER_SEC * 0.8;   ///derinsimes
-    double x, y; //aprilTag x , y detection
-    int id = 0;
-    private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
-    private AprilTagProcessor aprilTag;
-    private VisionPortal visionPortal;
     //--------------------
     boolean prev = false;
     boolean motorOn = false;
@@ -71,23 +39,18 @@ public class MainTleOpSukamera extends LinearOpMode {
         //Išmetimas/Paėmimas
         kamp = hardwareMap.get(Servo.class, "kamp");
 
-        sm1 = hardwareMap.get(DcMotorEx.class, "svD");  // 0 lizdas expansion hub
-        sm2 = hardwareMap.get(DcMotorEx.class, "svK");  // 1 lizdas expansion hub
-        pad = hardwareMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
-        pem = hardwareMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
+        Surinkimas surinkimas = new Surinkimas(hardwareMap);
+        Šaudyklė saudyklė = new Šaudyklė(hardwareMap);
+        Kamera kam = new Kamera(hardwareMap, telemetry);
+        saudyklė.sm1.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
+        saudyklė.sm2.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
 
-        sm1.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
-        sm2.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
-
-        initAprilTag();
-
+        kamp.setPosition(0);
+        MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG);
         waitForStart();
         while (!isStopRequested()) {
 
-
-
             // VaÅ¾iuoklÄ—
-            MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG) ;
             /// right bumper,dpad up,square,left bumper,dpad left,circle,
             if(!motorOn){ drive.driveRobotCentric(
                     gamepad1.left_stick_x * 0.85, // strafe/drift
@@ -96,54 +59,24 @@ public class MainTleOpSukamera extends LinearOpMode {
 
             );
             }
-            if (gamepad1.right_bumper) {
-                pem.setPower(-0.5); ///Paemimas
-            }
-             else if (!gamepad1.right_bumper) {
-                pem.setPower(0);
-            }if (gamepad1.triangle) {
-                pem.setPower(0.5); ///Paemimas atgal
+            if(gamepad1.right_bumper){
+                saudyklė.pem.setPower(-0.6);
             }
             /// Atgal visas
             if (gamepad1.cross){
-                kam.atgal1();
+                saudyklė.atgal1();
             }
-            else if (!gamepad1.cross){
-                kam.atgal0();
+            else if (!gamepad1.cross && !gamepad1.right_bumper){
+                saudyklė.atgal0();
             }
 
 ///Padavimas
             if (gamepad1.dpad_up) {
-                pad.setPower(0.5);
-            } else if (!gamepad1.dpad_up) {
-                pad.setPower(0);
+                saudyklė.pad.setPower(0.5);
             }
-
-            /// Išmetim0 kampas
-
-            while (gamepad1.left_trigger > 0.25 && gamepad1.right_trigger > 0){
-                kamp.setPosition(gamepad1.right_trigger);
-                telemetry.addData("Kampas: ", kamp.getPosition());
-                telemetry.update();
+            else if (!gamepad1.dpad_up) {
+                saudyklė.pad.setPower(0);
             }
-
-            if (gamepad1.square) {
-                if (sm2.getPower() >= targetVelocity) {
-                    gamepad1.rumble(500, 500, 600);
-                }
-               kam.ugnis();
-                drive.driveRobotCentric(
-                        0,
-                        0,
-                        0
-                );
-                telemetry.addData("Kampas: ", kamp.getPosition());
-                telemetry.update();
-
-            }
-
-
-
             //Taiklumo korekcija
             /// Z=83cm, kampas 0.65 1 kamuoliukas 11.9 voltai
             /// Kamera nemato:
@@ -160,27 +93,27 @@ public class MainTleOpSukamera extends LinearOpMode {
             while (gamepad1.left_bumper)
             {
                 double sp = 0.2; //Greitis
-                telemetryAprilTag();
+                kam.telemetryAprilTag();
                 telemetry.update();
 
-                if (id == 20 || id == 24) {
-                    if (x >= -18 && x <= 18) {
-                        kamp.setPosition(0.25);
-                        kam.ugnis();
+                if (kam.id == 20 || kam.id == 24) {
+                    if (kam.x >= -18 && kam.x <= 18) {
+                        kamp.setPosition(0.4);
+                        saudyklė.ugnis();
 
                         drive.driveRobotCentric(
                                 0,
                                 0,
                                 0
                         );
-                    } else if (x < - 5 || x > 5) {
+                    } else if (kam.x < - 5 || kam.x > 5) {
                         break;
 
                     }
                 }
                 else{
-                    kamp.setPosition(0.15);
-                    kam.ugnis();
+                    kamp.setPosition(0.2);
+                    saudyklė.ugnis();
 
                     drive.driveRobotCentric(
                             0,
@@ -191,8 +124,7 @@ public class MainTleOpSukamera extends LinearOpMode {
 
 
             }
-            id=0;
-
+            kam.id=0;
 
             if (gamepad1.dpad_left && gamepad1.circle) {
                 //pak0.setPosition(0.9); nuline pozicija
@@ -201,110 +133,7 @@ public class MainTleOpSukamera extends LinearOpMode {
                 pak1.setPosition(0.4);
 
             }
-
-
-
-
         }
 
     }
-
-    private void initAprilTag() {
-
-
-
-        // Create the AprilTag processor.
-        aprilTag = new AprilTagProcessor.Builder()
-
-                // The following default settings are available to un-comment and edit as needed.
-                .setDrawAxes(true)
-                .setDrawCubeProjection(false)
-                .setDrawTagOutline(true)
-                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-                .setTagLibrary(AprilLibrary.getSmallLibrary())
-//
-                .setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES)
-
-                // == CAMERA CALIBRATION ==
-                // If you do not manually specify calibration parameters, the SDK will attempt
-                // to load a predefined calibration for your camera.
-                //    .setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
-                // ... these parameters are fx, fy, cx, cy.
-
-                .build();
-
-        // Adjust Image Decimation to trade-off detection-range for detection-rate.
-        // eg: Some typical detection data using a Logitech C920 WebCam
-        // Decimation = 1 ..  Detect 2" Tag from 10 feet away at 10 Frames per second
-        // Decimation = 2 ..  Detect 2" Tag from 6  feet away at 22 Frames per second
-        // Decimation = 3 ..  Detect 2" Tag from 4  feet away at 30 Frames Per Second (default)
-        // Decimation = 3 ..  Detect 5" Tag from 10 feet away at 30 Frames Per Second (default)
-        // Note: Decimation can be changed on-the-fly to adapt during a match.
-        aprilTag.setDecimation(3);
-
-        // Create the vision portal by using a builder.
-        VisionPortal.Builder builder = new VisionPortal.Builder();
-
-        // Set the camera (webcam vs. built-in RC phone camera).
-        if (USE_WEBCAM) {
-            builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
-        } else {
-            builder.setCamera(BuiltinCameraDirection.BACK);
-        }
-
-
-        // Choose a camera resolution. Not all cameras support all resolutions.
-        builder.setCameraResolution(new Size(640, 480));
-
-        // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
-        builder.enableLiveView(true);
-
-        // Set the stream format; MJPEG uses less bandwidth than default YUY2.
-        builder.setStreamFormat(VisionPortal.StreamFormat.MJPEG);
-
-        // Choose whether or not LiveView stops if no processors are enabled.
-        // If set "true", monitor shows solid orange screen if no processors enabled.
-        // If set "false", monitor shows camera view without annotations.
-        builder.setAutoStopLiveView(false);
-
-        // Set and enable the processor.
-        builder.addProcessor(aprilTag);
-
-        // Build the Vision Portal, using the above settings.
-        visionPortal = builder.build();
-
-        // Disable or re-enable the aprilTag processor at any time.
-        //visionPortal.setProcessorEnabled(aprilTag, true);
-
-    }   // end method initAprilTag()
-    private void telemetryAprilTag() {
-
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        telemetry.addData("# AprilTags Detected", currentDetections.size());
-
-        // Step through the list of detections and display info for each one.
-        for (AprilTagDetection detection : currentDetections) {
-
-            if (detection.metadata != null) {
-
-                x = detection.ftcPose.x;
-                y = detection.ftcPose.y;
-                id = detection.id;
-                telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
-                telemetry.addLine(String.format("Y %6.1f (cm)",  detection.ftcPose.y));
-                telemetry.addLine(String.format("X %6.1f (deg)", detection.ftcPose.pitch));
-                telemetry.addLine(String.format("Z %6.1f (cm)", detection.ftcPose.range));
-                telemetry.addData("Kampas: ", kamp.getPosition());
-                telemetry.update();
-            } else {
-                telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
-                telemetry.addLine(String.format("Center   (pixels)", detection.center.x));
-            }
-
-        }   // end for() loop
-
-
-
-
-    }   // end method telemetryAprilTag()
 }

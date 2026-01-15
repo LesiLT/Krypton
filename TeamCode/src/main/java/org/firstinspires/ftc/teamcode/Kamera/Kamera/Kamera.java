@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Kamera.Kamera;
 import android.util.Size;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.List;
@@ -15,10 +16,7 @@ import org.firstinspires.ftc.teamcode.TeleOp.Test.Telemetrija;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
-
-
-
+@Disabled
 public class Kamera {
     private AprilTagProcessor aprilTagProcessor;
     private VisionPortal visionPortal;
@@ -26,6 +24,9 @@ public class Kamera {
     private List<AprilTagDetection> detectedTags = new ArrayList<>();
 
     private Telemetry telemetry;
+
+    public Kamera(HardwareMap hardwareMap, Telemetry telemetry) {
+    }
 
     public void init(HardwareMap hwMap, Telemetry telemetry) {
         this.telemetry = telemetry;
