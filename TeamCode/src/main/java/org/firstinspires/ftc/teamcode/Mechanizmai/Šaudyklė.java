@@ -36,12 +36,12 @@ public class Šaudyklė {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                sm1.setPower(smGalia);
-                sm2.setPower(smGalia);
+                sm1.setPower(targetVelocity);
+                sm2.setPower(targetVelocity);
                 sleep(400);
                 sm1.setPower(targetVelocity);
                 sm2.setPower(targetVelocity);
-                pad.setPower(-0.7);
+                pad.setPower(0.55);
                 pem.setPower(-0.5);
                 sleep(900);
                 sm1.setPower(0);
@@ -79,9 +79,9 @@ public class Šaudyklė {
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
                 pem.setPower(0);
-                pad.setPower(-0);
-                sm1.setPower(-0);
-                sm2.setPower(-0);
+                pad.setPower(0);
+                sm1.setPower(0);
+                sm2.setPower(0);
                 initialized = true;
             }
             return false;

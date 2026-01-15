@@ -7,33 +7,20 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.Mechanizmai.Posūkis_laisniais;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Surinkimas;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė;
 
 @Autonomous(name = "Auto_Clm")
 public class AutoClM extends LinearOpMode {
-    public Motor kP, kG, dP, dG; //kairė priekis/galas, desinė priekis/galas
     public Servo kamp;
     @Override
     public void runOpMode() throws InterruptedException {
-        kP = new Motor(hardwareMap, "kP", Motor.GoBILDA.RPM_312); // 0 lizdas control hub
-        kG = new Motor(hardwareMap, "kG", Motor.GoBILDA.RPM_312); // 1 lizdas control hub
-        dP = new Motor(hardwareMap, "dP", Motor.GoBILDA.RPM_312); // 2 lizdas control hub
-        dG = new Motor(hardwareMap, "dG", Motor.GoBILDA.RPM_312); // 3 lizdas control hub
+        kamp = hardwareMap.get(Servo.class, "kamp");
         kamp.setPosition(0.15);
-
-        kP.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        kG.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        dP.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        dG.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         Surinkimas surinkimas = new Surinkimas(hardwareMap);
         Šaudyklė saudyklė = new Šaudyklė(hardwareMap);
@@ -42,7 +29,6 @@ public class AutoClM extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         TrajectoryActionBuilder PRisovimas = drive.actionBuilder(initialPose)
-                .setReversed(true)
                         .lineToX(10)
                                 .turn(-Math.PI);
         TrajectoryActionBuilder Atsitraukimas = PRisovimas.endTrajectory().fresh()
@@ -59,14 +45,10 @@ public class AutoClM extends LinearOpMode {
 
         Actions.runBlocking(
                         new ParallelAction(
-                                new ParallelAction(
-                                        saudyklė.ugnis(),
-                                        PRisovimasAction
+                                PRisovimasAction,
+                                saudyklė.ugnis(),
+                                AtsitraukimasAction
 
-                                        ),
-                                new ParallelAction(
-                AtsitraukimasAction
-                                )
                                         //saudyklė.ugnis(),
                                         //AtsitraukimasAction
 

@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.Mechanizmai.Kamera;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Surinkimas;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė;
 
-@TeleOp (name = "MainTeleOpSuKamera")
-public class MainTleOpSukamera extends LinearOpMode {
+@TeleOp (name = "KKK_MainTeleOpSuKamera")
+public class KajusMAIN extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairÄ— priekis/galas, desinÄ— priekis/galas
     int KP=0,KG=0,DP=0,DG=0;
     Servo pak1, pak0, kamp;
@@ -36,8 +36,6 @@ public class MainTleOpSukamera extends LinearOpMode {
         pak0 = hardwareMap.get(Servo.class, "pak0");
         pak0.setDirection(Servo.Direction.REVERSE);
 
-
-        //Išmetimas/Paėmimas
         kamp = hardwareMap.get(Servo.class, "kamp");
 
         Surinkimas surinkimas = new Surinkimas(hardwareMap);
@@ -126,11 +124,18 @@ public class MainTleOpSukamera extends LinearOpMode {
 
             }
             kam.id=0;
+            double pos=0;
+            if (gamepad1.dpad_left && gamepad1.circle) {
+                //pak0.setPosition(0.9); nuline pozicija
+                pos+=0.1;
+                pak0.setPosition(pos);
+                //pak1.setPosition(0.4);
 
-            if (gamepad1.dpad_left && gamepad1.circle) {                //pak0.setPosition(0.9); nuline pozicija
-                pak0.setPosition(0.4);
-
-                pak1.setPosition(0.4);
+            }
+            if (gamepad1.dpad_right && gamepad1.circle) {
+                //pak0.setPosition(0.9); nuline pozicija
+                pak0.setPosition(0.9);
+                //pak1.setPosition(0);
 
             }
         }

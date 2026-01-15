@@ -9,9 +9,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Surinkimas {
-    DcMotor pem;
+    DcMotor pem, pad;
     public Surinkimas(HardwareMap hardwareMap) {
         pem = hardwareMap.get(DcMotor.class, "pem");
+        pad = hardwareMap.get(DcMotor.class, "pad");
 
     }
     public class paemimas implements Action {
@@ -19,7 +20,8 @@ public class Surinkimas {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                pem.setPower(0.6);
+                pem.setPower(-0.5);
+                pad.setPower(0.01);
                 initialized = true;
             }
             return false;
