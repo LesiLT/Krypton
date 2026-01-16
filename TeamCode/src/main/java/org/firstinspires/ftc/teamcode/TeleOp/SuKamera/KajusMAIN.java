@@ -101,21 +101,19 @@ public class KajusMAIN extends LinearOpMode {
                 telemetry.update();
 
                 if (kam.id == 20 || kam.id == 24) {
-                    if (kam.x >= -18 && kam.x <= 18) {
                         kamp.setPosition(0.4);
-                        saudyklė.teleugnis();
+                        sp=1;
+                        saudyklė.teleugnis(sp);
                         drive.driveRobotCentric(
                                 0,
                                 0,
                                 0
                         );
-                    } else if (kam.x < - 5 || kam.x > 5) {
-                        break;
-                    }
                 }
                 else{
                     kamp.setPosition(0.2);
-                    saudyklė.teleugnis();
+                    sp=0.9;
+                    saudyklė.teleugnis(sp);
 
                     drive.driveRobotCentric(
                             0,
@@ -127,11 +125,9 @@ public class KajusMAIN extends LinearOpMode {
 
             }
             kam.id=0;
-            double pos=0;
             if (gamepad1.dpad_left && gamepad1.circle) {
                 //pak0.setPosition(0.9); nuline pozicija
-                pos+=0.1;
-                pak0.setPosition(pos);
+                pak0.setPosition(0.4);
                 //pak1.setPosition(0.4);
 
             }

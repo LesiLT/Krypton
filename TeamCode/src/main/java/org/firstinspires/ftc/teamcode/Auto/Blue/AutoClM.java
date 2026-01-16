@@ -24,35 +24,32 @@ public class AutoClM extends LinearOpMode {
 
         Surinkimas surinkimas = new Surinkimas(hardwareMap);
         Šaudyklė saudyklė = new Šaudyklė(hardwareMap);
-
         Pose2d initialPose = new Pose2d(0, 0, 0);
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         TrajectoryActionBuilder PRisovimas = drive.actionBuilder(initialPose)
-                        .lineToX(10)
-                                .turn(-Math.PI);
-        TrajectoryActionBuilder Atsitraukimas = PRisovimas.endTrajectory().fresh()
                 .lineToX(-10)
-                .strafeTo(new Vector2d(0, 5));
+                .turn(-Math.PI/18);
+        TrajectoryActionBuilder NDPaemimas = PRisovimas.endTrajectory().fresh()
+                .lineToX(-33)
+                .turn(Math.PI/4.5);
+        TrajectoryActionBuilder DPaemimas = NDPaemimas.endTrajectory().fresh()
+                .lineToX(20);
         Action PRisovimasAction = PRisovimas.build();
-        Action AtsitraukimasAction = Atsitraukimas.build();
-
-
-
-
+        Action NDPaemimasAction = NDPaemimas.build();
     waitForStart();
     kamp.setPosition(0.15);
 
         Actions.runBlocking(
-                        new ParallelAction(
-                                PRisovimasAction,
-                                saudyklė.autougnis(),
-                                AtsitraukimasAction
+                new ParallelAction(
 
-                                        //saudyklė.ugnis(),
-                                        //AtsitraukimasAction
+                new ParallelAction(
+                        PRisovimasAction,
+                        saudyklė.autougnis(),
+                        NDPaemimasAction
+                        ),
+                new SequentialAction(
 
-
-                        ));
+)));
     }
 }

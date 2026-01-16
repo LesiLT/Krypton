@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.TeleOp.Test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+
+@Disabled
 @TeleOp (name = "RPM")
 public class RPM extends LinearOpMode {
     private DcMotorEx shooterLeft, shooterRight;

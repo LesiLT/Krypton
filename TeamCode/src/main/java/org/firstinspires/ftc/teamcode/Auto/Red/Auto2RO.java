@@ -20,8 +20,8 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 /// O = odometrija
-@Autonomous (name = "AutoBRed")
-public class Auto2R extends LinearOpMode {
+@Autonomous (name = "Auto+2BRed0")
+public class Auto2RO extends LinearOpMode {
 
     DcMotor kP, kG, dP, dG;
     DcMotorEx sm1,sm2; //PaÄ—mimas, iÅmetimas //0, 1, 2expansion hub
@@ -66,9 +66,10 @@ public class Auto2R extends LinearOpMode {
 
         /// Atsitraukti, pasisukti
         Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                .lineToX(-7)
+                .lineToX(-10)
                 .turn(Math.PI/18)
                 .stopAndAdd(new šauti(sm1, sm2, pad, pem, 0.96))
+                .lineToX(-33)
                 .turn(-Math.PI/4.5)
                 .stopAndAdd(new stopV(sm1, sm2, pad, pem, 0))
                 .build());
@@ -77,6 +78,24 @@ public class Auto2R extends LinearOpMode {
                 .strafeTo(new Vector2d(0, -3.6))
                 .build()
         );
+        /// paėmimas
+        pem.setPower(-0.9);
+        pad.setPower(0.0);
+        Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
+                .lineToX(20)
+                .turn(Math.PI/6)
+                .build()
+        );
+        /// grįžti, išauti
+        kamp.setPosition(0.4);
+        Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
+                .strafeTo(new Vector2d(0, 11))
+                .stopAndAdd(new šauti(sm1, sm2, pad, pem, 0.96))
+                .strafeTo(new Vector2d(0, 3))
+                .build());
+
+
+
     }
 
 

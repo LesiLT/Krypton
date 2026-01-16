@@ -16,6 +16,7 @@ public class MainTleOpSukamera extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairÄ— priekis/galas, desinÄ— priekis/galas
     int KP=0,KG=0,DP=0,DG=0;
     Servo pak1, pak0, kamp;
+    double sp;
     //--------------------
     boolean prev = false;
     boolean motorOn = false;
@@ -103,7 +104,8 @@ public class MainTleOpSukamera extends LinearOpMode {
 
                 if (kam.id == 20 || kam.id == 24) {
                         kamp.setPosition(0.4);
-                    saudykle.teleugnis();
+                        sp=1;
+                    saudykle.teleugnis(sp);
 
                         drive.driveRobotCentric(
                                 0,
@@ -113,7 +115,8 @@ public class MainTleOpSukamera extends LinearOpMode {
                 }
                 else{
                     kamp.setPosition(0.2);
-                    saudykle.teleugnis();
+                    sp=0.9;
+                    saudykle.teleugnis(sp);
 
                     drive.driveRobotCentric(
                             0,
@@ -127,9 +130,9 @@ public class MainTleOpSukamera extends LinearOpMode {
             kam.id=0;
 
             if (gamepad1.dpad_left && gamepad1.circle) {                //pak0.setPosition(0.9); nuline pozicija
-                pak0.setPosition(0.4);
+                pak0.setPosition(0);
 
-                pak1.setPosition(0.4);
+                pak1.setPosition(0);
 
             }
         }

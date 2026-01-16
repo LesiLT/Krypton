@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.TeleOp.Test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+@Disabled
 
 public class RPMTest extends OpMode {
 

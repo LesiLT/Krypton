@@ -6,23 +6,27 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-@Autonomous (name = "Auto+2Blue")
+/// O = odometrija
+@Autonomous (name = "AutoBlue")
 public class Auto2M extends LinearOpMode {
 
     DcMotor kP, kG, dP, dG;
     DcMotorEx sm1,sm2; //PaÄ—mimas, iÅmetimas //0, 1, 2expansion hub
     DcMotor pad, pem;
+    Servo kamp;
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
     private AprilTagProcessor aprilTag;
@@ -32,6 +36,9 @@ public class Auto2M extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        kamp = hardwareMap.get(Servo.class, "kamp");
+
 
         kP = hardwareMap.get(DcMotor.class, "kP"); // 0 lizdas control hub
         kG = hardwareMap.get(DcMotor.class, "kG");// 1 lizdas control hub
@@ -48,119 +55,62 @@ public class Auto2M extends LinearOpMode {
         pad = hardwareMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
         pem = hardwareMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
         sm2.setDirection(DcMotorSimple.Direction.REVERSE);
+        sm1.setDirection(DcMotorSimple.Direction.REVERSE);
         //Kr1pton?5
 
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         waitForStart();
-        //Atsitraukti
-        kP.setPower(-0.15);
-        dG.setPower(-0.15);
-        dP.setPower(-0.15);
-        kG.setPower(-0.15);
-        sleep(200);
-        kP.setPower(-0.4);
-        dG.setPower(-0.4);
-        dP.setPower(-0.4);
-        kG.setPower(-0.4);
-        sleep(860);
-        kP.setPower(0);
-        dG.setPower(-0);
-        dP.setPower(-0);
-        kG.setPower(0);
+        kamp.setPosition(0.25);
+
+
+        /// Atsitraukti, pasisukti
         Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                //    .lineToX(-10)
-                .stopAndAdd(new šauti(sm1, sm2, pad, pem, 0.9))
+                .lineToX(-7)
+                .turn(-Math.PI/18)
+                .stopAndAdd(new šauti(sm1, sm2, pad, pem, 0.96))
+                .stopAndAdd(new stopV(sm1, sm2, pad, pem, 0))
                 .build());
-        //Posukis
-        pem.setPower(0);
-        sm1.setPower(0);
-        sm2.setPower(0);
-        pad.setPower(0);
-        kP.setPower(-0.3);
-        dG.setPower(0.3);
-        dP.setPower(0.3);
-        kG.setPower(-0.3);
-        sleep(500);
-        //Strafe
-        kP.setPower(-0.3);
-        dG.setPower(-0.3);
-        dP.setPower(0.3);
-        kG.setPower(0.3);
-        sleep(1750);
-        //Paimti
-        kP.setPower(0.35);
-        dG.setPower(0.35);
-        dP.setPower(0.35);
-        kG.setPower(0.35);
-        pem.setPower(-0.6);
-        sleep(800);
-        kP.setPower(0);
-        dG.setPower(0);
-        dP.setPower(0);
-        kG.setPower(0);
-        pem.setPower(-0.6);
-        sleep(100);
-        //Atsitraukti
-        kP.setPower(0.35);
-        dG.setPower(0.35);
-        dP.setPower(-0.35);
-        kG.setPower(-0.35);
-        pem.setPower(-0);
-        sleep(1650);
-        kP.setPower(0.3);
-        dG.setPower(-0.3);
-        dP.setPower(-0.3);
-        kG.setPower(0.3);
-        sleep(500);
-        kP.setPower(-0.25);
-        dG.setPower(-0.25);
-        dP.setPower(-0.25);
-        kG.setPower(-0.25);
-        sleep(400);
-        kP.setPower(-0);
-        dG.setPower(-0);
-        dP.setPower(-0);
-        kG.setPower(-0);
-        //Strafe šovimui
-        kP.setPower(0.35);
-        dG.setPower(0.35);
-        dP.setPower(-0.35);
-        kG.setPower(-0.35);
-        pem.setPower(-0.6);
-        sleep(800);
-        //Atsitraukti
-        kP.setPower(-0.3);
-        dG.setPower(-0.3);
-        dP.setPower(-0.3);
-        kG.setPower(-0.3);
-        sleep(400);
-        kP.setPower(-0);
-        dG.setPower(-0);
-        dP.setPower(-0);
-        kG.setPower(-0);
+        /// Strafe
         Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                //    .lineToX(-10)
-                .stopAndAdd(new šauti(sm1, sm2, pad, pem, 0.9))
-                .build());
-        //Strafe
-        kP.setPower(-0.3);
-        dG.setPower(-0.3);
-        dP.setPower(0.3);
-        kG.setPower(0.3);
-        sleep(800);
-        pem.setPower(0);
-        sm1.setPower(0);
-        sm2.setPower(0);
-        pad.setPower(0);
-        kP.setPower(-0.3);
-        dG.setPower(-0.3);
-        dP.setPower(0.3);
-        kG.setPower(0.3);
+                .strafeTo(new Vector2d(0, 3.6))
+                .build()
+        );
 
     }
 
 
+    public class suktis implements Action{
+        DcMotor kP, kG, dP, dG;
+
+        int k;
+
+        public suktis (DcMotor kP, DcMotor kG, DcMotor dG, DcMotor dP,  int k){
+            this.dG = dG;
+            this.dP = dP;
+            this.kG = kG;
+            this.kP = kP;
+            this.k = k;
+        }
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            pem.setPower(0);
+            sm1.setPower(0);
+            sm2.setPower(0);
+            pad.setPower(0);
+            kP.setPower(-0.3 * k);
+            dG.setPower(0.3 * k);
+            dP.setPower(0.3 * k);
+            kG.setPower(-0.3 * k);
+            sleep(350);
+            kP.setPower(-0);
+            dG.setPower(0);
+            dP.setPower(0);
+            kG.setPower(-0);
+
+            return false;
+        }
+    }
     public class šauti implements Action {
         DcMotorEx sm1,sm2; //PaÄ—mimas, iÅmetimas //0, 1, 2expansion hub
         DcMotor pad, pem;
@@ -183,12 +133,40 @@ public class Auto2M extends LinearOpMode {
             sleep(800);
             sm1.setPower(sp);
             sm2.setPower(-sp);
-            pad.setPower(0.5);
-            pem.setPower(-0.5);
+            pad.setPower(-0.5);
+            pem.setPower( -0.8);
             sleep(1500);
 
             return false;
-
         }
     }
+
+    public class stopV implements Action {
+        DcMotorEx sm1,sm2; //PaÄ—mimas, iÅmetimas //0, 1, 2expansion hub
+        DcMotor pad, pem;
+        double sp;
+
+        public stopV(DcMotorEx sm1, DcMotorEx sm2, DcMotor pad, DcMotor pem, double sp) {
+            this.sm1 = sm1;
+            this.sm2 = sm2;
+            this.pad = pad;
+            this.pem = pem;
+            this.sp = sp;
+
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+            sm1.setPower(0);
+            sm2.setPower(-0);
+            pad.setPower(-0);
+            pem.setPower(-0);
+
+
+            return false;
+        }
+    }
+
+
 }

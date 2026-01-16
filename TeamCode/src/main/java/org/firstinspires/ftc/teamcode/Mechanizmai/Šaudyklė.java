@@ -21,6 +21,7 @@ public class Šaudyklė {
     private static final int MAX_RPM = 6000;
     private static final int MAX_TICKS_PER_SEC = (MAX_RPM / 60) * CPR;  // ~2800
     double smGalia = 0.85;
+    double sp;
 
     // Start at ~70% power
     private double targetVelocity = MAX_TICKS_PER_SEC * 1;   ///derinsimes
@@ -46,7 +47,7 @@ public class Šaudyklė {
                 sm2.setPower(targetVelocity);
                 pad.setPower(0.55);
                 pem.setPower(-0.5);
-                sleep(900);
+                sleep(600);
                 sm1.setPower(0);
                 sm2.setPower(0);
                 pad.setPower(0);
@@ -93,15 +94,15 @@ public class Šaudyklė {
     public  Action autoatgal0() {
         return new Šaudyklė.autoatgal0();
     }
-    public void teleugnis(){
-        sm1.setPower(targetVelocity);
-        sm2.setPower(targetVelocity);
+    public void teleugnis(double sp){
+        sm1.setPower(sp);
+        sm2.setPower(sp);
         sleep(400);
-        sm1.setPower(targetVelocity);
-        sm2.setPower(targetVelocity);
+        sm1.setPower(sp);
+        sm2.setPower(sp);
         pad.setPower(0.55);
         pem.setPower(-0.5);
-        sleep(900);
+        sleep(600);
         sm1.setPower(0);
         sm2.setPower(0);
         pad.setPower(0);
