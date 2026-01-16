@@ -46,7 +46,7 @@ public class AutoClM extends LinearOpMode {
         Actions.runBlocking(
                         new ParallelAction(
                                 PRisovimasAction,
-                                saudyklė.ugnis(),
+                                saudyklė.autougnis(),
                                 AtsitraukimasAction
 
                                         //saudyklė.ugnis(),

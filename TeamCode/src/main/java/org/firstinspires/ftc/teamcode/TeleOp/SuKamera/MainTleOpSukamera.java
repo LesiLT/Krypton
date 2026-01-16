@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp.SuKamera;
 
+import static android.os.SystemClock.sleep;
+
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -32,19 +34,22 @@ public class MainTleOpSukamera extends LinearOpMode {
         dG.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         /// Pakėlimas
+        kamp = hardwareMap.get(Servo.class, "kamp");
         pak1 = hardwareMap.get(Servo.class, "pak1");
         pak0 = hardwareMap.get(Servo.class, "pak0");
         pak0.setDirection(Servo.Direction.REVERSE);
+        pak1.setDirection(Servo.Direction.REVERSE);
+
 
 
         //Išmetimas/Paėmimas
-        kamp = hardwareMap.get(Servo.class, "kamp");
+
 
         Surinkimas surinkimas = new Surinkimas(hardwareMap);
-        Šaudyklė saudyklė = new Šaudyklė(hardwareMap);
+        Šaudyklė saudykle = new Šaudyklė(hardwareMap);
         Kamera kam = new Kamera(hardwareMap, telemetry);
-        saudyklė.sm1.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
-        saudyklė.sm2.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
+        saudykle.sm1.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
+        saudykle.sm2.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
 
         kamp.setPosition(0);
         MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG);
@@ -61,22 +66,22 @@ public class MainTleOpSukamera extends LinearOpMode {
             );
             }
             if(gamepad1.right_bumper){
-                saudyklė.pem.setPower(-0.6);
+                saudykle.pem.setPower(-0.6);
             }
             /// Atgal visas
             if (gamepad1.cross){
-                saudyklė.atgal1();
+                saudykle.teleatgal1();
             }
             else if (!gamepad1.cross && !gamepad1.right_bumper){
-                saudyklė.atgal0();
+                saudykle.teleatgal0();
             }
 
 ///Padavimas
             if (gamepad1.dpad_up) {
-                saudyklė.pad.setPower(0.5);
+                saudykle.pad.setPower(0.5);
             }
             else if (!gamepad1.dpad_up) {
-                saudyklė.pad.setPower(0);
+                saudykle.pad.setPower(0);
             }
             //Taiklumo korekcija
             /// Z=83cm, kampas 0.65 1 kamuoliukas 11.9 voltai
@@ -91,30 +96,24 @@ public class MainTleOpSukamera extends LinearOpMode {
             /// Z = 81.2 cm:
             /// Kampas, 0.3 - 1, 12.44 voltai
 
-            while (gamepad1.left_bumper)
+            if (gamepad1.left_bumper)
             {
-                double sp = 0.2; //Greitis
                 kam.telemetryAprilTag();
                 telemetry.update();
 
                 if (kam.id == 20 || kam.id == 24) {
-                    if (kam.x >= -18 && kam.x <= 18) {
                         kamp.setPosition(0.4);
-                        saudyklė.ugnis();
+                    saudykle.teleugnis();
 
                         drive.driveRobotCentric(
                                 0,
                                 0,
                                 0
                         );
-                    } else if (kam.x < - 5 || kam.x > 5) {
-                        break;
-
-                    }
                 }
                 else{
                     kamp.setPosition(0.2);
-                    saudyklė.ugnis();
+                    saudykle.teleugnis();
 
                     drive.driveRobotCentric(
                             0,

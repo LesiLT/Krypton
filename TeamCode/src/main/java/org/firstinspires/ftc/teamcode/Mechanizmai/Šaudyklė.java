@@ -30,8 +30,11 @@ public class Šaudyklė {
         sm2 = hwMap.get(DcMotorEx.class, "svK");  // 1 lizdas expansion hub
         pad = hwMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
         pem = hwMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
+        sm1.setDirection(DcMotor.Direction.REVERSE);
+        pad.setDirection(DcMotor.Direction.REVERSE);
+
     }
-    public class ugnis implements Action {
+    public class autougnis implements Action {
         private boolean initialized = false;
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
@@ -53,10 +56,10 @@ public class Šaudyklė {
             return false;
         }
     }
-    public  Action ugnis() {
-        return new Šaudyklė.ugnis();
+    public  Action autougnis() {
+        return new Šaudyklė.autougnis();
     }
-    public class atgal1 implements Action {
+    public class autoatgal1 implements Action {
         private boolean initialized = false;
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
@@ -70,10 +73,10 @@ public class Šaudyklė {
             return false;
         }
     }
-    public  Action atgal1() {
-        return new Šaudyklė.atgal1();
+    public  Action autoatgal1() {
+        return new Šaudyklė.autoatgal1();
     }
-    public class atgal0 implements Action {
+    public class autoatgal0 implements Action {
         private boolean initialized = false;
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
@@ -87,8 +90,35 @@ public class Šaudyklė {
             return false;
         }
     }
-    public  Action atgal0() {
-        return new Šaudyklė.atgal0();
+    public  Action autoatgal0() {
+        return new Šaudyklė.autoatgal0();
     }
+    public void teleugnis(){
+        sm1.setPower(targetVelocity);
+        sm2.setPower(targetVelocity);
+        sleep(400);
+        sm1.setPower(targetVelocity);
+        sm2.setPower(targetVelocity);
+        pad.setPower(0.55);
+        pem.setPower(-0.5);
+        sleep(900);
+        sm1.setPower(0);
+        sm2.setPower(0);
+        pad.setPower(0);
+        pem.setPower(0);
+    }
+    public void teleatgal1(){
+        pem.setPower(0.7);
+        pad.setPower(0.7);
+        sm1.setPower(-0.6);
+        sm2.setPower(-0.6);
+    }
+    public void teleatgal0(){
+        pem.setPower(0);
+        pad.setPower(0);
+        sm1.setPower(0);
+        sm2.setPower(0);
+    }
+
 
 }

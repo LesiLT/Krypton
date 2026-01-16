@@ -35,6 +35,11 @@ public class KajusMAIN extends LinearOpMode {
         pak1 = hardwareMap.get(Servo.class, "pak1");
         pak0 = hardwareMap.get(Servo.class, "pak0");
         pak0.setDirection(Servo.Direction.REVERSE);
+        pak1.setDirection(Servo.Direction.REVERSE);
+
+
+
+        //Išmetimas/Paėmimas
 
         kamp = hardwareMap.get(Servo.class, "kamp");
 
@@ -63,10 +68,10 @@ public class KajusMAIN extends LinearOpMode {
             }
             /// Atgal visas
             if (gamepad1.cross){
-                saudyklė.atgal1();
+                saudyklė.teleatgal1();
             }
             else if (!gamepad1.cross && !gamepad1.right_bumper){
-                saudyklė.atgal0();
+                saudyklė.teleatgal0();
             }
 
 ///Padavimas
@@ -98,8 +103,7 @@ public class KajusMAIN extends LinearOpMode {
                 if (kam.id == 20 || kam.id == 24) {
                     if (kam.x >= -18 && kam.x <= 18) {
                         kamp.setPosition(0.4);
-                        saudyklė.ugnis();
-
+                        saudyklė.teleugnis();
                         drive.driveRobotCentric(
                                 0,
                                 0,
@@ -107,12 +111,11 @@ public class KajusMAIN extends LinearOpMode {
                         );
                     } else if (kam.x < - 5 || kam.x > 5) {
                         break;
-
                     }
                 }
                 else{
                     kamp.setPosition(0.2);
-                    saudyklė.ugnis();
+                    saudyklė.teleugnis();
 
                     drive.driveRobotCentric(
                             0,
