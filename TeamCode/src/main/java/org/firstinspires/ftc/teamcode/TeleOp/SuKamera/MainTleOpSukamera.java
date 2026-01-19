@@ -6,7 +6,10 @@ import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Kamera;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Surinkimas;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė;
@@ -20,6 +23,8 @@ public class MainTleOpSukamera extends LinearOpMode {
     //--------------------
     boolean prev = false;
     boolean motorOn = false;
+
+    DistanceSensor distanceSensor;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -41,7 +46,7 @@ public class MainTleOpSukamera extends LinearOpMode {
         pak0.setDirection(Servo.Direction.REVERSE);
         pak1.setDirection(Servo.Direction.REVERSE);
 
-
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "colorSensor");
 
         //Išmetimas/Paėmimas
 
@@ -135,7 +140,14 @@ public class MainTleOpSukamera extends LinearOpMode {
                 pak1.setPosition(0);
 
             }
+
+            //telemetry.clear();
+            telemetry.addData("Atstumas (cm)", "%.2f", distanceSensor.getDistance(DistanceUnit.CM));
+            telemetry.update();
         }
+
+
+
 
     }
 }
