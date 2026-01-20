@@ -74,7 +74,8 @@ public class MainTleOpSukamera extends LinearOpMode {
             if(gamepad1.right_bumper){
                 saudykle.pem.setPower(-0.6);
             }
-            /// Atgal visas
+
+            /// ==============ATGAL VISAS==============
             if (gamepad1.cross){
                 saudykle.teleatgal1();
             }
@@ -82,25 +83,14 @@ public class MainTleOpSukamera extends LinearOpMode {
                 saudykle.teleatgal0();
             }
 
-///Padavimas
+            ///==============PADAVIMAS==============
             if (gamepad1.dpad_up) {
                 saudykle.pad.setPower(0.5);
             }
             else if (!gamepad1.dpad_up) {
                 saudykle.pad.setPower(0);
             }
-            //Taiklumo korekcija
-            /// Z=83cm, kampas 0.65 1 kamuoliukas 11.9 voltai
-            /// Kamera nemato:
-            ///kampas 0.156, 12.68 voltai antras kamuoliukas, abudu per pusę roboto arčiau
-            /// kampas 0.2, 0.25, 0.3 - 0
-            /// kampas  0.5, 0.55 - antras, 12.63 voltai
-            /// kampas 0.6 - 0 per arti
-            /// Beveik prie pat:
-            /// Kampas 0.1-0.0, du kamuoliai 12.52 voltai
-            /// kampas 0.2 atsimušą į sieną įkrenta du, 12.50 voltai
-            /// Z = 81.2 cm:
-            /// Kampas, 0.3 - 1, 12.44 voltai
+            ///==============ATSTUMO KOREKCIJA==============
 
             if (gamepad1.left_bumper)
             {
@@ -129,6 +119,7 @@ public class MainTleOpSukamera extends LinearOpMode {
                             0
                     );
                 }
+                kamp.setPosition(0);
 
 
             }
@@ -145,9 +136,6 @@ public class MainTleOpSukamera extends LinearOpMode {
             telemetry.addData("Atstumas (cm)", "%.2f", distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.update();
         }
-
-
-
 
     }
 }
