@@ -66,7 +66,7 @@ public class Šaudyklė {
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
                 pem.setPower(0.7);
-                pad.setPower(0.7);
+                pad.setPower(-0.7);
                 sm1.setPower(-0.6);
                 sm2.setPower(-0.6);
                 initialized = true;

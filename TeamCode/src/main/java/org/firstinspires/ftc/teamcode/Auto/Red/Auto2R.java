@@ -20,7 +20,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 /// O = odometrija
-@Autonomous (name = "AutoBRed")
+@Autonomous (name = "AutoRed")
 public class Auto2R extends LinearOpMode {
 
     DcMotor kP, kG, dP, dG;
