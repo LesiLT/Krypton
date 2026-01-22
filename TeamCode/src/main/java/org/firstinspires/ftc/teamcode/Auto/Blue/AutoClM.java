@@ -29,42 +29,41 @@ public class AutoClM extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         TrajectoryActionBuilder pirmas = drive.actionBuilder(initialPose)
+
                 .lineToX(-10)
                 .turn(-Math.PI/18);
         TrajectoryActionBuilder antras = pirmas.endTrajectory().fresh()
-                .fresh()
-                .lineToX(-43)
+                .lineToX(-20)
                 .turn(Math.PI/4.5);
-        TrajectoryActionBuilder trecias = antras.endTrajectory().fresh().fresh()
-                .strafeTo(new Vector2d(0, 20))
-                .lineToX(-23)
-                .turn(-Math.PI/6);
+        //.lineToXLinearHeading(10,Math.PI/180);
+        TrajectoryActionBuilder trecias = antras.endTrajectory().fresh()
+                //.strafeTo(new Vector2d(0, 20))
+                .strafeTo(new Vector2d(-30, 5));
+//                .turn(-Math.PI/6);
         TrajectoryActionBuilder ketvirtas = trecias.endTrajectory().fresh()
-                ;
+                .strafeTo(new Vector2d(-30, -5));
         Action pirmasAction = pirmas.build();
         Action antrasAction = antras.build();
         Action treciasAction = trecias.build();
-        telemetry.addData("pos", initialPose.position);
-        telemetry.update();
+        Action ketvirtasAction = ketvirtas.build();
     waitForStart();
     kamp.setPosition(0.25);
-        telemetry.update();
-
         Actions.runBlocking(
                 new SequentialAction(
 
 
                 new SequentialAction(
                         pirmasAction,
-                        saudyklė.autougnis(),
-                        antrasAction
+                        antrasAction,
+                        treciasAction,
+                        ketvirtasAction
+                        //saudyklė.autougnis(),
+                        //antrasAction
                         ),
                 new ParallelAction(
-                        surinkimas.paemimas(),
-                        treciasAction
+                        //surinkimas.paemimas(),
+
 
 )));
-        telemetry.update();
-
     }
 }
