@@ -31,17 +31,18 @@ public class AutoClM extends LinearOpMode {
         TrajectoryActionBuilder pirmas = drive.actionBuilder(initialPose)
 
                 .lineToX(-10)
-                .turn(-Math.PI/18);
+                .turn(-Math.PI/18)
+                .waitSeconds(0);
         TrajectoryActionBuilder antras = pirmas.endTrajectory().fresh()
-                .lineToX(-20)
-                .turn(Math.PI/4.5);
-        //.lineToXLinearHeading(10,Math.PI/180);
+                .lineToX(-30)
+                .turn(Math.PI/3.75)
+                .waitSeconds(0);
         TrajectoryActionBuilder trecias = antras.endTrajectory().fresh()
-                //.strafeTo(new Vector2d(0, 20))
-                .strafeTo(new Vector2d(-30, 5));
-//                .turn(-Math.PI/6);
+                .strafeTo(new Vector2d(-35, 4))
+                .waitSeconds(0);
         TrajectoryActionBuilder ketvirtas = trecias.endTrajectory().fresh()
-                .strafeTo(new Vector2d(-30, -5));
+                .lineToX(-10)
+                .waitSeconds(0.1);
         Action pirmasAction = pirmas.build();
         Action antrasAction = antras.build();
         Action treciasAction = trecias.build();
