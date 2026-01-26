@@ -19,10 +19,14 @@ public class MainTleOpSukamera extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairÄ— priekis/galas, desinÄ— priekis/galas
     int KP=0,KG=0,DP=0,DG=0;
     Servo pak1, pak0, kamp;
+    Servo sviesa;
     double sp;
     //--------------------
     boolean prev = false;
     boolean motorOn = false;
+    double value = 0;
+    boolean right, rightLast = false;
+    boolean left, leftLast = false;
 
     DistanceSensor distanceSensor;
 
@@ -43,6 +47,7 @@ public class MainTleOpSukamera extends LinearOpMode {
         kamp = hardwareMap.get(Servo.class, "kamp");
         pak1 = hardwareMap.get(Servo.class, "pak1");
         pak0 = hardwareMap.get(Servo.class, "pak0");
+        sviesa = hardwareMap.get(Servo.class, "sviesa");
         pak0.setDirection(Servo.Direction.REVERSE);
         pak1.setDirection(Servo.Direction.REVERSE);
 
@@ -131,6 +136,20 @@ public class MainTleOpSukamera extends LinearOpMode {
                 pak1.setPosition(0);
 
             }
+
+            right = gamepad1.dpad_right;
+            left = gamepad1.dpad_left;
+            if(right && !rightLast)
+            {
+                value += 0.1;
+            }
+            else if(left && !leftLast)
+            {
+                value -= 0.1;
+            }
+            sviesa.setPosition(value);
+            leftLast = left;
+            rightLast = right;
 
             //telemetry.clear();
             telemetry.addData("Atstumas (cm)", "%.2f", distanceSensor.getDistance(DistanceUnit.CM));

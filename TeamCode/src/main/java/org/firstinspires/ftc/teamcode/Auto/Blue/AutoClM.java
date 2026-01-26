@@ -48,6 +48,7 @@ public class AutoClM extends LinearOpMode {
         Action treciasAction = trecias.build();
         Action ketvirtasAction = ketvirtas.build();
     waitForStart();
+
     kamp.setPosition(0.25);
         Actions.runBlocking(
                 new SequentialAction(
