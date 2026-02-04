@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė;
 public class MainTleOpSukamera extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairÄ— priekis/galas, desinÄ— priekis/galas
     int KP=0,KG=0,DP=0,DG=0;
-    Servo pak1, pak0, kamp;
+    Servo kamp;
     Servo sviesa;
     double sp;
     //--------------------
@@ -45,11 +45,8 @@ public class MainTleOpSukamera extends LinearOpMode {
 
         /// Pakėlimas
         kamp = hardwareMap.get(Servo.class, "kamp");
-        pak1 = hardwareMap.get(Servo.class, "pak1");
-        pak0 = hardwareMap.get(Servo.class, "pak0");
         sviesa = hardwareMap.get(Servo.class, "sviesa");
-        pak0.setDirection(Servo.Direction.REVERSE);
-        pak1.setDirection(Servo.Direction.REVERSE);
+
 
         distanceSensor = hardwareMap.get(DistanceSensor.class, "colorSensor");
 
@@ -130,13 +127,6 @@ public class MainTleOpSukamera extends LinearOpMode {
             }
             kam.id=0;
 
-            if (gamepad1.dpad_left && gamepad1.circle) {                //pak0.setPosition(0.9); nuline pozicija
-                pak0.setPosition(0);
-
-                pak1.setPosition(0);
-
-            }
-
             right = gamepad1.dpad_right;
             left = gamepad1.dpad_left;
             if(right && !rightLast)
@@ -153,6 +143,7 @@ public class MainTleOpSukamera extends LinearOpMode {
 
             //telemetry.clear();
             telemetry.addData("Atstumas (cm)", "%.2f", distanceSensor.getDistance(DistanceUnit.CM));
+            telemetry.addData("Sviesa pozicija", value);
             telemetry.update();
         }
 

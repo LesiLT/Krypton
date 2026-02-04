@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.util.TypeConversion;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -108,8 +109,8 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
         Y_VELOCITY      (12),
         H_VELOCITY      (13),
         MM_PER_TICK     (14),
-        X_POD_OFFSET    (15),
-        Y_POD_OFFSET    (16),
+        X_POD_OFFSET    (15),//30
+        Y_POD_OFFSET    (16),//118
         YAW_SCALAR      (17),
         BULK_READ       (18);
 
@@ -285,10 +286,12 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
      * The most common tracking position is the center of the robot. <br> <br>
      * The X pod offset refers to how far sideways (in mm) from the tracking point the X (forward) odometry pod is. Left of the center is a positive number, right of center is a negative number. <br>
      * the Y pod offset refers to how far forwards (in mm) from the tracking point the Y (strafe) odometry pod is. forward of center is a positive number, backwards is a negative number.<br>
+     *
      * @param xOffset how sideways from the center of the robot is the X (forward) pod? Left increases
      * @param yOffset how far forward from the center of the robot is the Y (Strafe) pod? forward increases
+     * @param mm
      */
-    public void setOffsets(double xOffset, double yOffset){
+    public void setOffsets(double xOffset, double yOffset, DistanceUnit mm){
         writeFloat(Register.X_POD_OFFSET, (float) xOffset);
         writeFloat(Register.Y_POD_OFFSET, (float) yOffset);
     }
@@ -466,29 +469,29 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
     /**
      * @return the estimated X (forward) velocity of the robot in mm/sec
      */
-    public double getVelX(){return xVelocity; }
+    public double getVelX(DistanceUnit mm){return xVelocity; }
 
     /**
      * @return the estimated Y (strafe) velocity of the robot in mm/sec
      */
-    public double getVelY(){return yVelocity; }
+    public double getVelY(DistanceUnit mm){return yVelocity; }
 
     /**
      * @return the estimated H (heading) velocity of the robot in radians/sec
      */
-    public double getHeadingVelocity(){return hVelocity; }
+    public double getHeadingVelocity(UnnormalizedAngleUnit degrees){return hVelocity; }
 
     /**
      * <strong> This uses its own I2C read, avoid calling this every loop. </strong>
      * @return the user-set offset for the X (forward) pod
      */
-    public float getXOffset(){return readFloat(Register.X_POD_OFFSET);}
+    public float getXOffset(DistanceUnit mm){return readFloat(Register.X_POD_OFFSET);}
 
     /**
      * <strong> This uses its own I2C read, avoid calling this every loop. </strong>
      * @return the user-set offset for the Y (strafe) pod
      */
-    public float getYOffset(){return readFloat(Register.Y_POD_OFFSET);}
+    public float getYOffset(DistanceUnit mm){return readFloat(Register.Y_POD_OFFSET);}
 
     /**
      * @return a Pose2D containing the estimated position of the robot

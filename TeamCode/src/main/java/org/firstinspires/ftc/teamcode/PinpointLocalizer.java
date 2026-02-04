@@ -5,8 +5,10 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.acmerobotics.roadrunner.ftc.PinpointView;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 
 import java.util.Objects;
 
@@ -32,10 +34,10 @@ public final class PinpointLocalizer implements Localizer {
 
         double mmPerTick = 25.4 * inPerTick;
         driver.setEncoderResolution(1 / mmPerTick);
-        driver.setOffsets(mmPerTick * PARAMS.parYTicks, mmPerTick * PARAMS.perpXTicks);
+        driver.setOffsets(mmPerTick * PARAMS.parYTicks, mmPerTick * PARAMS.perpXTicks, DistanceUnit.MM);
 
         // TODO: reverse encoder directions if needed
-        initialParDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
+        initialParDirection = GoBildaPinpointDriver.EncoderDirection.REVERSED;
         initialPerpDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
 
         driver.setEncoderDirections(initialParDirection, initialPerpDirection);
@@ -60,9 +62,9 @@ public final class PinpointLocalizer implements Localizer {
         driver.update();
         if (Objects.requireNonNull(driver.getDeviceStatus()) == GoBildaPinpointDriver.DeviceStatus.READY) {
             txPinpointRobot = new Pose2d(driver.getPosX() / 25.4, driver.getPosY() / 25.4, driver.getHeading());
-            Vector2d worldVelocity = new Vector2d(driver.getVelX() / 25.4, driver.getVelY() / 25.4);
+            Vector2d worldVelocity = new Vector2d(driver.getVelX(DistanceUnit.MM) / 25.4, driver.getVelY(DistanceUnit.MM) / 25.4);
             Vector2d robotVelocity = Rotation2d.fromDouble(-driver.getHeading()).times(worldVelocity);
-            return new PoseVelocity2d(robotVelocity, driver.getHeadingVelocity());
+            return new PoseVelocity2d(robotVelocity, driver.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES));
         }
         return new PoseVelocity2d(new Vector2d(0, 0), 0);
     }

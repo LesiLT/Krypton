@@ -22,12 +22,8 @@ import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.acmerobotics.roadrunner.ftc.LynxQuadratureEncoderGroup;
 import com.acmerobotics.roadrunner.ftc.ManualFeedforwardTuner;
 import com.acmerobotics.roadrunner.ftc.MecanumMotorDirectionDebugger;
-import com.acmerobotics.roadrunner.ftc.OTOSAngularScalarTuner;
 import com.acmerobotics.roadrunner.ftc.OTOSEncoderGroup;
-import com.acmerobotics.roadrunner.ftc.OTOSHeadingOffsetTuner;
 import com.acmerobotics.roadrunner.ftc.OTOSIMU;
-import com.acmerobotics.roadrunner.ftc.OTOSLinearScalarTuner;
-import com.acmerobotics.roadrunner.ftc.OTOSPositionOffsetTuner;
 import com.acmerobotics.roadrunner.ftc.PinpointEncoderGroup;
 import com.acmerobotics.roadrunner.ftc.PinpointIMU;
 import com.acmerobotics.roadrunner.ftc.PinpointView;
@@ -37,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
@@ -89,7 +86,7 @@ public final class TuningOpModes {
 
             @Override
             public float getHeadingVelocity() {
-                return (float) pl.driver.getHeadingVelocity();
+                return (float) pl.driver.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
             }
 
             @Override
