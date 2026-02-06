@@ -101,8 +101,8 @@ public class Šaudyklė {
         sm1.setPower(sp);
         sm2.setPower(sp);
         pad.setPower(0.55);
-        pem.setPower(-0.5);
-        sleep(600);
+        pem.setPower(-0.7);
+        sleep(800);
         sm1.setPower(0);
         sm2.setPower(0);
         pad.setPower(0);

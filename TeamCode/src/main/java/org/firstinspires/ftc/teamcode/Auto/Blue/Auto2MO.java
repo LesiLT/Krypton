@@ -67,7 +67,7 @@ public class Auto2MO extends LinearOpMode {
         /// Atsitraukti, pasisukti
         Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
                 .lineToX(-10)
-                .turn(-Math.PI/18)
+                .turn(-Math.PI/54)
                 .stopAndAdd(new šauti(sm1, sm2, pad, pem, 0.96))
                 .lineToX(-33)
                 .turn(Math.PI/4.5)
