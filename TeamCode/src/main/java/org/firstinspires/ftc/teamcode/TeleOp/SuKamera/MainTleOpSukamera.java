@@ -75,7 +75,13 @@ public class MainTleOpSukamera extends LinearOpMode {
             }
             /// ===============Paėmimas===============
             if(gamepad1.right_bumper){
-                saudykle.pem.setPower(-0.6);
+                saudykle.pem.setPower(-0.8);
+            }
+            if (gamepad1.right_bumper && distanceSensor.getDistance(DistanceUnit.CM) < 6){
+                saudykle.pad.setPower(0.65);
+            }
+            else if (distanceSensor.getDistance(DistanceUnit.CM) >=6) {
+                saudykle.pad.setPower(0);
             }
 
             /// ==============ATGAL VISAS==============
@@ -89,11 +95,16 @@ public class MainTleOpSukamera extends LinearOpMode {
             ///==============PADAVIMAS==============
             if (gamepad1.dpad_up) {
                 saudykle.pad.setPower(0.5);
-            }
+           }
             else if (!gamepad1.dpad_up || distanceSensor.getDistance(DistanceUnit.CM) > 2) {
                 saudykle.pad.setPower(0);
             }
-
+            if (distanceSensor.getDistance(DistanceUnit.CM) < 8){
+                value = 0.5;
+            }
+            else if (distanceSensor.getDistance(DistanceUnit.CM) > 6){
+                value = 0.72;
+            }
             ///==============ATSTUMO KOREKCIJA==============
 
             if (gamepad1.left_bumper)
@@ -114,7 +125,7 @@ public class MainTleOpSukamera extends LinearOpMode {
                 }
                 else{
                     kamp.setPosition(0.2);
-                    sp=0.9;
+                    sp=0.95;
                     saudykle.teleugnis(sp);
 
                     drive.driveRobotCentric(
@@ -143,9 +154,7 @@ public class MainTleOpSukamera extends LinearOpMode {
             leftLast = left;
             rightLast = right;
 
-            if (gamepad1.left_stick_y == 0) {
-                value = 0.8;
-            }
+
             //telemetry.clear();
             telemetry.addData("Atstumas (cm)", "%.2f", distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.addData("Sviesa pozicija", value);
