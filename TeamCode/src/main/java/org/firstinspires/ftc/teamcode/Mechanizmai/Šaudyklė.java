@@ -7,11 +7,9 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.InstantFunction;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 public class Šaudyklė {
     public DcMotorEx sm1,sm2; //, iÅmetimas //0, 1, 2expansion hub
@@ -114,7 +112,7 @@ public class Šaudyklė {
         sm1.setPower(-0.6);
         sm2.setPower(-0.6);
     }
-    public void teleatgal0(){
+    public void teleStop(){
         pem.setPower(0);
         pad.setPower(0);
         sm1.setPower(0);

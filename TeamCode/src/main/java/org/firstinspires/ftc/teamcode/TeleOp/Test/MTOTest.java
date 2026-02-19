@@ -1,25 +1,44 @@
-package org.firstinspires.ftc.teamcode.TeleOp.SuKamera;
+package org.firstinspires.ftc.teamcode.TeleOp.Test;
 
+import com.acmerobotics.roadrunner.HeadingPath;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Kamera;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Surinkimas;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė;
 
-@TeleOp (name = "KKK_MainTeleOpSuKamera")
-public class KajusMAIN extends LinearOpMode {
+@TeleOp (name = "MTOTest")
+public class MTOTest extends LinearOpMode {
+
+    GoBildaPinpointDriver driver;
+    double htest = driver.getHeading();
+
     Motor kP, kG, dP, dG; //kairÄ— priekis/galas, desinÄ— priekis/galas
     int KP=0,KG=0,DP=0,DG=0;
-    Servo pak1, pak0, kamp;
+    Servo kamp;
+    Servo sviesa;
+    double sp;
     //--------------------
     boolean prev = false;
     boolean motorOn = false;
+    double value = 0;
+    boolean right, rightLast = false;
+    boolean left, leftLast = false;
+
+    DistanceSensor distanceSensor;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        driver = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+
 
         //Važiuoklės varikliai
         kP = new Motor(hardwareMap, "kP", Motor.GoBILDA.RPM_312); // 0 lizdas control hub
@@ -32,26 +51,27 @@ public class KajusMAIN extends LinearOpMode {
         dG.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
         /// Pakėlimas
-        pak1 = hardwareMap.get(Servo.class, "pak1");
-        pak0 = hardwareMap.get(Servo.class, "pak0");
-        pak0.setDirection(Servo.Direction.REVERSE);
-        pak1.setDirection(Servo.Direction.REVERSE);
+        kamp = hardwareMap.get(Servo.class, "kamp");
+        sviesa = hardwareMap.get(Servo.class, "sviesa");
 
 
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "colorSensor");
 
         //Išmetimas/Paėmimas
 
-        kamp = hardwareMap.get(Servo.class, "kamp");
 
         Surinkimas surinkimas = new Surinkimas(hardwareMap);
-        Šaudyklė saudyklė = new Šaudyklė(hardwareMap);
+        Šaudyklė saudykle = new Šaudyklė(hardwareMap);
         Kamera kam = new Kamera(hardwareMap, telemetry);
-        saudyklė.sm1.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
-        saudyklė.sm2.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
+        saudykle.sm1.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
+        saudykle.sm2.setVelocityPIDFCoefficients(0.01, 0.0, 0.001, 11.7);
 
         kamp.setPosition(0);
         MecanumDrive drive = new MecanumDrive(kP, dP, kG, dG);
+        ///==========================WAIT FOR START==============================================
         waitForStart();
+        driver.resetPosAndIMU();
+
         while (!isStopRequested()) {
 
             // VaÅ¾iuoklÄ—
@@ -63,47 +83,42 @@ public class KajusMAIN extends LinearOpMode {
 
             );
             }
+            /// ===============Paėmimas===============
             if(gamepad1.right_bumper){
-                saudyklė.pem.setPower(-0.6);
+                saudykle.pem.setPower(-0.8);
             }
-            /// Atgal visas
+            ///==============PADAVIMAS==============
+            if (gamepad1.right_bumper && distanceSensor.getDistance(DistanceUnit.CM) < 6){
+                saudykle.pad.setPower(0.65);
+            }
+            else if (distanceSensor.getDistance(DistanceUnit.CM) >=6) {
+                saudykle.pad.setPower(0);
+            }
+
+            /// ==============ATGAL VISAS==============
             if (gamepad1.cross){
-                saudyklė.teleatgal1();
+                saudykle.teleatgal1();
             }
             else if (!gamepad1.cross && !gamepad1.right_bumper){
-                saudyklė.teleStop();
+                saudykle.teleStop();
             }
 
-///Padavimas
-            if (gamepad1.dpad_up) {
-                saudyklė.pad.setPower(0.5);
-            }
-            else if (!gamepad1.dpad_up) {
-                saudyklė.pad.setPower(0);
-            }
-            //Taiklumo korekcija
-            /// Z=83cm, kampas 0.65 1 kamuoliukas 11.9 voltai
-            /// Kamera nemato:
-            ///kampas 0.156, 12.68 voltai antras kamuoliukas, abudu per pusę roboto arčiau
-            /// kampas 0.2, 0.25, 0.3 - 0
-            /// kampas  0.5, 0.55 - antras, 12.63 voltai
-            /// kampas 0.6 - 0 per arti
-            /// Beveik prie pat:
-            /// Kampas 0.1-0.0, du kamuoliai 12.52 voltai
-            /// kampas 0.2 atsimušą į sieną įkrenta du, 12.50 voltai
-            /// Z = 81.2 cm:
-            /// Kampas, 0.3 - 1, 12.44 voltai
 
-            while (gamepad1.left_bumper)
+               // value = 0.5; Žalia
+               //value = 0.72; Rausva
+
+            ///==============ATSTUMO KOREKCIJA==============
+
+            if (gamepad1.left_bumper)
             {
-                double sp = 0.2; //Greitis
                 kam.telemetryAprilTag();
                 telemetry.update();
 
                 if (kam.id == 20 || kam.id == 24) {
                         kamp.setPosition(0.4);
                         sp=1;
-                        saudyklė.teleugnis(sp);
+                    saudykle.teleugnis(sp);
+
                         drive.driveRobotCentric(
                                 0,
                                 0,
@@ -112,8 +127,8 @@ public class KajusMAIN extends LinearOpMode {
                 }
                 else{
                     kamp.setPosition(0.2);
-                    sp=0.9;
-                    saudyklė.teleugnis(sp);
+                    sp=0.95;
+                    saudykle.teleugnis(sp);
 
                     drive.driveRobotCentric(
                             0,
@@ -121,22 +136,33 @@ public class KajusMAIN extends LinearOpMode {
                             0
                     );
                 }
+                kamp.setPosition(0);
 
 
             }
             kam.id=0;
-            if (gamepad1.dpad_left && gamepad1.circle) {
-                //pak0.setPosition(0.9); nuline pozicija
-                pak0.setPosition(0.4);
-                //pak1.setPosition(0.4);
 
+            right = gamepad1.dpad_right;
+            left = gamepad1.dpad_left;
+            if(right && !rightLast)
+            {
+                value += 0.1;
             }
-            if (gamepad1.dpad_right && gamepad1.circle) {
-                //pak0.setPosition(0.9); nuline pozicija
-                pak0.setPosition(0.9);
-                //pak1.setPosition(0);
+            else if(left && !leftLast)
+            {
+                value -= 0.1;
+            }
+            sviesa.setPosition(value);
+            leftLast = left;
+            rightLast = right;
 
-            }
+
+            //telemetry.clear();
+            telemetry.addData("Atstumas (cm)", "%.2f", distanceSensor.getDistance(DistanceUnit.CM));
+            telemetry.addData("Sviesa pozicija", value);
+
+
+            telemetry.update();
         }
 
     }

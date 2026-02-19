@@ -485,13 +485,13 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
      * <strong> This uses its own I2C read, avoid calling this every loop. </strong>
      * @return the user-set offset for the X (forward) pod
      */
-    public float getXOffset(DistanceUnit mm){return readFloat(Register.X_POD_OFFSET);}
+    public float getXOffset(){return readFloat(Register.X_POD_OFFSET);}
 
     /**
      * <strong> This uses its own I2C read, avoid calling this every loop. </strong>
      * @return the user-set offset for the Y (strafe) pod
      */
-    public float getYOffset(DistanceUnit mm){return readFloat(Register.Y_POD_OFFSET);}
+    public float getYOffset(){return readFloat(Register.Y_POD_OFFSET);}
 
     /**
      * @return a Pose2D containing the estimated position of the robot

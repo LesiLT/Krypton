@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.TeleOp.SuKamera;
 
-import static android.os.SystemClock.sleep;
-
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -77,19 +75,13 @@ public class MainTleOpSukamera extends LinearOpMode {
             if(gamepad1.right_bumper){
                 saudykle.pem.setPower(-0.8);
             }
-            if (gamepad1.right_bumper && distanceSensor.getDistance(DistanceUnit.CM) < 6){
-                saudykle.pad.setPower(0.65);
-            }
-            else if (distanceSensor.getDistance(DistanceUnit.CM) >=6) {
-                saudykle.pad.setPower(0);
-            }
 
             /// ==============ATGAL VISAS==============
             if (gamepad1.cross){
                 saudykle.teleatgal1();
             }
             else if (!gamepad1.cross && !gamepad1.right_bumper){
-                saudykle.teleatgal0();
+                saudykle.teleStop();
             }
 
             ///==============PADAVIMAS==============

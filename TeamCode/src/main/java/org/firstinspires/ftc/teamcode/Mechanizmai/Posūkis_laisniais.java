@@ -4,12 +4,18 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
+
 @Disabled
 public class Posūkis_laisniais {
     double degrees;
-
+    GoBildaPinpointDriver driver;
+    GoBildaPinpointDriver.EncoderDirection initialParDirection, initialPerpDirection;
+    private Pose2d txPinpointRobot = new Pose2d(0, 0, 0);
 
     public Posūkis_laisniais(HardwareMap hardwareMap) {
     }
