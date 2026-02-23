@@ -15,6 +15,10 @@ public class Surinkimas {
         pad = hardwareMap.get(DcMotor.class, "pad");
 
     }
+    public void init(HardwareMap hardwareMap){
+        pem = hardwareMap.get(DcMotor.class, "pem");
+        pad = hardwareMap.get(DcMotor.class, "pad");
+    }
     public class paemimas implements Action {
         private boolean initialized = false;
         @Override
@@ -35,7 +39,7 @@ public class Surinkimas {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                pem.setPower(0.5);
+                pem.setPower(0.3);
                 initialized = true;
             }
             return false;

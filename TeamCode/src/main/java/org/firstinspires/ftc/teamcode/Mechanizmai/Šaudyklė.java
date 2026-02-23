@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Šaudyklė {
     public DcMotorEx sm1,sm2; //, iÅmetimas //0, 1, 2expansion hub
     public DcMotor pad, pem; //Paėmimas padavimas
-
+    public DcMotor kP, kG, dP, dG;
     private static final int CPR = 28;             // encoder counts per rev (GoBILDA 6000RPM)
     private static final int MAX_RPM = 6000;
     private static final int MAX_TICKS_PER_SEC = (MAX_RPM / 60) * CPR;  // ~2800
@@ -32,6 +32,35 @@ public class Šaudyklė {
         sm1.setDirection(DcMotor.Direction.REVERSE);
         pad.setDirection(DcMotor.Direction.REVERSE);
 
+        kP = hwMap.get(DcMotor.class, "kP");
+        dP = hwMap.get(DcMotor.class, "dP");
+        kG = hwMap.get(DcMotor.class, "kG");
+        dG = hwMap.get(DcMotor.class, "dG");
+
+        kP.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        kG.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dP.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dG.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+    }
+
+    public void init (HardwareMap hwMap){
+        sm1 = hwMap.get(DcMotorEx.class, "svD");  // 0 lizdas expansion hub
+        sm2 = hwMap.get(DcMotorEx.class, "svK");  // 1 lizdas expansion hub
+        pad = hwMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
+        pem = hwMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
+        sm1.setDirection(DcMotor.Direction.REVERSE);
+        pad.setDirection(DcMotor.Direction.REVERSE);
+
+        kP = hwMap.get(DcMotor.class, "kP");
+        dP = hwMap.get(DcMotor.class, "dP");
+        kG = hwMap.get(DcMotor.class, "kG");
+        dG = hwMap.get(DcMotor.class, "dG");
+
+        kP.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        kG.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dP.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dG.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public class autougnis implements Action {
         private boolean initialized = false;
@@ -93,6 +122,11 @@ public class Šaudyklė {
         return new Šaudyklė.autoatgal0();
     }
     public void teleugnis(double sp){
+        kP.setPower(0);
+        kG.setPower(0);
+        dP.setPower(0);
+        dG.setPower(0);
+
         sm1.setPower(sp);
         sm2.setPower(sp);
         sleep(400);
