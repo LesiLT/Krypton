@@ -9,23 +9,39 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
+import org.firstinspires.ftc.teamcode.Mechanizmai.Kamera;
+import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė;
+import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė2;
 
-@Disabled
+
 @TeleOp
 public class FieldCentricTest extends OpMode {
-
+    Šaudyklė2 saudykle = new Šaudyklė2();
     GoBildaPinpointDriver odo;
-
+    DistanceSensor distanceSensor;
+    double value = 0;
     DcMotor kP, kG, dP, dG;
+    DcMotor pem;
+    Servo sviesa;
+    Servo kamp;
+    Kamera kam;
+    double sp = 1;
 
     @Override
     public void init() {
         odo = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+
+        pem = hardwareMap.get(DcMotor.class, "pem");
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "colorSensor");
+        sviesa = hardwareMap.get(Servo.class, "sviesa");
+        kamp = hardwareMap.get(Servo.class, "kamp");
 
          kP = hardwareMap.get(DcMotor.class, "kP");
          dP = hardwareMap.get(DcMotor.class, "dP");
@@ -37,10 +53,9 @@ public class FieldCentricTest extends OpMode {
         dP.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         dG.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-//        kP.setDirection(DcMotorSimple.Direction.REVERSE);
-//        dP.setDirection(DcMotorSimple.Direction.REVERSE);
-//        dG.setDirection(DcMotorSimple.Direction.REVERSE);
-//        kG.setDirection(DcMotorSimple.Direction.REVERSE);
+        kam = new Kamera(hardwareMap, telemetry);
+
+        saudykle.init(hardwareMap);
 
         odo.setOffsets(-84.0, -168.0, DistanceUnit.MM);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
@@ -92,9 +107,63 @@ public class FieldCentricTest extends OpMode {
 
         @Override
         public void loop() {
-            moveRobot();
+                moveRobot();
+                odo.update();
+                if (gamepad1.options){
+                    odo.resetPosAndIMU();
+                }
 
-            odo.update();
+            /// ===============Paėmimas===============
+            if(gamepad1.right_bumper){
+                saudykle.pem.setPower(-0.8);
+            }
+
+            /// ==============ATGAL VISAS==============
+            if (gamepad1.cross){
+                saudykle.teleatgal1();
+            }
+            else if (!gamepad1.cross && !gamepad1.right_bumper){
+                saudykle.teleStop();
+            }
+
+            ///==============PADAVIMAS==============
+            if (gamepad1.dpad_up) {
+                saudykle.pad.setPower(0.5);
+            }
+            else if (!gamepad1.dpad_up || distanceSensor.getDistance(DistanceUnit.CM) > 2) {
+                saudykle.pad.setPower(0);
+            }
+            if (distanceSensor.getDistance(DistanceUnit.CM) < 8){
+                value = 0.5;
+            }
+            else if (distanceSensor.getDistance(DistanceUnit.CM) > 6){
+                value = 0.72;
+            }
+
+            if (gamepad1.left_bumper)
+            {
+                kam.telemetryAprilTag();
+                telemetry.update();
+
+                if (kam.id == 20 || kam.id == 24) {
+                    kamp.setPosition(0.4);
+                    sp=1;
+                    saudykle.teleugnis(sp);
+
+                }
+                else{
+                    kamp.setPosition(0.2);
+                    sp=0.95;
+                    saudykle.teleugnis(sp);
+
+                }
+                kamp.setPosition(0);
+
+
+            }
+            kam.id=0;
+
+
         }
 
 }

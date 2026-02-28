@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Mechanizmai.Kamera;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Surinkimas;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė;
 
-@TeleOp (name = "KameraTele")
+@TeleOp
 public class MainTleOpSukamera extends LinearOpMode {
     Motor kP, kG, dP, dG; //kairÄ— priekis/galas, desinÄ— priekis/galas
     int KP=0,KG=0,DP=0,DG=0;
