@@ -81,8 +81,8 @@ public class FieldCentricTest extends OpMode {
         Pose2D pos = odo.getPosition();
         double kampas = pos.getHeading(AngleUnit.RADIANS);
 
-        double cos = Math.cos((Math.PI / 2) - kampas);
-        double sin = Math.sin((Math.PI / 2) - kampas);
+        double cos = Math.cos((Math.PI / 2) + kampas);
+        double sin = Math.sin((Math.PI / 2) + kampas);
 
         double didBausme = -pirmyn * sin + bausti * cos; ///Global strafe
         double didPirmyn = pirmyn * cos + bausti * sin; /// Global forward
@@ -94,10 +94,10 @@ public class FieldCentricTest extends OpMode {
         kg = didPirmyn + didBausme + posukis;
         dg = didPirmyn - didBausme + posukis;
 
-        kP.setPower(-kp);
-        dP.setPower(-dp);
-        kG.setPower(kg);
-        dG.setPower(dg);
+        kP.setPower(-kp * 0.4);
+        dP.setPower(-dp * 0.4);
+        kG.setPower(kg *0.4);
+        dG.setPower(dg * 0.4);
 
         telemetry.addData("X", pos.getX(DistanceUnit.MM));
         telemetry.addData("Y", pos.getY(DistanceUnit.MM));
