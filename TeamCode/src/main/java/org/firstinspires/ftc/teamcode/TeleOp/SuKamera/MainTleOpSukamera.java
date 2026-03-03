@@ -73,7 +73,7 @@ public class MainTleOpSukamera extends LinearOpMode {
             }
             /// ===============Paėmimas===============
             if(gamepad1.right_bumper){
-                saudykle.pem.setPower(-0.8);
+                saudykle.pem.setPower(0.8);
             }
 
             /// ==============ATGAL VISAS==============

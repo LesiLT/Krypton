@@ -108,7 +108,7 @@ public class FieldCentricTele extends OpMode {
 
             /// ===============Paėmimas===============
             if(gamepad1.right_bumper){
-                saudykle.pem.setPower(-0.65);
+                saudykle.pem.setPower(0.65);
             }
 
             /// ==============ATGAL VISAS==============

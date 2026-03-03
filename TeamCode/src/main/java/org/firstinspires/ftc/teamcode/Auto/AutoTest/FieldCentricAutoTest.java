@@ -28,9 +28,9 @@ public class FieldCentricAutoTest extends OpMode {
     Kamera kam;
     double sp = 1;
 
-    Pose2D Pos = odo.getPosition();
-    double kampas = Pos.getHeading(AngleUnit.RADIANS);
-    double k = Pos.getX(DistanceUnit.CM);
+    Pose2D Pos ;//= odo0.getPosition();
+    double kampas ;// Pos.getHeading(AngleUnit.RADIANS);
+    //double k ;//= Pos.getX(DistanceUnit.CM);
 
     double P, B, S = 0; ///Primyn /// Į Šoną /// Suktis
     int veiksmas = 0;
@@ -103,6 +103,10 @@ public class FieldCentricAutoTest extends OpMode {
         telemetry.addData("X", pos.getX(DistanceUnit.MM));
         telemetry.addData("Y", pos.getY(DistanceUnit.MM));
         telemetry.addData("Kampas: ", kampas);
+//        double posicia = 60;
+//        if(posicia == pos.getX(DistanceUnit.CM) || posicia > pos.getY(DistanceUnit.CM)){
+//            odo.resetPosAndIMU();
+//        }
 
     }
 
@@ -110,14 +114,37 @@ public class FieldCentricAutoTest extends OpMode {
         public void loop() {
                 moveRobot();
                 odo.update();
-                if (k < 5 && veiksmas == 0){
-                    P = 0.5;
+                Pos = odo.getPosition();
+                double k = Pos.getX(DistanceUnit.CM);
+                double p = Pos.getY(DistanceUnit.CM);
+                if(k < 10 && veiksmas == 0){
+                    P=0.4;
                 }
-                if (k > 5) {
-                    veiksmas = 1;
-                    P = 0;
-                    odo.resetPosAndIMU();
-                }
+                else if (k > 10 && veiksmas == 0){
+                    P=0;
+                    veiksmas= 1;
+                    odo.resetPosAndIMU();                }
+            if(k > -10 && veiksmas == 1){
+                P=-0.4;
+            }
+            else if (k < -10 && veiksmas == 1){
+                P=0;
+                veiksmas= 2;
+                odo.resetPosAndIMU();            }
+            if(p < -10 && veiksmas == 2){
+                B=-0.6;
+            }
+            else if (p > -10 && veiksmas == 2){
+                B=0;
+                veiksmas= 3;
+                odo.resetPosAndIMU();            }
+            if(p > 10 && veiksmas == 3){
+                B=0.6;
+            }
+            else if (p < 10 && veiksmas == 3){
+                B=0;
+                veiksmas= 4;
+                odo.resetPosAndIMU();            }
         }
 
 }

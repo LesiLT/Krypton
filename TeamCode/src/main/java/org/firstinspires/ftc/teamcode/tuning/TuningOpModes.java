@@ -66,6 +66,23 @@ public final class TuningOpModes {
 
     private static PinpointView makePinpointView(PinpointLocalizer pl) {
         return new PinpointView() {
+            @Override
+            public float getHeadingVelocity(@NonNull UnnormalizedAngleUnit unnormalizedAngleUnit) {
+                return 0;
+            }
+
+            @NonNull
+            @Override
+            public DcMotorSimple.Direction getPerpDirection() {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            public DcMotorSimple.Direction getParDirection() {
+                return null;
+            }
+
             GoBildaPinpointDriver.EncoderDirection parDirection = pl.initialParDirection;
             GoBildaPinpointDriver.EncoderDirection perpDirection = pl.initialPerpDirection;
 
@@ -84,7 +101,6 @@ public final class TuningOpModes {
                 return pl.driver.getEncoderY();
             }
 
-            @Override
             public float getHeadingVelocity() {
                 return (float) pl.driver.getHeadingVelocity(UnnormalizedAngleUnit.DEGREES);
             }

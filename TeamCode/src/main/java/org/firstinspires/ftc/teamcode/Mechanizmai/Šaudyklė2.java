@@ -115,7 +115,7 @@ public class Šaudyklė2 {
         sm1.setPower(sp);
         sm2.setPower(sp);
         pad.setPower(0.55);
-        pem.setPower(-0.7);
+        pem.setPower(0.7);
         sleep(800);
         sm1.setPower(0);
         sm2.setPower(0);
@@ -123,7 +123,7 @@ public class Šaudyklė2 {
         pem.setPower(0);
     }
     public void teleatgal1(){
-        pem.setPower(0.7);
+        pem.setPower(-0.7);
         pad.setPower(-0.7);
         sm1.setPower(-0.6);
         sm2.setPower(-0.6);
