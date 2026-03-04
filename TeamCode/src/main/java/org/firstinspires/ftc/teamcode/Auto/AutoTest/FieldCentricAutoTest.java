@@ -32,7 +32,7 @@ public class FieldCentricAutoTest extends OpMode {
     double kampas ;// Pos.getHeading(AngleUnit.RADIANS);
     //double k ;//= Pos.getX(DistanceUnit.CM);
 
-    double P, B, S = 0; ///Primyn /// Į Šoną /// Suktis
+    double P = 0, B = 0, S = 0; ///Primyn /// Į Šoną /// Suktis
     int veiksmas = 0;
 
     @Override
@@ -119,31 +119,31 @@ public class FieldCentricAutoTest extends OpMode {
                 double p = Pos.getY(DistanceUnit.CM);
                 kampas = Pos.getHeading(AngleUnit.DEGREES);
 
-                if(k < 10 && veiksmas == 0){
+                if(k < 30 && veiksmas == 0){
                     P=0.4;
                 }
-                else if (k > 10 && veiksmas == 0){
+                else if (k > 30 && veiksmas == 0){
                     P=0;
                     veiksmas= 1;
                     odo.resetPosAndIMU();                }
-                if(k > -10 && veiksmas == 1){
+                if(k > -30 && veiksmas == 1){
                     P=-0.4;
                 }
-                else if (k < -10 && veiksmas == 1){
+                else if (k < -30 && veiksmas == 1){
                     P=0;
                     veiksmas= 2;
                     odo.resetPosAndIMU();            }
-                if(p < -10 && veiksmas == 2){
+                if(p < -30 && veiksmas == 2){
                     B=-0.6;
                 }
-                else if (p > -10 && veiksmas == 2){
+                else if (p > -30 && veiksmas == 2){
                     B=0;
                     veiksmas= 3;
                     odo.resetPosAndIMU();            }
-                if(p > 10 && veiksmas == 3){
+                if(p > 30 && veiksmas == 3){
                     B=0.6;
                 }
-                else if (p < 10 && veiksmas == 3){
+                else if (p < 30 && veiksmas == 3){
                     B=0;
                     veiksmas= 4;
                     odo.resetPosAndIMU();            }
