@@ -133,19 +133,19 @@ public class FieldCentricAutoTest extends OpMode {
                     P=0;
                     veiksmas= 2;
                     odo.resetPosAndIMU();            }
-                if(p < -30 && veiksmas == 2){
+                if(p > -30 && veiksmas == 0){
                     B=-0.6;
                 }
-                else if (p > -30 && veiksmas == 2){
+                else if (p < -30 && veiksmas == 0){
                     B=0;
-                    veiksmas= 3;
+                    veiksmas= 1;
                     odo.resetPosAndIMU();            }
-                if(p > 30 && veiksmas == 3){
+                if(p < 30 && veiksmas == 1){
                     B=0.6;
                 }
-                else if (p < 30 && veiksmas == 3){
+                else if (p > 30 && veiksmas == 1){
                     B=0;
-                    veiksmas= 4;
+                    veiksmas= 0;
                     odo.resetPosAndIMU();            }
                 if(kampas > 90 && veiksmas == 4){
                     S=-0.4;
