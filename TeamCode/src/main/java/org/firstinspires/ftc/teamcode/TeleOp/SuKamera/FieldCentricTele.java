@@ -25,6 +25,8 @@ public class FieldCentricTele extends OpMode {
     Servo sviesa;
     Servo kamp;
     Kamera kam;
+    boolean right, rightLast = false;
+    boolean left, leftLast = false;
     double sp = 1;
     
     @Override
@@ -155,7 +157,25 @@ public class FieldCentricTele extends OpMode {
 
             }
             kam.id=0;
+            right = gamepad1.dpad_right;
+            left = gamepad1.dpad_left;
+            if(right && !rightLast)
+            {
+                value += 0.1;
+            }
+            else if(left && !leftLast)
+            {
+                value -= 0.1;
+            }
+            sviesa.setPosition(value);
+            leftLast = left;
+            rightLast = right;
 
+
+            //telemetry.clear();
+            telemetry.addData("Atstumas (cm)", "%.2f", distanceSensor.getDistance(DistanceUnit.CM));
+            telemetry.addData("Sviesa pozicija", value);
+            telemetry.update();
 
         }
 

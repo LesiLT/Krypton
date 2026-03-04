@@ -49,15 +49,6 @@ public class Auto2M extends LinearOpMode {
         dP.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         dG.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //Išmetimas/Paėmimas
-        sm1 = hardwareMap.get(DcMotorEx.class, "svD");  // 0 lizdas expansion hub
-        sm2 = hardwareMap.get(DcMotorEx.class, "svK");  // 1 lizdas expansion hub
-        pad = hardwareMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
-        pem = hardwareMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
-        sm2.setDirection(DcMotorSimple.Direction.REVERSE);
-        sm1.setDirection(DcMotorSimple.Direction.REVERSE);
-        //Kr1pton?5
-
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         waitForStart();
@@ -66,107 +57,15 @@ public class Auto2M extends LinearOpMode {
 
         /// Atsitraukti, pasisukti
         Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                .lineToX(-7)
-                .turn(-Math.PI/18)
-                .stopAndAdd(new šauti(sm1, sm2, pad, pem, 0.96))
-                .stopAndAdd(new stopV(sm1, sm2, pad, pem, 0))
+                .turn(Math.PI/2)
                 .build());
         /// Strafe
-        Actions.runBlocking(drive.actionBuilder(new Pose2d(0, 0, 0))
-                .strafeTo(new Vector2d(0, 3.6))
-                .build()
-        );
+
 
     }
 
 
-    public class suktis implements Action{
-        DcMotor kP, kG, dP, dG;
 
-        int k;
-
-        public suktis (DcMotor kP, DcMotor kG, DcMotor dG, DcMotor dP,  int k){
-            this.dG = dG;
-            this.dP = dP;
-            this.kG = kG;
-            this.kP = kP;
-            this.k = k;
-        }
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            pem.setPower(0);
-            sm1.setPower(0);
-            sm2.setPower(0);
-            pad.setPower(0);
-            kP.setPower(-0.3 * k);
-            dG.setPower(0.3 * k);
-            dP.setPower(0.3 * k);
-            kG.setPower(-0.3 * k);
-            sleep(350);
-            kP.setPower(-0);
-            dG.setPower(0);
-            dP.setPower(0);
-            kG.setPower(-0);
-
-            return false;
-        }
-    }
-    public class šauti implements Action {
-        DcMotorEx sm1,sm2; //PaÄ—mimas, iÅmetimas //0, 1, 2expansion hub
-        DcMotor pad, pem;
-        double sp;
-
-        public šauti(DcMotorEx sm1, DcMotorEx sm2, DcMotor pad, DcMotor pem, double sp) {
-            this.sm1 = sm1;
-            this.sm2 = sm2;
-            this.pad = pad;
-            this.pem = pem;
-            this.sp = sp;
-
-        }
-
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-
-            sm1.setPower(sp);
-            sm2.setPower(-sp);
-            sleep(800);
-            sm1.setPower(sp);
-            sm2.setPower(-sp);
-            pad.setPower(-0.5);
-            pem.setPower( -0.8);
-            sleep(1500);
-
-            return false;
-        }
-    }
-
-    public class stopV implements Action {
-        DcMotorEx sm1,sm2; //PaÄ—mimas, iÅmetimas //0, 1, 2expansion hub
-        DcMotor pad, pem;
-        double sp;
-
-        public stopV(DcMotorEx sm1, DcMotorEx sm2, DcMotor pad, DcMotor pem, double sp) {
-            this.sm1 = sm1;
-            this.sm2 = sm2;
-            this.pad = pad;
-            this.pem = pem;
-            this.sp = sp;
-
-        }
-
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-
-            sm1.setPower(0);
-            sm2.setPower(-0);
-            pad.setPower(-0);
-            pem.setPower(-0);
-
-
-            return false;
-        }
-    }
 
 
 }

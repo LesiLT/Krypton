@@ -97,11 +97,11 @@ public class FieldCentricAutoTest extends OpMode {
 
         kP.setPower(-kp * 0.4);
         dP.setPower(-dp * 0.4);
-        kG.setPower(kg *0.4);
+        kG.setPower(kg * 0.4);
         dG.setPower(dg * 0.4);
 
-        telemetry.addData("X", pos.getX(DistanceUnit.MM));
-        telemetry.addData("Y", pos.getY(DistanceUnit.MM));
+        telemetry.addData("X", pos.getX(DistanceUnit.CM));
+        telemetry.addData("Y", pos.getY(DistanceUnit.CM));
         telemetry.addData("Kampas: ", kampas);
 //        double posicia = 60;
 //        if(posicia == pos.getX(DistanceUnit.CM) || posicia > pos.getY(DistanceUnit.CM)){
@@ -117,6 +117,8 @@ public class FieldCentricAutoTest extends OpMode {
                 Pos = odo.getPosition();
                 double k = Pos.getX(DistanceUnit.CM);
                 double p = Pos.getY(DistanceUnit.CM);
+                kampas = Pos.getHeading(AngleUnit.DEGREES);
+
                 if(k < 10 && veiksmas == 0){
                     P=0.4;
                 }
@@ -124,27 +126,42 @@ public class FieldCentricAutoTest extends OpMode {
                     P=0;
                     veiksmas= 1;
                     odo.resetPosAndIMU();                }
-            if(k > -10 && veiksmas == 1){
-                P=-0.4;
-            }
-            else if (k < -10 && veiksmas == 1){
-                P=0;
-                veiksmas= 2;
-                odo.resetPosAndIMU();            }
-            if(p < -10 && veiksmas == 2){
-                B=-0.6;
-            }
-            else if (p > -10 && veiksmas == 2){
-                B=0;
-                veiksmas= 3;
-                odo.resetPosAndIMU();            }
-            if(p > 10 && veiksmas == 3){
-                B=0.6;
-            }
-            else if (p < 10 && veiksmas == 3){
-                B=0;
-                veiksmas= 4;
-                odo.resetPosAndIMU();            }
+                if(k > -10 && veiksmas == 1){
+                    P=-0.4;
+                }
+                else if (k < -10 && veiksmas == 1){
+                    P=0;
+                    veiksmas= 2;
+                    odo.resetPosAndIMU();            }
+                if(p < -10 && veiksmas == 2){
+                    B=-0.6;
+                }
+                else if (p > -10 && veiksmas == 2){
+                    B=0;
+                    veiksmas= 3;
+                    odo.resetPosAndIMU();            }
+                if(p > 10 && veiksmas == 3){
+                    B=0.6;
+                }
+                else if (p < 10 && veiksmas == 3){
+                    B=0;
+                    veiksmas= 4;
+                    odo.resetPosAndIMU();            }
+                if(kampas > 90 && veiksmas == 4){
+                    S=-0.4;
+                }
+                else if (kampas < 90 && veiksmas == 4){
+                    S=0;
+                    veiksmas= 5;
+                    odo.resetPosAndIMU();            }
+                if(kampas < -90 && veiksmas == 5){
+                    S=0.4;
+                }
+                else if (kampas > -90 && veiksmas == 5){
+                    S=0;
+                    veiksmas= 0;
+                    odo.resetPosAndIMU();            }
+
         }
 
 }
