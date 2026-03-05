@@ -117,7 +117,7 @@ public class FieldCentricAutoTest extends OpMode {
                 Pos = odo.getPosition();
                 double k = Pos.getX(DistanceUnit.CM);
                 double p = Pos.getY(DistanceUnit.CM);
-                kampas = Pos.getHeading(AngleUnit.DEGREES);
+                kampas = Pos.getHeading(AngleUnit.RADIANS);
 
                 if(k < 30 && veiksmas == 0){
                     P=0.4;
@@ -133,31 +133,31 @@ public class FieldCentricAutoTest extends OpMode {
                     P=0;
                     veiksmas= 2;
                     odo.resetPosAndIMU();            }
-                if(p > -30 && veiksmas == 0){
+                if(p > -30 && veiksmas == 2){
                     B=-0.6;
                 }
-                else if (p < -30 && veiksmas == 0){
+                else if (p < -30 && veiksmas == 2){
                     B=0;
-                    veiksmas= 1;
+                    veiksmas= 3;
                     odo.resetPosAndIMU();            }
-                if(p < 30 && veiksmas == 1){
+                if(p < 30 && veiksmas == 3){
                     B=0.6;
                 }
-                else if (p > 30 && veiksmas == 1){
+                else if (p > 30 && veiksmas == 3){
                     B=0;
-                    veiksmas= 0;
+                    veiksmas= 4;
                     odo.resetPosAndIMU();            }
-                if(kampas > 90 && veiksmas == 4){
+                if(kampas < 2 && veiksmas == 4){
                     S=-0.4;
                 }
-                else if (kampas < 90 && veiksmas == 4){
+                else if (kampas > 0.4 && veiksmas == 4){
                     S=0;
                     veiksmas= 5;
                     odo.resetPosAndIMU();            }
-                if(kampas < -90 && veiksmas == 5){
+                if(kampas > -0.4 && veiksmas == 5){
                     S=0.4;
                 }
-                else if (kampas > -90 && veiksmas == 5){
+                else if (kampas < -2 && veiksmas == 5){
                     S=0;
                     veiksmas= 0;
                     odo.resetPosAndIMU();            }
