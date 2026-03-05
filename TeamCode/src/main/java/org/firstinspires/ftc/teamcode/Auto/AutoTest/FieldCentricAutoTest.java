@@ -12,19 +12,20 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Kamera;
+import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė2;
 
 
 @Autonomous(name = "CustomTest")
 public class FieldCentricAutoTest extends OpMode {
-  //  Šaudyklė2 saudykle = new Šaudyklė2();
+    Šaudyklė2 saudykle = new Šaudyklė2();
     GoBildaPinpointDriver odo;
  //   DistanceSensor distanceSensor;
   //  double value = 0;
     DcMotor kP, kG, dP, dG;
- //   DcMotor pem;
+    DcMotor pem;
  //   Servo sviesa;
- //   Servo kamp;
+    Servo kamp;
     Kamera kam;
     double sp = 1;
 
@@ -39,10 +40,10 @@ public class FieldCentricAutoTest extends OpMode {
     public void init() {
         odo = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
 
-       // pem = hardwareMap.get(DcMotor.class, "pem");
+        pem = hardwareMap.get(DcMotor.class, "pem");
        // distanceSensor = hardwareMap.get(DistanceSensor.class, "colorSensor");
        // sviesa = hardwareMap.get(Servo.class, "sviesa");
-       // kamp = hardwareMap.get(Servo.class, "kamp");
+        kamp = hardwareMap.get(Servo.class, "kamp");
 
          kP = hardwareMap.get(DcMotor.class, "kP");
          dP = hardwareMap.get(DcMotor.class, "dP");
@@ -56,7 +57,7 @@ public class FieldCentricAutoTest extends OpMode {
 
         kam = new Kamera(hardwareMap, telemetry);
 
-     //   saudykle.init(hardwareMap);
+        saudykle.init(hardwareMap);
 
         odo.setOffsets(-84.0, -168.0, DistanceUnit.MM);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
@@ -120,47 +121,47 @@ public class FieldCentricAutoTest extends OpMode {
                 kampas = Pos.getHeading(AngleUnit.RADIANS);
 
                 if(k < 30 && veiksmas == 0){
-                    P=0.4;
+                    P=-0.45;
                 }
                 else if (k > 30 && veiksmas == 0){
-                    P=0;
+                    P = 0;
+                    S = 0.45;
+                    saudykle.teleugnis(0.95);
                     veiksmas= 1;
-                    odo.resetPosAndIMU();                }
-                if(k > -30 && veiksmas == 1){
-                    P=-0.4;
+                    odo.resetPosAndIMU();
                 }
-                else if (k < -30 && veiksmas == 1){
-                    P=0;
-                    veiksmas= 2;
-                    odo.resetPosAndIMU();            }
-                if(p > -30 && veiksmas == 2){
-                    B=-0.6;
+                if(kampas > 0.2 && veiksmas == 1) {
+                    S = 0;
+                    B = 0.45;
+                    veiksmas = 2;
+                    odo.resetPosAndIMU();
                 }
-                else if (p < -30 && veiksmas == 2){
-                    B=0;
-                    veiksmas= 3;
-                    odo.resetPosAndIMU();            }
-                if(p < 30 && veiksmas == 3){
-                    B=0.6;
+                else if (p > 30 && veiksmas == 2){
+                    B = 0;
+                    pem.setPower(0.5);
+                    P = 0.45;
+                    veiksmas = 3;
+                    odo.resetPosAndIMU();
                 }
-                else if (p > 30 && veiksmas == 3){
-                    B=0;
-                    veiksmas= 4;
-                    odo.resetPosAndIMU();            }
-                if(kampas < 2 && veiksmas == 4){
-                    S=-0.4;
+                if (k > 10 && veiksmas == 3){
+                    pem.setPower(0);
+                    P = 0;
+                    B = -0.45;
+                    veiksmas = 4;
+                    odo.resetPosAndIMU();
                 }
-                else if (kampas > 0.4 && veiksmas == 4){
-                    S=0;
-                    veiksmas= 5;
-                    odo.resetPosAndIMU();            }
-                if(kampas > -0.4 && veiksmas == 5){
-                    S=0.4;
+                else if (p < -25 && veiksmas == 4) {
+                    B = 0;
+                    S = -0.45;
+                    veiksmas = 5;
+                    odo.resetPosAndIMU();
                 }
-                else if (kampas < -2 && veiksmas == 5){
-                    S=0;
-                    veiksmas= 0;
-                    odo.resetPosAndIMU();            }
+                if (kampas < -0.2 && veiksmas == 5){
+                    S = 0;
+                    saudykle.teleugnis(0.95);
+                    veiksmas = 6;
+                }
+
 
         }
 
