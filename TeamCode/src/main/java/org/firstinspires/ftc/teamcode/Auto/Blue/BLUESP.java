@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.Auto.AutoTest;
+package org.firstinspires.ftc.teamcode.Auto.Blue;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -11,8 +12,8 @@ import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Kamera;
 import org.firstinspires.ftc.teamcode.Mechanizmai.Šaudyklė2;
 
-@Autonomous(name = "CustomTest")
-public class FieldCentricAutoTest extends OpMode {
+@Autonomous(name = "BLUESP")
+public class BLUESP extends OpMode {
     Šaudyklė2 saudykle = new Šaudyklė2();
     GoBildaPinpointDriver odo;
     DcMotor kP, kG, dP, dG;
@@ -30,10 +31,10 @@ public class FieldCentricAutoTest extends OpMode {
         pem = hardwareMap.get(DcMotor.class, "pem");
         //kamp = hardwareMap.get(Servo.class, "kamp");
 
-         kP = hardwareMap.get(DcMotor.class, "kP");
-         dP = hardwareMap.get(DcMotor.class, "dP");
-         kG = hardwareMap.get(DcMotor.class, "kG");
-         dG = hardwareMap.get(DcMotor.class, "dG");
+        kP = hardwareMap.get(DcMotor.class, "kP");
+        dP = hardwareMap.get(DcMotor.class, "dP");
+        kG = hardwareMap.get(DcMotor.class, "kG");
+        dG = hardwareMap.get(DcMotor.class, "dG");
 
         kP.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         kG.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -84,32 +85,32 @@ public class FieldCentricAutoTest extends OpMode {
         telemetry.addData("Y", pos.getY(DistanceUnit.CM));
         telemetry.addData("1Kampas: ", kampas);
     }
-        @Override
-        public void loop() {
-                moveRobot();
-                odo.update();
-                Pos = odo.getPosition();
-                double k = Pos.getX(DistanceUnit.CM);
-                double p = Pos.getY(DistanceUnit.CM);
-                kampas = Pos.getHeading(AngleUnit.RADIANS);
+    @Override
+    public void loop() {
+        moveRobot();
+        odo.update();
+        Pos = odo.getPosition();
+        double k = Pos.getX(DistanceUnit.CM);
+        double p = Pos.getY(DistanceUnit.CM);
+        kampas = Pos.getHeading(AngleUnit.RADIANS);
 // atsitraukia, sauna, pasisuka, strafina, issuka paemima, pavaziau i prieki paimti,strafe atgal,pasisuka, issauna, isvaziuoja is linijos
-                if(k > -30 && veiksmas == 0){
-                    P=-0.45;
-                }
-                else if (k < -30 && veiksmas == 0){
-                    P = 0;
-                    saudykle.teleugnis(0.95);
-                    veiksmas= 1;
-                    odo.resetPosAndIMU();
-                }
-                if(p < 30 && veiksmas == 1) {
-                    B = 0.45;
-                }
-                else if(p > 30 && veiksmas == 1){
-                    B = 0;
-                    veiksmas = 2;
-                    odo.resetPosAndIMU();
-                }
+        if(k > -40 && veiksmas == 0){
+            P=-0.45;
+        }
+        else if (k < -40 && veiksmas == 0){
+            P = 0;
+            saudykle.teleugnis(0.8);
+            veiksmas= 1;
+            odo.resetPosAndIMU();
+        }
+        if(p < 35 && veiksmas == 1) {
+            B = 0.45;
+        }
+        else if(p > 45 && veiksmas == 1){
+            B = 0;
+            veiksmas = 2;
+            odo.resetPosAndIMU();
+        }
 //                if (p < 30 && veiksmas == 2){
 //                    B = 0.45;
 //                }
@@ -144,8 +145,8 @@ public class FieldCentricAutoTest extends OpMode {
 //                    veiksmas = 6;
 //                    odo.resetPosAndIMU();
 //                }
-            telemetry.addData("Veiksmas", veiksmas );
-            telemetry.addData("2Kampas: ", kampas);
-        }
+        telemetry.addData("Veiksmas", veiksmas );
+        telemetry.addData("2Kampas: ", kampas);
+    }
 }
 

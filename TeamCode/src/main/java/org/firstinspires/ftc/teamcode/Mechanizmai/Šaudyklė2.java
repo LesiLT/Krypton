@@ -22,7 +22,7 @@ public class Šaudyklė2 {
     double sp;
 
     // Start at ~70% power
-    private double targetVelocity = MAX_TICKS_PER_SEC * 1;   ///derinsimes
+    private double targetVelocity = MAX_TICKS_PER_SEC *0.85;   ///derinsimes
     double x,y; //aprilTag x , y detection
 
 
@@ -31,7 +31,7 @@ public class Šaudyklė2 {
         sm2 = hwMap.get(DcMotorEx.class, "svK");  // 1 lizdas expansion hub
         pad = hwMap.get(DcMotor.class, "pad");  // 2 lizdas expansion hub
         pem = hwMap.get(DcMotor.class, "pem");  // 3 lizdas expansion hub
-        sm1.setDirection(DcMotor.Direction.REVERSE);
+        sm2.setDirection(DcMotor.Direction.REVERSE);
         pad.setDirection(DcMotor.Direction.REVERSE);
 
         kP = hwMap.get(DcMotor.class, "kP");
@@ -49,14 +49,14 @@ public class Šaudyklė2 {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                sm1.setPower(targetVelocity);
-                sm2.setPower(targetVelocity);
-                sleep(400);
-                sm1.setPower(targetVelocity);
-                sm2.setPower(targetVelocity);
+                sm1.setPower(0.50);
+                sm2.setPower(0.50);
+                sleep(500);
+                sm1.setPower(0.50);
+                sm2.setPower(0.50);
                 pad.setPower(0.55);
                 pem.setPower(-0.5);
-                sleep(600);
+                sleep(1100);
                 sm1.setPower(0);
                 sm2.setPower(0);
                 pad.setPower(0);
@@ -111,12 +111,12 @@ public class Šaudyklė2 {
 
         sm1.setPower(sp);
         sm2.setPower(sp);
-        sleep(400);
+        sleep(500);
         sm1.setPower(sp);
         sm2.setPower(sp);
-        pad.setPower(0.55);
+        pad.setPower(0.7);
         pem.setPower(0.7);
-        sleep(800);
+        sleep(1100);
         sm1.setPower(0);
         sm2.setPower(0);
         pad.setPower(0);

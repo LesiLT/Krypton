@@ -20,10 +20,11 @@ public class FieldCentricTele extends OpMode {
     GoBildaPinpointDriver odo;
     DistanceSensor distanceSensor;
     double value = 0;
+    double x;
     DcMotor kP, kG, dP, dG;
     DcMotor pem;
     Servo sviesa;
-    Servo kamp;
+    //Servo kamp;
     Kamera kam;
     boolean right, rightLast = false;
     boolean left, leftLast = false;
@@ -36,7 +37,7 @@ public class FieldCentricTele extends OpMode {
         pem = hardwareMap.get(DcMotor.class, "pem");
         distanceSensor = hardwareMap.get(DistanceSensor.class, "colorSensor");
         sviesa = hardwareMap.get(Servo.class, "sviesa");
-        kamp = hardwareMap.get(Servo.class, "kamp");
+        //kamp = hardwareMap.get(Servo.class, "kamp");
 
          kP = hardwareMap.get(DcMotor.class, "kP");
          dP = hardwareMap.get(DcMotor.class, "dP");
@@ -48,7 +49,7 @@ public class FieldCentricTele extends OpMode {
         dP.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         dG.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        kam = new Kamera(hardwareMap, telemetry);
+        //kam = new Kamera(hardwareMap, telemetry);
 
         saudykle.init(hardwareMap);
 
@@ -89,10 +90,10 @@ public class FieldCentricTele extends OpMode {
         kg = didPirmyn + didBausme + posukis;
         dg = didPirmyn - didBausme + posukis;
 
-        kP.setPower(-kp);
-        dP.setPower(-dp);
-        kG.setPower(kg);
-        dG.setPower(dg);
+        kP.setPower(-kp*0.8);
+        dP.setPower(-dp*0.8);
+        kG.setPower(kg*0.8);
+        dG.setPower(dg*0.8 );
 
         telemetry.addData("X", pos.getX(DistanceUnit.MM));
         telemetry.addData("Y", pos.getY(DistanceUnit.MM));
@@ -134,46 +135,53 @@ public class FieldCentricTele extends OpMode {
             else if (distanceSensor.getDistance(DistanceUnit.CM) > 6){
                 value = 0.72;
             }
-
+//            x = kam.x;
+//            if (x == 30){
+//                value =0.72;
+//
+//            }
+//            else value =0.5;
             if (gamepad1.left_bumper)
             {
-                kam.telemetryAprilTag();
-                telemetry.update();
+//                kam.telemetryAprilTag();
+//                telemetry.update();
 
-                if (kam.id == 20 || kam.id == 24) {
-                    kamp.setPosition(0.4);
-                    sp=1;
+//                if (kam.id == 20 || kam.id == 24) {
+//                    //kamp.setPosition(0.4);
+//                    sp=0.9;
+//                    saudykle.teleugnis(sp);
+//
+//                }
+
+                    //kamp.setPosition(0.2);
+                    sp=0.9;
                     saudykle.teleugnis(sp);
 
-                }
-                else{
-                    kamp.setPosition(0.2);
-                    sp=0.95;
-                    saudykle.teleugnis(sp);
 
-                }
-                kamp.setPosition(0);
+                //kamp.setPosition(0);
 
 
             }
-            kam.id=0;
-            right = gamepad1.dpad_right;
-            left = gamepad1.dpad_left;
-            if(right && !rightLast)
-            {
-                value += 0.1;
-            }
-            else if(left && !leftLast)
-            {
-                value -= 0.1;
-            }
+            //kam.id=0;
+//            right = gamepad1.dpad_right;
+//            left = gamepad1.dpad_left;
+//            if(right && !rightLast)
+//            {
+//                value += 0.1;
+//            }
+//            else if(left && !leftLast)
+//            {
+//                value -= 0.1;
+//            }
+            //value = 0.72;
             sviesa.setPosition(value);
-            leftLast = left;
-            rightLast = right;
+            //leftLast = left;
+            //rightLast = right;
 
 
             //telemetry.clear();
-            telemetry.addData("Atstumas (cm)", "%.2f", distanceSensor.getDistance(DistanceUnit.CM));
+            //telemetry.addData("Atstumas (cm)", "%.2f", kam.z);
+            //telemetry.addData(" ",kam.id);
             telemetry.addData("Sviesa pozicija", value);
             telemetry.update();
 

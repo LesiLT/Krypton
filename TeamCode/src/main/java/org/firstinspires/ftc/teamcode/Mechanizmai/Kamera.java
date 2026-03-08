@@ -31,7 +31,7 @@ public class Kamera {
     public HardwareMap hardwareMap;
     public Telemetry telemetry;
     public int id=0;
-    public double x,y; //aprilTag x , y detection
+    public double x,y,z; //aprilTag x , y detection
 
     public static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
     public AprilTagProcessor aprilTag;
@@ -125,6 +125,8 @@ public class Kamera {
                 x = detection.ftcPose.x;
                 y = detection.ftcPose.y;
                 id = detection.id;
+                z = detection.ftcPose.range;
+
                 telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
                 telemetry.addLine(String.format("Y %6.1f (cm)",  detection.ftcPose.y));
                 telemetry.addLine(String.format("X %6.1f (deg)", detection.ftcPose.pitch));
