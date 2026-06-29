@@ -1,0 +1,160 @@
+package org.firstinspires.ftc.teamcode.TeleOp.Test;
+
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
+
+
+@TeleOp
+public class FieldCentricKazkas extends OpMode {
+    GoBildaPinpointDriver odo;
+    DistanceSensor distanceSensor;
+    double value = 0;
+    double x;
+    DcMotor kP, kG, dP, dG;
+    boolean right, rightLast = false;
+    boolean left, leftLast = false;
+    double sp = 1;
+
+    @Override
+    public void init() {
+        odo = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+
+        distanceSensor = hardwareMap.get(DistanceSensor.class, "colorSensor");
+        //kamp = hardwareMap.get(Servo.class, "kamp");
+
+        kP = hardwareMap.get(DcMotor.class, "kP");
+        dP = hardwareMap.get(DcMotor.class, "dP");
+        kG = hardwareMap.get(DcMotor.class, "kG");
+        dG = hardwareMap.get(DcMotor.class, "dG");
+
+        kP.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        kG.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dP.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dG.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//-135 25
+        odo.setOffsets(0.2, 0, DistanceUnit.MM);
+        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+
+        odo.resetPosAndIMU();
+        Pose2D startPos = new Pose2D(DistanceUnit.MM, -8, -9, AngleUnit.RADIANS, 0);
+        odo.setPosition(startPos);
+
+//        telemetry.addData("X", odo.getXOffset());
+//        telemetry.addData("Y", odo.getYOffset());
+//        telemetry.addData("Versija: ", odo.getDeviceVersion());
+//        telemetry.addData("Scalar", odo.getYawScalar());
+
+    }
+
+    public void moveRobot() {
+
+        double pirmyn = -gamepad1.left_stick_y;
+        double bausti = -gamepad1.left_stick_x; ///STRAFE
+        double posukis = gamepad1.right_stick_x;
+
+        Pose2D pos = odo.getPosition();
+        double kampas = pos.getHeading(AngleUnit.RADIANS);
+
+        double cos = Math.cos((Math.PI / 2) + kampas);// (-) buvo
+        double sin = Math.sin((Math.PI / 2) + kampas);
+
+        double didBausme = -pirmyn * sin + bausti * cos; ///Global strafe
+        double didPirmyn = pirmyn * cos + bausti * sin; /// Global forward
+
+        double kp, dp, kg, dg;
+
+        kp = didPirmyn + didBausme - posukis;
+        dp = didPirmyn - didBausme - posukis;
+        kg = didPirmyn + didBausme + posukis;
+        dg = didPirmyn - didBausme + posukis;
+
+        kP.setPower(-kp*0.8);
+        dP.setPower(-dp*0.8);
+        kG.setPower(kg*0.8);
+        dG.setPower(dg*0.8 );
+
+        telemetry.addData("X", pos.getX(DistanceUnit.MM));
+        telemetry.addData("Y", pos.getY(DistanceUnit.MM));
+        telemetry.addData("Kampas: ", kampas);
+
+    }
+
+    @Override
+    public void loop() {
+        moveRobot();
+        odo.update();
+        if (gamepad1.options){
+            odo.resetPosAndIMU();
+        }
+
+        /// ===============Paėmimas===============
+
+        /// ==============ATGAL VISAS==============
+
+        ///==============PADAVIMAS==============
+        if (distanceSensor.getDistance(DistanceUnit.CM) < 8){
+            value = 0.5;
+        }
+        else if (distanceSensor.getDistance(DistanceUnit.CM) > 6){
+            value = 0.72;
+        }
+//            x = kam.x;
+//            if (x == 30){
+//                value =0.72;
+//
+//            }
+//            else value =0.5;
+        if (gamepad1.left_bumper)
+        {
+//                kam.telemetryAprilTag();
+//                telemetry.update();
+
+//                if (kam.id == 20 || kam.id == 24) {
+//                    //kamp.setPosition(0.4);
+//                    sp=0.9;
+//                    saudykle.teleugnis(sp);
+//
+//                }
+
+            //kamp.setPosition(0.2);
+            sp=0.9;
+
+
+            //kamp.setPosition(0);
+
+
+        }
+        //kam.id=0;
+//            right = gamepad1.dpad_right;
+//            left = gamepad1.dpad_left;
+//            if(right && !rightLast)
+//            {
+//                value += 0.1;
+//            }
+//            else if(left && !leftLast)
+//            {
+//                value -= 0.1;
+//            }
+        //value = 0.72;
+        //leftLast = left;
+        //rightLast = right;
+
+
+        //telemetry.clear();
+        //telemetry.addData("Atstumas (cm)", "%.2f", kam.z);
+        //telemetry.addData(" ",kam.id);
+        telemetry.addData("Sviesa pozicija", value);
+        telemetry.update();
+
+    }
+
+}
